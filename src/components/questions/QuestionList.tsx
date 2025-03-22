@@ -11,20 +11,11 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { Button, Modal, Table } from "react-bootstrap";
+import { Question } from "../../types/entities";
+import useQuery from "../../hooks/useQuery";
+import { PaginatedResponse } from "../../types/common";
+import QuestionService from "../../services/questionService";
 
-export interface Choice {
-    id: number;
-    body: string;
-}
-
-export interface Question {
-    id: number;
-    body: string;
-    score: number;
-    questionLevel: number;
-    answerOrder: number;
-    choices: Choice[];
-}
 const columnHelper = createColumnHelper<Question>();
 
 const columns = [
@@ -39,20 +30,21 @@ const columns = [
     }),
 ];
 
-type Props = unknown;
-
-const QuestionList = (props: Props) => {
-    const [data, setData] = useState<Question[]>([]);
+const QuestionList = () => {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [rowCount, setRowCount] = useState<number>(0);
+
+    const { data, isPending, error } = useQuery<PaginatedResponse<Question>>(
+        () => QuestionService.getAllQuestions(pagination),
+        [pagination]
+    );
 
     const table = useReactTable({
-        data,
+        data: data?.data ?? [],
         columns,
-        rowCount,
+        rowCount: data?.totalCount ?? 0,
         debugTable: true,
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -76,28 +68,8 @@ const QuestionList = (props: Props) => {
         setSelectedRow(null);
     };
 
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            const response = await api.get(ENDPOINTS.QUESTIONS + "/list", {
-                params: {
-                    pageIndex: pagination.pageIndex,
-                    pageSize: pagination.pageSize,
-                },
-            });
-
-            console.log("data fetched");
-            console.log(response);
-
-            console.log("data state");
-            console.log(response.data.data);
-
-            setData(response.data.data);
-            setRowCount(response.data.totalCount);
-        };
-
-        fetchQuestions();
-        return () => {};
-    }, [pagination]);
+    if (isPending) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
         <div>
