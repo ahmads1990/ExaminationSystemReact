@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
-import api from "../../api/api";
-import { ENDPOINTS } from "../../api/endpoints";
-import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getSortedRowModel,
-    PaginationState,
-    useReactTable,
-} from "@tanstack/react-table";
-import { Button, Modal, Table } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 import { Question } from "../../types/entities";
 import useQuery from "../../hooks/useQuery";
 import { PaginatedResponse } from "../../types/common";
 import QuestionService from "../../services/questionService";
+import GenericTable from "../common/Table";
+import { createColumnHelper, PaginationState } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper<Question>();
 
@@ -41,20 +32,6 @@ const QuestionList = () => {
         [pagination]
     );
 
-    const table = useReactTable({
-        data: data?.data ?? [],
-        columns,
-        rowCount: data?.totalCount ?? 0,
-        debugTable: true,
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        manualPagination: true,
-        onPaginationChange: setPagination,
-        getCoreRowModel: getCoreRowModel(),
-        state: {
-            pagination,
-        },
-    });
     const [selectedRow, setSelectedRow] = useState<Question | null>(null);
     const [showModal, setShowModal] = useState(false);
 
@@ -68,9 +45,6 @@ const QuestionList = () => {
         setSelectedRow(null);
     };
 
-    if (isPending) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -81,101 +55,16 @@ const QuestionList = () => {
                 </div>
             </div>
 
-            <Table striped bordered hover>
-                <thead>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <th key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(header.column.columnDef.header, header.getContext())}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map((row) => (
-                        <tr key={row.id} style={{ cursor: "pointer" }}>
-                            {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                            ))}
-                            <td>
-                                <button onClick={() => handleRowClick(row.original)}>click me </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <div className="h-2" />
-            <div className="flex items-center gap-2">
-                <button
-                    className="border rounded p-1"
-                    onClick={() => table.firstPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    {"<<"}
-                </button>
-                <button
-                    className="border rounded p-1"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    {"<"}
-                </button>
-                <button
-                    className="border rounded p-1"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    {">"}
-                </button>
-                <button
-                    className="border rounded p-1"
-                    onClick={() => table.lastPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    {">>"}
-                </button>
-                <span className="flex items-center gap-1">
-                    <div>Page</div>
-                    <strong>
-                        {table.getState().pagination.pageIndex + 1} of {table.getPageCount().toLocaleString()}
-                    </strong>
-                </span>
-                <span className="flex items-center gap-1">
-                    | Go to page:
-                    <input
-                        type="number"
-                        min="1"
-                        max={table.getPageCount()}
-                        defaultValue={table.getState().pagination.pageIndex + 1}
-                        onChange={(e) => {
-                            const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                            table.setPageIndex(page);
-                        }}
-                        className="border p-1 rounded w-16"
-                    />
-                </span>
-                <select
-                    value={table.getState().pagination.pageSize}
-                    onChange={(e) => {
-                        table.setPageSize(Number(e.target.value));
-                    }}
-                >
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                Showing {table.getRowModel().rows.length.toLocaleString()} of {table.getRowCount().toLocaleString()}{" "}
-                Rows
-            </div>
-            <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre>
+            <GenericTable<Question>
+                data={data?.data ?? []}
+                columns={columns}
+                pagination={pagination}
+                setPagination={setPagination}
+                totalCount={data?.totalCount ?? 0}
+                onRowClick={handleRowClick}
+                isPending={isPending}
+                error={error}
+            />
 
             {/* Modal */}
             <Modal show={showModal} onHide={handleCloseModal}>
@@ -185,6 +74,7 @@ const QuestionList = () => {
                 <Modal.Body>
                     {selectedRow ? (
                         <>
+                            {console.log("selectedRow", selectedRow)}
                             <p>
                                 <strong>ID:</strong> {selectedRow.id}
                             </p>
