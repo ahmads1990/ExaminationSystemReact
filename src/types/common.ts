@@ -3,6 +3,7 @@ export interface ListParameters {
     pageSize: number;
     [key: string]: any;
 }
+
 export interface PaginatedResponse<T> {
     data: T[];
     totalCount: number;
