@@ -5,7 +5,7 @@ import {
     getFilteredRowModel,
     getSortedRowModel,
     PaginationState,
-    useReactTable,
+    useReactTable
 } from "@tanstack/react-table";
 import { Table } from "react-bootstrap";
 
@@ -28,7 +28,7 @@ const GenericTable = <T,>({
     totalCount,
     onRowClick,
     isPending,
-    error,
+    error
 }: TableProps<T>) => {
     const table = useReactTable({
         data: data ?? [],
@@ -41,8 +41,8 @@ const GenericTable = <T,>({
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         state: {
-            pagination,
-        },
+            pagination
+        }
     });
 
     if (isPending) return <p>Loading...</p>;

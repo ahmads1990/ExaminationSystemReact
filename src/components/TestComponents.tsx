@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Container, Row, Col, Form, Button, Alert, Table } from "react-bootstrap";
-import Select from "react-select";
-import { useReactTable, getCoreRowModel, ColumnDef, flexRender } from "@tanstack/react-table";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import axios from "axios";
+import { useState } from "react";
+import { Alert, Button, Col, Container, Form, Row, Table } from "react-bootstrap";
+import Select from "react-select";
 
 interface UserData {
     id: number;
@@ -18,7 +18,7 @@ const TestComponents = () => {
     const [rowData] = useState<UserData[]>([
         { id: 1, name: "John Doe", email: "john@example.com" },
         { id: 2, name: "Jane Smith", email: "jane@example.com" },
-        { id: 3, name: "Bob Johnson", email: "bob@example.com" },
+        { id: 3, name: "Bob Johnson", email: "bob@example.com" }
     ]);
 
     // State for API test
@@ -29,21 +29,21 @@ const TestComponents = () => {
     const options = [
         { value: "chocolate", label: "Chocolate" },
         { value: "strawberry", label: "Strawberry" },
-        { value: "vanilla", label: "Vanilla" },
+        { value: "vanilla", label: "Vanilla" }
     ];
 
     // Define columns for TanStack Table
     const columns: ColumnDef<UserData>[] = [
         { accessorKey: "id", header: "ID" },
         { accessorKey: "name", header: "Name" },
-        { accessorKey: "email", header: "Email" },
+        { accessorKey: "email", header: "Email" }
     ];
 
     // Initialize TanStack Table
     const table = useReactTable({
         data: rowData,
         columns,
-        getCoreRowModel: getCoreRowModel(),
+        getCoreRowModel: getCoreRowModel()
     });
 
     // Test API call using axios

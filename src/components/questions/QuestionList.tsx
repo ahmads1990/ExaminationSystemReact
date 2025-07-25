@@ -1,30 +1,30 @@
+import { createColumnHelper, PaginationState } from "@tanstack/react-table";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { Question } from "../../types/entities";
 import useQuery from "../../hooks/useQuery";
-import { PaginatedResponse } from "../../types/common";
 import QuestionService from "../../services/questionService";
+import { PaginatedResponse } from "../../types/common";
+import { Question } from "../../types/entities";
 import GenericTable from "../common/Table";
-import { createColumnHelper, PaginationState } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper<Question>();
 
 const columns = [
     columnHelper.accessor("id", {
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue()
     }),
     columnHelper.accessor("body", {
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue()
     }),
     columnHelper.accessor("score", {
-        cell: (info) => info.getValue(),
-    }),
+        cell: (info) => info.getValue()
+    })
 ];
 
 const QuestionList = () => {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
-        pageSize: 10,
+        pageSize: 10
     });
 
     const { data, isPending, error } = useQuery<PaginatedResponse<Question>>(

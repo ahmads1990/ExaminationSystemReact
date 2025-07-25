@@ -1,3 +1,3 @@
 export const ENDPOINTS = {
-    QUESTIONS: "/questions",
+    QUESTIONS: "/questions"
 };

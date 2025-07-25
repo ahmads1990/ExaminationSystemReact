@@ -8,7 +8,7 @@ const serviceEndpoint = ENDPOINTS.QUESTIONS;
 const QuestionService = {
     getAllQuestions: async (params: ListParameters | object = {}): Promise<PaginatedResponse<Question>> => {
         const questions = await api.get(serviceEndpoint + "/list", {
-            params,
+            params
         });
 
         console.log("questions");
@@ -21,7 +21,7 @@ const QuestionService = {
         console.log("question");
         console.log(response);
         return response.data;
-    },
+    }
 };
 
 export default QuestionService;
