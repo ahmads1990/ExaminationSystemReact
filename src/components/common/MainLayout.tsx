@@ -1,10 +1,6 @@
-import React from "react";
+import { Outlet } from "react-router-dom";
 
-interface MainLayoutProps {
-    children: React.ReactNode;
-}
-
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = () => {
     return (
         <div className="d-flex flex-grow-1">
             {/* SIDEBAR */}
@@ -30,8 +26,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                     </ul>
                 </div>
             </aside>
+
             {/* MAIN CONTENT */}
-            <main className="flex-grow-1 p-4"> {children}</main>
+            <main className="flex-grow-1 p-4">
+                <Outlet />
+            </main>
         </div>
     );
 };

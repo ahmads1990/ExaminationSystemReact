@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Registration from "./components/auth/Registration";
 import MainLayout from "./components/common/MainLayout";
 import QuestionList from "./components/questions/QuestionList";
 import TestComponents from "./components/TestComponents";
@@ -25,22 +26,34 @@ function App() {
                                 Test
                             </a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/registration">
+                                Registration
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/login">
+                                Login
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
             {/* MAIN SECTION */}
-            <MainLayout>
-                <Routes>
+            <Routes>
+                <Route path="/registration" element={<Registration />} />
+
+                <Route element={<MainLayout />}>
                     <Route path="test" element={<TestComponents />}></Route>
                     <Route path="/" element={<QuestionList />}></Route>
-                </Routes>
-            </MainLayout>
+                </Route>
+            </Routes>
             {/* FOOTER */}
-            <footer className="bg-dark text-white text-center py-3 mt-auto">
+            {/* <footer className="bg-dark text-white text-center py-3 mt-auto">
                 <div className="container">
                     <small>&copy; 2024 MyApp</small>
                 </div>
-            </footer>
+            </footer> */}
         </BrowserRouter>
     );
 }
