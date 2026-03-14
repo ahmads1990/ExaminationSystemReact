@@ -1,59 +1,31 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
-import Registration from "./components/auth/Registration";
-import MainLayout from "./components/common/MainLayout";
+import MainLayout from "./layouts/MainLayout";
 import QuestionList from "./components/questions/QuestionList";
-import TestComponents from "./components/TestComponents";
+import AuthLayout from "./layouts/AuthLayout";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 function App() {
     return (
         <BrowserRouter>
-            {/* TOP NAVBAR */}
-            <nav className="navbar navbar-expand-lg navbar-dark bg-info">
-                <div className="container-fluid">
-                    <a className="navbar-brand text-black" href="#">
-                        MyApp
-                    </a>
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/">
-                                Questions
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/test">
-                                Test
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/registration">
-                                Registration
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/login">
-                                Login
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            {/* MAIN SECTION */}
             <Routes>
-                <Route path="/registration" element={<Registration />} />
+                {/* Auth Routes */}
+                <Route element={<AuthLayout />}>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/verify-email" element={<VerifyEmailPage />} />
+                </Route>
 
+                {/* Dashboard / Main Routes */}
                 <Route element={<MainLayout />}>
-                    <Route path="test" element={<TestComponents />}></Route>
-                    <Route path="/" element={<QuestionList />}></Route>
+                    {/* Redirect root to login for now, or dashboard if auth */}
+                    <Route path="/" element={<Navigate to="/questions" replace />} />
+                    
+                    <Route path="questions" element={<QuestionList />} />
                 </Route>
             </Routes>
-            {/* FOOTER */}
-            {/* <footer className="bg-dark text-white text-center py-3 mt-auto">
-                <div className="container">
-                    <small>&copy; 2024 MyApp</small>
-                </div>
-            </footer> */}
         </BrowserRouter>
     );
 }

@@ -1,9 +1,37 @@
 :root {
-    font-family: "Times New Roman", Times, serif;
+  --bs-primary: #2563EB; /* Brand Blue */
+  --bs-secondary: #64748B; /* Slate-500 */
+  --bs-success: #10B981; /* Success Mint */
+  --bs-info: #0EA5E9; /* Highlight Sky */
+  --bs-warning: #F59E0B; /* Alert Amber */
+  --bs-danger: #F43F5E; /* Error Rose */
+  
+  --bs-body-bg: #F8FAFC; /* Paper White */
+  --bs-body-color: #0F172A; /* Void Slate (Text) */
+  
+  --bs-font-sans-serif: "DM Sans", "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --bs-body-font-family: var(--bs-font-sans-serif);
+  
+  --bs-border-radius: 0.75rem;
+  --bs-border-radius-lg: 1rem;
+  --bs-border-radius-sm: 0.5rem;
 }
 
-#root {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+/* Custom utilities ported from custom.scss */
+.card {
+  border: 1px solid rgba(37, 99, 235, 0.1); /* rgba($primary, 0.1) */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39); /* rgba($primary, 0.39) */
+  --bs-btn-bg: #2563EB;
+  --bs-btn-border-color: #2563EB;
+  --bs-btn-hover-bg: #1d4ed8;
+  --bs-btn-hover-border-color: #1d4ed8;
+}
+
+/* Ensure headings use the correct font if overridden in bootstrap variables */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Outfit", "Plus Jakarta Sans", var(--bs-font-sans-serif);
 }

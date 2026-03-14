@@ -1,6 +1,6 @@
 import { FloatingLabel, Form } from "react-bootstrap";
 
-type FormInputProps = {
+type FormPasswordInputProps = {
     id: string;
     name: string;
     label: string;
@@ -11,10 +11,9 @@ type FormInputProps = {
     required?: boolean;
     disabled?: boolean;
     minLength?: number;
-    maxLength?: number;
 };
 
-const FormInput = ({
+const FormPasswordInput = ({
     id,
     name,
     label,
@@ -24,14 +23,13 @@ const FormInput = ({
     error,
     required = false,
     disabled = false,
-    minLength,
-    maxLength
-}: FormInputProps) => {
+    minLength
+}: FormPasswordInputProps) => {
     return (
         <div className="mb-3">
             <FloatingLabel controlId={id} label={label}>
                 <Form.Control
-                    type="text"
+                    type="password"
                     name={name}
                     placeholder={placeholder}
                     value={value}
@@ -40,7 +38,6 @@ const FormInput = ({
                     required={required}
                     disabled={disabled}
                     minLength={minLength}
-                    maxLength={maxLength}
                     className="bg-light border-light-subtle focus-ring"
                 />
                 {error && (
@@ -53,4 +50,4 @@ const FormInput = ({
     );
 };
 
-export default FormInput;
+export default FormPasswordInput;

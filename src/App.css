@@ -1,1 +1,121 @@
- 
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --dark-bg: #0f172a;
+  --light-text: #f8fafc;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Premium Navbar Styles */
+.navbar-premium {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand-text {
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.nav-link-custom {
+  color: #4b5563 !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+  color: var(--primary-color) !important;
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+/* Dropdown Customization */
+.dropdown-menu-custom {
+  border: none;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 0.5rem;
+  margin-top: 10px;
+  animation: slideIn 0.2s ease-out forwards;
+}
+
+.dropdown-item-custom {
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  color: #4b5563;
+  transition: all 0.15s ease;
+}
+
+.dropdown-item-custom:hover {
+  background-color: rgba(79, 70, 229, 0.05);
+  color: var(--primary-color);
+  transform: translateX(2px);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Auth Buttons */
+.btn-auth-outline {
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.4rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.btn-auth-outline:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-auth-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.5rem 1.4rem;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-auth-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}

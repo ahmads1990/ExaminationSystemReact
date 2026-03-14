@@ -1,48 +1,49 @@
 import { FloatingLabel, Form } from "react-bootstrap";
 
-type FormInputProps = {
+type FormSelectInputProps = {
     id: string;
     name: string;
     label: string;
-    placeholder: string;
     value: string;
     onChange: (value: string) => void;
+    options: { value: string; label: string }[];
     error?: string;
     required?: boolean;
     disabled?: boolean;
-    minLength?: number;
-    maxLength?: number;
+    placeholder?: string;
 };
 
-const FormInput = ({
+const FormSelectInput = ({
     id,
     name,
     label,
-    placeholder,
     value,
     onChange,
+    options,
     error,
     required = false,
     disabled = false,
-    minLength,
-    maxLength
-}: FormInputProps) => {
+    placeholder = "Select an option"
+}: FormSelectInputProps) => {
     return (
         <div className="mb-3">
             <FloatingLabel controlId={id} label={label}>
-                <Form.Control
-                    type="text"
+                <Form.Select
                     name={name}
-                    placeholder={placeholder}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     isInvalid={!!error}
                     required={required}
                     disabled={disabled}
-                    minLength={minLength}
-                    maxLength={maxLength}
                     className="bg-light border-light-subtle focus-ring"
-                />
+                >
+                    <option value="">{placeholder}</option>
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </Form.Select>
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}
@@ -53,4 +54,4 @@ const FormInput = ({
     );
 };
 
-export default FormInput;
+export default FormSelectInput;
