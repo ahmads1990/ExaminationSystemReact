@@ -2,6 +2,7 @@
 
 const STORAGE_KEYS = {
     TOKEN: 'auth_token',
+    REFRESH_TOKEN: 'auth_refresh_token',
     USER: 'auth_user'
 } as const;
 
@@ -19,6 +20,22 @@ export const getToken = (): string | null =>
 export const removeToken = (): void =>
 {
     localStorage.removeItem(STORAGE_KEYS.TOKEN);
+};
+
+// Refresh Token management
+export const saveRefreshToken = (token: string): void =>
+{
+    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
+};
+
+export const getRefreshToken = (): string | null =>
+{
+    return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+};
+
+export const removeRefreshToken = (): void =>
+{
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
 };
 
 // User management
@@ -50,5 +67,6 @@ export const removeUser = (): void =>
 export const clearAuth = (): void =>
 {
     removeToken();
+    removeRefreshToken();
     removeUser();
 };

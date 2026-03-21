@@ -1,5 +1,6 @@
 :root {
-  --bs-primary: #2563EB; /* Brand Blue */
+  --bs-primary: #10B981; /* Brand Emerald */
+  --bs-primary-rgb: 16, 185, 129;
   --bs-secondary: #64748B; /* Slate-500 */
   --bs-success: #10B981; /* Success Mint */
   --bs-info: #0EA5E9; /* Highlight Sky */
@@ -24,11 +25,11 @@
 }
 
 .btn-primary {
-  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39); /* rgba($primary, 0.39) */
-  --bs-btn-bg: #2563EB;
-  --bs-btn-border-color: #2563EB;
-  --bs-btn-hover-bg: #1d4ed8;
-  --bs-btn-hover-border-color: #1d4ed8;
+  box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+  --bs-btn-bg: #10B981;
+  --bs-btn-border-color: #10B981;
+  --bs-btn-hover-bg: #059669;
+  --bs-btn-hover-border-color: #059669;
 }
 
 /* Ensure headings use the correct font if overridden in bootstrap variables */

@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { User, AuthState, AuthContextType } from '../types/auth';
-import { saveToken, getToken, saveUser, getUser, clearAuth } from '../utils/storage';
+import { saveToken, getToken, saveUser, getUser, clearAuth, saveRefreshToken } from '../utils/storage';
 import { extractUserFromToken, isTokenExpired } from '../utils/jwt';
 
 // Create and export the context
@@ -49,9 +49,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loadAuthData();
     }, []);
 
-    const login = (token: string) => {
+    const login = (accessToken: string, refreshToken: string) => {
         // Extract user from token
-        const user = extractUserFromToken(token);
+        const user = extractUserFromToken(accessToken);
         
         if (!user) {
             console.error('Failed to extract user from token');
@@ -59,13 +59,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
 
         // Save to localStorage
-        saveToken(token);
+        saveToken(accessToken);
+        saveRefreshToken(refreshToken);
         saveUser(user);
 
         // Update state
         setState({
             user,
-            token,
+            token: accessToken,
             isAuthenticated: true,
             isLoading: false
         });

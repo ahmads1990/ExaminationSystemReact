@@ -18,7 +18,7 @@ export interface AuthState
 
 export interface AuthContextType extends AuthState
 {
-    login: (token: string) => void;
+    login: (accessToken: string, refreshToken: string) => void;
     logout: () => void;
     updateUser: (user: User) => void;
 }

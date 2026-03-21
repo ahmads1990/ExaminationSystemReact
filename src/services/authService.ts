@@ -5,37 +5,25 @@ import { ApiResponse } from "../api/responses/ApiResponse";
 
 const serviceEndpoint = ENDPOINTS.AUTH;
 const endpoints = {
-    registerStudent: serviceEndpoint + "/RegisterStudent",
-    registerInstructor: serviceEndpoint + "/RegisterInstructor",
+    registerStudent: serviceEndpoint + "/register/student",
+    registerInstructor: serviceEndpoint + "/register/instructor",
     login: serviceEndpoint + "/login"
 }
 
 const AuthService = {
     registerStudent: async (request: RegisterStudentRequest): Promise<ApiResponse<number>> =>
     {
-        const response = await api.post(endpoints.registerStudent, {
-            request
-        });
-        console.log(response);
-        debugger;
+        const response = await api.post(endpoints.registerStudent, request);
         return response.data;
     },
     registerInstructor: async (request: RegisterInstructorRequest): Promise<ApiResponse<number>> =>
     {
-        const response = await api.post(endpoints.registerInstructor, {
-            request
-        });
-        console.log(response);
-        debugger;
+        const response = await api.post(endpoints.registerInstructor, request);
         return response.data;
     },
-    login: async (request: LoginRequest): Promise<ApiResponse<string>> =>
+    login: async (request: LoginRequest): Promise<ApiResponse<any>> =>
     {
-        const response = await api.post(endpoints.login, {
-            request
-        });
-        console.log(response);
-        debugger;
+        const response = await api.post(endpoints.login, request);
         return response.data;
     }
 }
