@@ -12,9 +12,11 @@ export enum ApiErrorCode
     EmailAlreadyExists = 1003,
     UsernameAlreadyExists = 1004,
     InvalidVerificationToken = 1005,
-    TokenExpired = 1006,
+    ExpiredToken = 1006,
     Unauthorized = 1007,
     Forbidden = 1008,
+    InvalidToken = 1009,
+    ExamTimeout = 1010,
 
     // Validation Errors (2000-2999)
     ValidationFailed = 2000,
@@ -35,6 +37,20 @@ export enum ApiErrorCode
     CannotDeleteCourseWithStudents = 4005,
     CannotDeletePublishedExam = 4006,
     CannotUnenrollFromCourse = 4007,
+    ExamAlreadyPublished = 4008,
+    ExamAlreadyUnpublished = 4009,
+    ExamArchived = 4010,
+    ExamHasNoQuestions = 4011,
+    ScoresMismatch = 4012,
+    ExamHasSubmissions = 4013,
+    ExamIsPublished = 4014,
+    QuestionLocked = 4015,
+    NotEnrolledInCourse = 4016,
+    MaxAttemptsExceeded = 4017,
+    AttemptAlreadyCompleted = 4018,
+    HasActiveAttempt = 4019,
+    AttemptNotCompleted = 4020,
+    GradingInProgress = 4021,
 
     // Server Errors (5000-5999)
     InternalServerError = 5000,
