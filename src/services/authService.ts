@@ -31,6 +31,16 @@ const AuthService = {
     {
         const response = await api.post(endpoints.logout);
         return response.data;
+    },
+    resendVerification: async (userId: number): Promise<ApiResponse<string>> =>
+    {
+        const response = await api.post(`${serviceEndpoint}/resend-verification?userId=${userId}`);
+        return response.data;
+    },
+    verifyEmail: async (email: string, otp: string): Promise<ApiResponse<string>> =>
+    {
+        const response = await api.post(`${serviceEndpoint}/verify-email`, { email, otp });
+        return response.data;
     }
 }
 

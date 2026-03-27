@@ -68,6 +68,13 @@ const Navbar = () => {
                             </ul>
                         </li>
 
+                        {/* TODO: Delete this temporary link later */}
+                        <li className="nav-item">
+                            <NavLink className="nav-link nav-link-custom text-warning" to="/verify-email">
+                                [TEST OTP]
+                            </NavLink>
+                        </li>
+
                         <li className="nav-item">
                             <NavLink className="nav-link nav-link-custom" to="/docs">
                                 Docs

@@ -109,7 +109,7 @@ const RegisterPage = () => {
                 });
                 
                 if (response.success) {
-                    setTimeout(() => navigate("/verify-email"), 1500);
+                    setTimeout(() => navigate("/verify-email", { state: { email: studentForm.email, userId: response.data } }), 1500);
                 } else {
                     setError(response.message || "Registration failed. Please try again.");
                 }
@@ -150,7 +150,7 @@ const RegisterPage = () => {
                 });
                 
                 if (response.success) {
-                    setTimeout(() => navigate("/verify-email"), 1500);
+                    setTimeout(() => navigate("/verify-email", { state: { email: instructorForm.email, userId: response.data } }), 1500);
                 } else {
                     setError(response.message || "Registration failed. Please try again.");
                 }
