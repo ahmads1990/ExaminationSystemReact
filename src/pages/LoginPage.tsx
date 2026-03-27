@@ -37,7 +37,8 @@ const LoginPage = () => {
             
             if (response.success && response.data) {
                 // Login successful, save token and redirect
-                login(response.data);
+                const { accessToken, refreshToken } = response.data;
+                login(accessToken, refreshToken);
                 navigate("/");
             } else {
                 setError(response.message || "Login failed. Please try again.");
@@ -91,7 +92,7 @@ const LoginPage = () => {
                     <a href="#" className="text-decoration-none small fw-semibold text-primary hover-opacity">Forgot password?</a>
                 </div>
 
-                <Button variant="primary" type="submit" className="w-100 py-3 fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2 mb-3" disabled={loading}>
+                <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-4" disabled={loading}>
                     {loading ? (
                         <>
                             <Spinner animation="border" size="sm" /> Signing In...
@@ -109,24 +110,6 @@ const LoginPage = () => {
                 </div>
             </Form>
 
-            <style>
-                {`
-                    .focus-ring:focus {
-                        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-                        border-color: #2563EB;
-                    }
-                    .hover-opacity:hover {
-                        opacity: 0.8;
-                    }
-                    .animate-fade-in {
-                        animation: fadeIn 0.5s ease-out;
-                    }
-                    @keyframes fadeIn {
-                        from { opacity: 0; transform: translateY(10px); }
-                        to { opacity: 1; transform: translateY(0); }
-                    }
-                `}
-            </style>
         </div>
     );
 };

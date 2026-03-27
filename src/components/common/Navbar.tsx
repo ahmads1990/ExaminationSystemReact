@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import UserMenu from "./UserMenu";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [resourcesOpen, setResourcesOpen] = useState(false);
-    // TODO: Replace with actual auth state from context
-    const [isLoggedIn, setIsLoggedIn] = useState(true); 
+    const { isAuthenticated } = useAuthContext();
 
     const toggleNavbar = () => setIsOpen(!isOpen);
 
@@ -14,8 +14,8 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg navbar-premium sticky-top">
             <div className="container-fluid px-4 px-lg-5">
                 {/* SECTION 1: LOGO */}
-                <Link className="navbar-brand navbar-brand-text" to="/">
-                    Exam<span style={{ color: "var(--primary-color)" }}>Sys</span>
+                <Link className="navbar-brand navbar-brand-text fw-bold fs-4" to="/">
+                    Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                 </Link>
 
                 {/* Mobile Toggle Button */}
@@ -77,27 +77,18 @@ const Navbar = () => {
 
                     {/* SECTION 3: AUTH / USER ACTIONS */}
                     <div className="d-flex align-items-center gap-3">
-                        {isLoggedIn ? (
+                        {isAuthenticated ? (
                             <UserMenu />
                         ) : (
                             <>
                                 <Link to="/login" className="btn btn-auth-outline text-decoration-none">
                                     Log In
                                 </Link>
-                                <Link to="/registration" className="btn btn-auth-primary text-decoration-none">
+                                <Link to="/register" className="btn btn-auth-primary text-decoration-none">
                                     Get Started
                                 </Link>
                             </>
                         )}
-                        {/* Dev Toggle for demo purposes */}
-                        <div className="form-check form-switch ms-2 d-none d-md-block" title="Toggle Auth State">
-                            <input 
-                                className="form-check-input" 
-                                type="checkbox" 
-                                checked={isLoggedIn}
-                                onChange={() => setIsLoggedIn(!isLoggedIn)} 
-                            />
-                        </div>
                     </div>
                 </div>
             </div>

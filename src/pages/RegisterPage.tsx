@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button, Tabs, Tab, Row, Col, Alert } from "react-bootstrap";
+import { Form, Button, Tabs, Tab, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../services/authService";
 import FormInput from "../components/common/FormInput";
@@ -282,8 +282,14 @@ const RegisterPage = () => {
                             </Col>
                         </Row>
 
-                        <Button variant="primary" type="submit" className="w-100 py-3 fw-semibold shadow-sm mt-2" disabled={loading}>
-                            {loading ? "Creating Account..." : "Register as Student"}
+                        <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4 mb-2" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    <Spinner animation="border" size="sm" /> Creating Account...
+                                </>
+                            ) : (
+                                "Register as Student"
+                            )}
                         </Button>
                     </Form>
                 </Tab>
@@ -383,8 +389,14 @@ const RegisterPage = () => {
                             maxLength={200}
                         />
 
-                        <Button variant="primary" type="submit" className="w-100 py-3 fw-semibold shadow-sm mt-2" disabled={loading}>
-                            {loading ? "Creating Account..." : "Register as Instructor"}
+                        <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4 mb-2" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    <Spinner animation="border" size="sm" /> Creating Account...
+                                </>
+                            ) : (
+                                "Register as Instructor"
+                            )}
                         </Button>
                     </Form>
                 </Tab>
@@ -397,27 +409,6 @@ const RegisterPage = () => {
                 </Link>
             </div>
 
-            <style>
-                {`
-                    .custom-tabs .nav-link {
-                        color: #64748B;
-                        font-weight: 500;
-                        border: none;
-                        border-bottom: 2px solid transparent;
-                        padding-bottom: 1rem;
-                    }
-                    .custom-tabs .nav-link.active {
-                        color: #2563EB;
-                        background: transparent;
-                        border-bottom-color: #2563EB;
-                        font-weight: 600;
-                    }
-                    .custom-tabs .nav-link:hover {
-                        color: #2563EB;
-                        border-color: transparent;
-                    }
-                `}
-            </style>
         </div>
     );
 };

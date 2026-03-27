@@ -1,38 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --bs-primary: #10B981; /* Brand Emerald */
-  --bs-primary-rgb: 16, 185, 129;
-  --bs-secondary: #64748B; /* Slate-500 */
-  --bs-success: #10B981; /* Success Mint */
-  --bs-info: #0EA5E9; /* Highlight Sky */
-  --bs-warning: #F59E0B; /* Alert Amber */
-  --bs-danger: #F43F5E; /* Error Rose */
-  
-  --bs-body-bg: #F8FAFC; /* Paper White */
-  --bs-body-color: #0F172A; /* Void Slate (Text) */
-  
-  --bs-font-sans-serif: "DM Sans", "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --bs-body-font-family: var(--bs-font-sans-serif);
-  
-  --bs-border-radius: 0.75rem;
-  --bs-border-radius-lg: 1rem;
-  --bs-border-radius-sm: 0.5rem;
+  /* ─── Brand Colors ─────────────────────── */
+  --color-primary-50:  #ECFDF5;
+  --color-primary-100: #D1FAE5;
+  --color-primary-400: #34D399;
+  --color-primary-500: #10B981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-primary-900: #064E3B;
+
+  --color-secondary-50:  #F8FAFC;
+  --color-secondary-200: #E2E8F0;
+  --color-secondary-400: #94A3B8;
+  --color-secondary-600: #475569;
+  --color-secondary-800: #334155;
+  --color-secondary-900: #1E293B;
+  --color-secondary-950: #0F172A;
+
+  --color-accent-400:  #FBBF24;
+  --color-accent-500:  #F59E0B;
+  --color-accent-700:  #B45309;
+
+  /* ─── Semantic ─────────────────────────── */
+  --color-success: var(--color-primary-500);
+  --color-warning: var(--color-accent-500);
+  --color-error:   #EF4444;
+  --color-info:    #64748B;
+
+  /* ─── Surface ──────────────────────────── */
+  --surface-bg:       var(--color-secondary-50);
+  --surface-card:     #FFFFFF;
+  --surface-sidebar:  var(--color-secondary-950);
+  --surface-border:   var(--color-secondary-200);
+
+  /* ─── Text ─────────────────────────────── */
+  --text-primary:   var(--color-secondary-950);
+  --text-secondary: var(--color-secondary-600);
+  --text-muted:     var(--color-secondary-400);
+  --text-on-dark:   #FFFFFF;
+  --text-on-primary:#FFFFFF;
+
+  /* ─── Typography ───────────────────────── */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+
+  /* ─── Spacing ──────────────────────────── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ─── Radius ───────────────────────────── */
+  --radius-sm:  0.25rem;
+  --radius-md:  0.5rem;
+  --radius-lg:  0.75rem;
+  --radius-xl:  1rem;
+  --radius-full:9999px;
+
+  /* ─── Shadows ──────────────────────────── */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-primary: 0 4px 14px 0 rgb(16 185 129 / 0.3);
+
+  /* ─── Transitions ──────────────────────── */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ─── Layout ───────────────────────────── */
+  --sidebar-width: 260px;
+  --topbar-height: 64px;
+  --content-max-width: 1280px;
 }
 
-/* Custom utilities ported from custom.scss */
-.card {
-  border: 1px solid rgba(37, 99, 235, 0.1); /* rgba($primary, 0.1) */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
+/* ─── Base Reset ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.btn-primary {
-  box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
-  --bs-btn-bg: #10B981;
-  --bs-btn-border-color: #10B981;
-  --bs-btn-hover-bg: #059669;
-  --bs-btn-hover-border-color: #059669;
-}
-
-/* Ensure headings use the correct font if overridden in bootstrap variables */
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Outfit", "Plus Jakarta Sans", var(--bs-font-sans-serif);
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background-color: var(--surface-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }

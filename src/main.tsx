@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
+import "./styles/components.css";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
