@@ -7,7 +7,8 @@ const serviceEndpoint = ENDPOINTS.AUTH;
 const endpoints = {
     registerStudent: serviceEndpoint + "/register/student",
     registerInstructor: serviceEndpoint + "/register/instructor",
-    login: serviceEndpoint + "/login"
+    login: serviceEndpoint + "/login",
+    logout: serviceEndpoint + "/logout"
 }
 
 const AuthService = {
@@ -24,6 +25,11 @@ const AuthService = {
     login: async (request: LoginRequest): Promise<ApiResponse<any>> =>
     {
         const response = await api.post(endpoints.login, request);
+        return response.data;
+    },
+    logout: async (): Promise<ApiResponse<string>> =>
+    {
+        const response = await api.post(endpoints.logout);
         return response.data;
     }
 }

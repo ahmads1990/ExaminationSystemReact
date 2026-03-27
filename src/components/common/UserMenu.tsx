@@ -1,13 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import AuthService from "../../services/authService";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { user, logout } = useAuthContext();
 
-    // Dummy user data
-    const user = {
-        name: "Ahmad",
-        avatar: "https://ui-avatars.com/api/?name=Ahmad&background=4f46e5&color=fff&rounded=true"
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            await AuthService.logout();
+        } catch (error) {
+            console.error("Logout API failed, continuing local cleanup", error);
+        } finally {
+            logout(); // Synchronously clear state in AuthContext
+        }
+    };
+
+    // Use context user, fallback to dummy data if missing
+    const displayUser = {
+        name: user?.name || "Admin",
+        avatar: "https://ui-avatars.com/api/?name=" + (user?.name || "Admin") + "&background=4f46e5&color=fff&rounded=true"
     };
 
     return (
@@ -20,14 +34,14 @@ const UserMenu = () => {
                 style={{ cursor: "pointer" }}
             >
                 <img
-                    src={user.avatar}
-                    alt={user.name}
+                    src={displayUser.avatar}
+                    alt={displayUser.name}
                     className="rounded-circle border border-2 border-white shadow-sm"
                     width="40"
                     height="40"
                 />
                 <div className="d-none d-lg-block text-start">
-                    <div className="fw-bold text-dark small">{user.name}</div>
+                    <div className="fw-bold text-dark small">{displayUser.name}</div>
                     {/* Optional: Add role or status here */}
                 </div>
             </a>
@@ -45,9 +59,9 @@ const UserMenu = () => {
                 </li>
                 <li><hr className="dropdown-divider" /></li>
                 <li>
-                    <Link className="dropdown-item dropdown-item-custom text-danger" to="/logout">
+                    <a href="#" className="dropdown-item dropdown-item-custom text-danger" onClick={handleLogout}>
                         <i className="bi bi-box-arrow-right me-2"></i>Log Out
-                    </Link>
+                    </a>
                 </li>
             </ul>
         </div>
