@@ -1,5 +1,8 @@
 import axios from "axios";
-import { getToken } from "../utils/storage";
+import { getToken, getRefreshToken, saveToken, saveRefreshToken, getUser, clearAuth } from "../utils/storage";
+import { User } from "../types/auth";
+import { ENDPOINTS } from "./endpoints";
+import toast from "react-hot-toast";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -26,17 +29,73 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor - Handle 401 Unauthorized
+// Response interceptor - Handle 401 Unauthorized and Token Refresh
 api.interceptors.response.use(
     (response) => response,
-    (error) =>
+    async (error) =>
     {
-        if (error.response?.status === 401)
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry)
         {
+            originalRequest._retry = true;
+
+            const refreshTokenStr = getRefreshToken();
+            const user = getUser<User>();
+
+            if (refreshTokenStr && user)
+            {
+                try
+                {
+                    const refreshUrl = `${import.meta.env.VITE_API_BASE_URL}${ENDPOINTS.AUTH}/refresh-token`;
+                    const refreshResponse = await axios.post(refreshUrl, {
+                        userId: user.uid,
+                        refreshToken: refreshTokenStr
+                    });
+
+                    if (refreshResponse.data && refreshResponse.data.success && refreshResponse.data.data)
+                    {
+                        const { accessToken, refreshToken: newRefreshToken } = refreshResponse.data.data;
+
+                        saveToken(accessToken);
+                        saveRefreshToken(newRefreshToken);
+
+                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                        return api(originalRequest);
+                    }
+                } catch (refreshError)
+                {
+                    console.error("Token refresh failed:", refreshError);
+                }
+            }
+
             // Backend returns 401 for all permission issues (no 403 support yet)
-            // Redirect to main page instead of logging out
-            window.location.href = '/';
+            // Or if refresh token fails / missing
+            clearAuth();
+            window.location.href = '/login';
         }
+
+        // Global Error Handling (skip 401s as they are handled above)
+        if (error.response && error.response.status !== 401)
+        {
+            // Only toast if there's a specific message or a 500
+            const errorMessage = error.response.data?.message;
+            if (error.response.status >= 500)
+            {
+                toast.error("A server error occurred. Please try again later.");
+            } else if (errorMessage && !originalRequest._skipGlobalError)
+            {
+                toast.error(errorMessage);
+            }
+        } else if (error.request && !error.response)
+        {
+            // Network error
+            if (error.code !== 'ECONNABORTED' && error.message !== 'Network Error')
+            {
+                toast.error("Network error. Please check your connection.");
+            }
+        }
+
         return Promise.reject(error);
     }
 );
