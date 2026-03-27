@@ -64,6 +64,40 @@ const LoginPage = () => {
                 </Alert>
             )}
 
+            <div className="demo-credentials-card border rounded-3 p-3 mb-4 shadow-sm" style={{ backgroundColor: '#fffdf0', borderColor: '#ffe69c' }}>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                    <h6 className="mb-0 text-warning-emphasis fw-bold">🚀 Quick Demo Access</h6>
+                    <span className="badge bg-success rounded-pill px-2">Good with it! ✨</span>
+                </div>
+                <div className="row g-2">
+                    <div className="col-6">
+                        <div 
+                            className="p-2 border rounded bg-white cursor-pointer hover-shadow transition-all" 
+                            style={{ fontSize: '0.8rem', cursor: 'pointer' }}
+                            onClick={() => setFormData({ email: 'admin@exam.com', password: 'Password123!' })}
+                        >
+                            <div className="fw-bold text-primary">Instructor</div>
+                            <code>admin@exam.com</code>
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div 
+                            className="p-2 border rounded bg-white cursor-pointer hover-shadow transition-all" 
+                            style={{ fontSize: '0.8rem', cursor: 'pointer' }}
+                            onClick={() => setFormData({ email: 'student@exam.com', password: 'Password123!' })}
+                        >
+                            <div className="fw-bold text-info">Student</div>
+                            <code>student@exam.com</code>
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-2 text-center">
+                    <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+                        Click a user above to auto-fill the form!
+                    </small>
+                </div>
+            </div>
+
             <Form onSubmit={handleLogin}>
                 <FormInput
                     id="loginEmail"
