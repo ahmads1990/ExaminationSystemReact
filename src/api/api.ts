@@ -1,3 +1,4 @@
+import { getErrorMessage } from "../utils/errorMessages";
 import axios from "axios";
 import { getToken, getRefreshToken, saveToken, saveRefreshToken, getUser, clearAuth } from "../utils/storage";
 import { User } from "../types/auth";
@@ -78,14 +79,17 @@ api.interceptors.response.use(
         // Global Error Handling (skip 401s as they are handled above)
         if (error.response && error.response.status !== 401)
         {
-            // Only toast if there's a specific message or a 500
-            const errorMessage = error.response.data?.message;
-            if (error.response.status >= 500)
+            const errorCode = error.response.data?.errorCode;
+            if (errorCode && !originalRequest._skipGlobalError)
+            {
+                toast.error(getErrorMessage(errorCode));
+            }
+            else if (error.response.status >= 500)
             {
                 toast.error("A server error occurred. Please try again later.");
-            } else if (errorMessage && !originalRequest._skipGlobalError)
+            } else if (error.response.data?.message && !originalRequest._skipGlobalError)
             {
-                toast.error(errorMessage);
+                toast.error(error.response.data.message);
             }
         } else if (error.request && !error.response)
         {
