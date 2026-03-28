@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Alert, Spinner, Form } from "react-bootstrap";
-import UserService from "../services/userService";
-import FormPasswordInput from "../components/common/FormPasswordInput";
+import UserService from "../../services/userService";
+import PasswordInput from "../../components/common/forms/PasswordInput";
 
 const ChangePasswordPage = () => {
     const [currentPassword, setCurrentPassword] = useState("");
@@ -72,35 +72,35 @@ const ChangePasswordPage = () => {
 
                             <Form onSubmit={handleChangePasswordSubmit} className="d-flex flex-column gap-3">
                                 
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="currentPassword"
                                     name="currentPassword"
                                     label="Current Password"
                                     placeholder="Enter current password"
                                     value={currentPassword}
-                                    onChange={(value) => setCurrentPassword(value)}
+                                    onChange={(value: string) => setCurrentPassword(value)}
                                     required
                                 />
 
                                 <hr className="my-2 opacity-50 text-muted" />
 
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="newPassword"
                                     name="newPassword"
                                     label="New Password"
                                     placeholder="Enter new password"
                                     value={newPassword}
-                                    onChange={(value) => setNewPassword(value)}
+                                    onChange={(value: string) => setNewPassword(value)}
                                     required
                                 />
 
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     label="Confirm New Password"
                                     placeholder="Confirm new password"
                                     value={confirmPassword}
-                                    onChange={(value) => setConfirmPassword(value)}
+                                    onChange={(value: string) => setConfirmPassword(value)}
                                     required
                                 />
 

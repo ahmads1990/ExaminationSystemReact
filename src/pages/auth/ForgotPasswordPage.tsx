@@ -3,9 +3,8 @@ import { Button, Alert, Spinner, Form } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-import AuthService from "../services/authService";
-
-import passwordSecurityLottieUrl from "../assets/lottie-animations/passwordSecurity.lottie?url";
+import AuthService from "../../services/authService";
+import passwordSecurityLottieUrl from "../../assets/lottie-animations/passwordSecurity.lottie?url";
 
 const ForgotPasswordPage = () => {
     const navigate = useNavigate();

@@ -3,8 +3,8 @@ import { Modal, Form, Spinner } from "react-bootstrap";
 import { Pencil } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
-import FormInput from "../common/FormInput";
-import FormTextareaInput from "../common/FormTextareaInput";
+import TextInput from "../common/forms/TextInput";
+import TextAreaInput from "../common/forms/TextAreaInput";
 
 interface EditCourseModalProps {
     show: boolean;
@@ -95,7 +95,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
 
             <Modal.Body className="px-4 pb-0 pt-4">
                 <Form id="edit-course-form" onSubmit={handleSubmit}>
-                    <FormInput
+                    <TextInput
                         id="edit-course-title"
                         name="title"
                         label="Course Title"
@@ -106,7 +106,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                         required
                         maxLength={100}
                     />
-                    <FormTextareaInput
+                    <TextAreaInput
                         id="edit-course-description"
                         name="description"
                         label="Description"

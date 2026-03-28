@@ -1,45 +1,49 @@
 import { FloatingLabel, Form } from "react-bootstrap";
 
-type FormPasswordInputProps = {
+type SelectInputProps = {
     id: string;
     name: string;
     label: string;
-    placeholder: string;
     value: string;
     onChange: (value: string) => void;
+    options: { value: string; label: string }[];
     error?: string;
     required?: boolean;
     disabled?: boolean;
-    minLength?: number;
+    placeholder?: string;
 };
 
-const FormPasswordInput = ({
+const SelectInput = ({
     id,
     name,
     label,
-    placeholder,
     value,
     onChange,
+    options,
     error,
     required = false,
     disabled = false,
-    minLength
-}: FormPasswordInputProps) => {
+    placeholder = "Select an option"
+}: SelectInputProps) => {
     return (
         <div className="mb-3">
             <FloatingLabel controlId={id} label={label}>
-                <Form.Control
-                    type="password"
+                <Form.Select
                     name={name}
-                    placeholder={placeholder}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     isInvalid={!!error}
                     required={required}
                     disabled={disabled}
-                    minLength={minLength}
                     className="bg-light border-light-subtle focus-ring"
-                />
+                >
+                    <option value="">{placeholder}</option>
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </Form.Select>
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}
@@ -50,4 +54,4 @@ const FormPasswordInput = ({
     );
 };
 
-export default FormPasswordInput;
+export default SelectInput;

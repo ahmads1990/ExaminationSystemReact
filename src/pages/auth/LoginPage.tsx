@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Form, Button, Spinner, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
-import AuthService from "../services/authService";
-import FormInput from "../components/common/FormInput";
-import FormPasswordInput from "../components/common/FormPasswordInput";
-import { validateLoginRequest, ValidationErrors } from "../utils/validation";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import AuthService from "../../services/authService";
+import TextInput from "../../components/common/forms/TextInput";
+import PasswordInput from "../../components/common/forms/PasswordInput";
+import { validateLoginRequest, ValidationErrors } from "../../utils/validation";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -108,24 +108,24 @@ const LoginPage = () => {
             </div>
 
             <Form onSubmit={handleLogin}>
-                <FormInput
+                <TextInput
                     id="loginEmail"
                     name="email"
                     label="Email Address"
                     placeholder="name@example.com"
                     value={formData.email}
-                    onChange={(value) => setFormData({ ...formData, email: value })}
+                    onChange={(value: string) => setFormData({ ...formData, email: value })}
                     error={errors.email}
                     required
                 />
 
-                <FormPasswordInput
+                <PasswordInput
                     id="loginPassword"
                     name="password"
                     label="Password"
                     placeholder="Password"
                     value={formData.password}
-                    onChange={(value) => setFormData({ ...formData, password: value })}
+                    onChange={(value: string) => setFormData({ ...formData, password: value })}
                     error={errors.password}
                     required
                 />

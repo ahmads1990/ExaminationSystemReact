@@ -1,49 +1,48 @@
 import { FloatingLabel, Form } from "react-bootstrap";
 
-type FormSelectInputProps = {
+type TextAreaInputProps = {
     id: string;
     name: string;
     label: string;
+    placeholder: string;
     value: string;
     onChange: (value: string) => void;
-    options: { value: string; label: string }[];
     error?: string;
     required?: boolean;
     disabled?: boolean;
-    placeholder?: string;
+    rows?: number;
+    maxLength?: number;
 };
 
-const FormSelectInput = ({
+const TextAreaInput = ({
     id,
     name,
     label,
+    placeholder,
     value,
     onChange,
-    options,
     error,
     required = false,
     disabled = false,
-    placeholder = "Select an option"
-}: FormSelectInputProps) => {
+    rows = 3,
+    maxLength
+}: TextAreaInputProps) => {
     return (
         <div className="mb-3">
             <FloatingLabel controlId={id} label={label}>
-                <Form.Select
+                <Form.Control
+                    as="textarea"
                     name={name}
+                    placeholder={placeholder}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     isInvalid={!!error}
                     required={required}
                     disabled={disabled}
+                    maxLength={maxLength}
+                    style={{ height: `${rows * 33}px` }}
                     className="bg-light border-light-subtle focus-ring"
-                >
-                    <option value="">{placeholder}</option>
-                    {options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </Form.Select>
+                />
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}
@@ -54,4 +53,4 @@ const FormSelectInput = ({
     );
 };
 
-export default FormSelectInput;
+export default TextAreaInput;

@@ -1,4 +1,4 @@
-type FormSwitchProps = {
+type SwitchInputProps = {
     id: string;
     optionLeft: string;
     optionRight: string;
@@ -6,7 +6,7 @@ type FormSwitchProps = {
     onChange: (value: string) => void;
 };
 
-const FormSwitch = ({ id, optionLeft, optionRight, value, onChange }: FormSwitchProps) => {
+const SwitchInput = ({ id, optionLeft, optionRight, value, onChange }: SwitchInputProps) => {
     const checked = value === optionRight;
 
     return (
@@ -24,4 +24,4 @@ const FormSwitch = ({ id, optionLeft, optionRight, value, onChange }: FormSwitch
     );
 };
 
-export default FormSwitch;
+export default SwitchInput;

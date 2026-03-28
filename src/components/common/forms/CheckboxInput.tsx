@@ -1,6 +1,6 @@
 import { Form } from "react-bootstrap";
 
-type FormCheckboxInputProps = {
+type CheckboxInputProps = {
     id: string;
     name: string;
     label: React.ReactNode;
@@ -11,7 +11,7 @@ type FormCheckboxInputProps = {
     disabled?: boolean;
 };
 
-const FormCheckboxInput = ({
+const CheckboxInput = ({
     id,
     name,
     label,
@@ -20,7 +20,7 @@ const FormCheckboxInput = ({
     error,
     required = false,
     disabled = false
-}: FormCheckboxInputProps) => {
+}: CheckboxInputProps) => {
     return (
         <div className="mb-3">
             <Form.Check
@@ -43,4 +43,4 @@ const FormCheckboxInput = ({
     );
 };
 
-export default FormCheckboxInput;
+export default CheckboxInput;

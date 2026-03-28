@@ -1,6 +1,6 @@
 import { FloatingLabel, Form } from "react-bootstrap";
 
-type FormInputProps = {
+type TextInputProps = {
     id: string;
     name: string;
     label: string;
@@ -14,7 +14,7 @@ type FormInputProps = {
     maxLength?: number;
 };
 
-const FormInput = ({
+const TextInput = ({
     id,
     name,
     label,
@@ -26,7 +26,7 @@ const FormInput = ({
     disabled = false,
     minLength,
     maxLength
-}: FormInputProps) => {
+}: TextInputProps) => {
     return (
         <div className="mb-3">
             <FloatingLabel controlId={id} label={label}>
@@ -53,4 +53,4 @@ const FormInput = ({
     );
 };
 
-export default FormInput;
+export default TextInput;

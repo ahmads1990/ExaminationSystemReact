@@ -3,8 +3,8 @@ import { Modal, Form, Spinner } from "react-bootstrap";
 import { BookOpen } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
-import FormInput from "../common/FormInput";
-import FormTextareaInput from "../common/FormTextareaInput";
+import TextInput from "../common/forms/TextInput";
+import TextAreaInput from "../common/forms/TextAreaInput";
 
 interface AddCourseModalProps {
     show: boolean;
@@ -97,24 +97,24 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
 
             <Modal.Body className="px-4 pb-0 pt-4">
                 <Form id="add-course-form" onSubmit={handleSubmit}>
-                    <FormInput
+                    <TextInput
                         id="add-course-title"
                         name="title"
                         label="Course Title"
                         placeholder="e.g. Introduction to Computer Science"
                         value={formData.title}
-                        onChange={(v) => setFormData((p) => ({ ...p, title: v }))}
+                        onChange={(v: string) => setFormData((p) => ({ ...p, title: v }))}
                         error={errors.title}
                         required
                         maxLength={100}
                     />
-                    <FormTextareaInput
+                    <TextAreaInput
                         id="add-course-description"
                         name="description"
                         label="Description"
                         placeholder="Describe what students will learn in this course"
                         value={formData.description}
-                        onChange={(v) => setFormData((p) => ({ ...p, description: v }))}
+                        onChange={(v: string) => setFormData((p) => ({ ...p, description: v }))}
                         error={errors.description}
                         required
                         rows={4}

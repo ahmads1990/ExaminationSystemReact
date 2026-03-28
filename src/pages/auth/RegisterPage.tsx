@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Form, Button, Tabs, Tab, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../services/authService";
-import FormInput from "../components/common/FormInput";
-import FormPasswordInput from "../components/common/FormPasswordInput";
-import FormSelectInput from "../components/common/FormSelectInput";
-import FormTextareaInput from "../components/common/FormTextareaInput";
+import AuthService from "../../services/authService";
+import TextInput from "../../components/common/forms/TextInput";
+import PasswordInput from "../../components/common/forms/PasswordInput";
+import SelectInput from "../../components/common/forms/SelectInput";
+import TextAreaInput from "../../components/common/forms/TextAreaInput";
 import { 
     validateRegisterStudentRequest, 
     validateRegisterInstructorRequest,
     ValidationErrors 
-} from "../utils/validation";
+} from "../../utils/validation";
 
 enum UserType {
     Student = "student",
@@ -186,13 +186,13 @@ const RegisterPage = () => {
                     <Form onSubmit={handleRegister} className="mt-3">
                         <Row>
                             <Col md={6}>
-                                <FormInput
+                                <TextInput
                                     id="studentName"
                                     name="name"
                                     label="Full Name"
                                     placeholder="John Doe"
                                     value={studentForm.name}
-                                    onChange={(value) => setStudentForm({ ...studentForm, name: value })}
+                                    onChange={(value: string) => setStudentForm({ ...studentForm, name: value })}
                                     error={studentErrors.name}
                                     required
                                     minLength={3}
@@ -200,13 +200,13 @@ const RegisterPage = () => {
                                 />
                             </Col>
                             <Col md={6}>
-                                <FormInput
+                                <TextInput
                                     id="studentUser"
                                     name="username"
                                     label="Username"
                                     placeholder="johndoe"
                                     value={studentForm.username}
-                                    onChange={(value) => setStudentForm({ ...studentForm, username: value })}
+                                    onChange={(value: string) => setStudentForm({ ...studentForm, username: value })}
                                     error={studentErrors.username}
                                     required
                                     minLength={3}
@@ -215,39 +215,39 @@ const RegisterPage = () => {
                             </Col>
                         </Row>
 
-                        <FormInput
+                        <TextInput
                             id="studentEmail"
                             name="email"
                             label="Email Address"
                             placeholder="name@example.com"
                             value={studentForm.email}
-                            onChange={(value) => setStudentForm({ ...studentForm, email: value })}
+                            onChange={(value: string) => setStudentForm({ ...studentForm, email: value })}
                             error={studentErrors.email}
                             required
                         />
 
                         <Row>
                             <Col md={6}>
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="studentPass"
                                     name="password"
                                     label="Password"
                                     placeholder="Password"
                                     value={studentForm.password}
-                                    onChange={(value) => setStudentForm({ ...studentForm, password: value })}
+                                    onChange={(value: string) => setStudentForm({ ...studentForm, password: value })}
                                     error={studentErrors.password}
                                     required
                                     minLength={8}
                                 />
                             </Col>
                             <Col md={6}>
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="studentConfirm"
                                     name="confirmPassword"
                                     label="Confirm Password"
                                     placeholder="Confirm Password"
                                     value={studentForm.confirmPassword}
-                                    onChange={(value) => setStudentForm({ ...studentForm, confirmPassword: value })}
+                                    onChange={(value: string) => setStudentForm({ ...studentForm, confirmPassword: value })}
                                     error={studentErrors.confirmPassword}
                                     required
                                 />
@@ -256,12 +256,12 @@ const RegisterPage = () => {
 
                         <Row>
                             <Col md={6}>
-                                <FormSelectInput
+                                <SelectInput
                                     id="studentLevel"
                                     name="level"
                                     label="Education Level"
                                     value={studentForm.level}
-                                    onChange={(value) => setStudentForm({ ...studentForm, level: value })}
+                                    onChange={(value: string) => setStudentForm({ ...studentForm, level: value })}
                                     options={levelOptions}
                                     error={studentErrors.level}
                                     required
@@ -269,13 +269,13 @@ const RegisterPage = () => {
                                 />
                             </Col>
                             <Col md={6}>
-                                <FormInput
+                                <TextInput
                                     id="studentGroup"
                                     name="group"
                                     label="Group (Optional)"
                                     placeholder="e.g., Group A"
                                     value={studentForm.group}
-                                    onChange={(value) => setStudentForm({ ...studentForm, group: value })}
+                                    onChange={(value: string) => setStudentForm({ ...studentForm, group: value })}
                                     error={studentErrors.group}
                                     maxLength={50}
                                 />
@@ -298,13 +298,13 @@ const RegisterPage = () => {
                     <Form onSubmit={handleRegister} className="mt-3">
                         <Row>
                             <Col md={6}>
-                                <FormInput
+                                <TextInput
                                     id="instrName"
                                     name="name"
                                     label="Full Name"
                                     placeholder="Dr. Jane Smith"
                                     value={instructorForm.name}
-                                    onChange={(value) => setInstructorForm({ ...instructorForm, name: value })}
+                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, name: value })}
                                     error={instructorErrors.name}
                                     required
                                     minLength={3}
@@ -312,13 +312,13 @@ const RegisterPage = () => {
                                 />
                             </Col>
                             <Col md={6}>
-                                <FormInput
+                                <TextInput
                                     id="instrUser"
                                     name="username"
                                     label="Username"
                                     placeholder="janesmith"
                                     value={instructorForm.username}
-                                    onChange={(value) => setInstructorForm({ ...instructorForm, username: value })}
+                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, username: value })}
                                     error={instructorErrors.username}
                                     required
                                     minLength={3}
@@ -327,64 +327,64 @@ const RegisterPage = () => {
                             </Col>
                         </Row>
 
-                        <FormInput
+                        <TextInput
                             id="instrEmail"
                             name="email"
                             label="Email Address"
                             placeholder="name@example.com"
                             value={instructorForm.email}
-                            onChange={(value) => setInstructorForm({ ...instructorForm, email: value })}
+                            onChange={(value: string) => setInstructorForm({ ...instructorForm, email: value })}
                             error={instructorErrors.email}
                             required
                         />
 
                         <Row>
                             <Col md={6}>
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="instrPass"
                                     name="password"
                                     label="Password"
                                     placeholder="Password"
                                     value={instructorForm.password}
-                                    onChange={(value) => setInstructorForm({ ...instructorForm, password: value })}
+                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, password: value })}
                                     error={instructorErrors.password}
                                     required
                                     minLength={8}
                                 />
                             </Col>
                             <Col md={6}>
-                                <FormPasswordInput
+                                <PasswordInput
                                     id="instrConfirm"
                                     name="confirmPassword"
                                     label="Confirm Password"
                                     placeholder="Confirm Password"
                                     value={instructorForm.confirmPassword}
-                                    onChange={(value) => setInstructorForm({ ...instructorForm, confirmPassword: value })}
+                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, confirmPassword: value })}
                                     error={instructorErrors.confirmPassword}
                                     required
                                 />
                             </Col>
                         </Row>
 
-                        <FormTextareaInput
+                        <TextAreaInput
                             id="instrBio"
                             name="bio"
                             label="Bio (Optional)"
                             placeholder="Tell us about yourself..."
                             value={instructorForm.bio}
-                            onChange={(value) => setInstructorForm({ ...instructorForm, bio: value })}
+                            onChange={(value: string) => setInstructorForm({ ...instructorForm, bio: value })}
                             error={instructorErrors.bio}
                             rows={3}
                             maxLength={500}
                         />
 
-                        <FormInput
+                        <TextInput
                             id="instrSpecialization"
                             name="specialization"
                             label="Specialization (Optional)"
                             placeholder="e.g., Computer Science"
                             value={instructorForm.specialization}
-                            onChange={(value) => setInstructorForm({ ...instructorForm, specialization: value })}
+                            onChange={(value: string) => setInstructorForm({ ...instructorForm, specialization: value })}
                             error={instructorErrors.specialization}
                             maxLength={200}
                         />

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button, Alert, Spinner, Form } from "react-bootstrap";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
-import AuthService from "../services/authService";
-import OtpInput from "../components/common/OtpInput";
-import FormPasswordInput from "../components/common/FormPasswordInput";
+import AuthService from "../../services/authService";
+import OtpInput from "../../components/common/forms/OtpInput";
+import PasswordInput from "../../components/common/forms/PasswordInput";
 
 const ResetPasswordPage = () => {
     const navigate = useNavigate();
@@ -92,23 +92,23 @@ const ResetPasswordPage = () => {
                 </div>
 
                 {/* Password Inputs */}
-                <FormPasswordInput
+                <PasswordInput
                     id="newPassword"
                     name="newPassword"
                     label="New Password"
                     placeholder="Enter new password"
                     value={newPassword}
-                    onChange={(value) => setNewPassword(value)}
+                    onChange={(value: string) => setNewPassword(value)}
                     required
                 />
 
-                <FormPasswordInput
+                <PasswordInput
                     id="confirmPassword"
                     name="confirmPassword"
                     label="Confirm Password"
                     placeholder="Confirm new password"
                     value={confirmPassword}
-                    onChange={(value) => setConfirmPassword(value)}
+                    onChange={(value: string) => setConfirmPassword(value)}
                     required
                 />
 

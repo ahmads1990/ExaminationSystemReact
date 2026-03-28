@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import OtpInput from "../components/common/OtpInput";
-
-import AuthService from "../services/authService";
-
-import contactUsLottieUrl from "../assets/lottie-animations/contactUs.lottie?url";
+import OtpInput from "../../components/common/forms/OtpInput";
+import AuthService from "../../services/authService";
+import contactUsLottieUrl from "../../assets/lottie-animations/contactUs.lottie?url";
 
 const VerifyEmailPage = () => {
     const navigate = useNavigate();
