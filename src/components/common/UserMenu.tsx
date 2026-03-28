@@ -57,6 +57,11 @@ const UserMenu = () => {
                         <i className="bi bi-gear me-2"></i>Settings
                     </Link>
                 </li>
+                <li>
+                    <Link className="dropdown-item dropdown-item-custom" to="/change-password">
+                        <i className="bi bi-shield-lock me-2"></i>Change Password
+                    </Link>
+                </li>
                 <li><hr className="dropdown-divider" /></li>
                 <li>
                     <a href="#" className="dropdown-item dropdown-item-custom text-danger" onClick={handleLogout}>

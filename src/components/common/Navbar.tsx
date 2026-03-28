@@ -75,6 +75,20 @@ const Navbar = () => {
                             </NavLink>
                         </li>
 
+                        {/* TODO: Delete this temporary link later */}
+                        <li className="nav-item">
+                            <NavLink className="nav-link nav-link-custom text-warning" to="/forgot-password">
+                                [FORGOT PASS]
+                            </NavLink>
+                        </li>
+
+                        {/* TODO: Delete this temporary link later */}
+                        <li className="nav-item">
+                            <NavLink className="nav-link nav-link-custom text-warning" to="/change-password">
+                                [CHANGE PASS]
+                            </NavLink>
+                        </li>
+
                         <li className="nav-item">
                             <NavLink className="nav-link nav-link-custom" to="/docs">
                                 Docs

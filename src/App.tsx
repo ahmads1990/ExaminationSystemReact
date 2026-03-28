@@ -8,6 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/" element={<Navigate to="/questions" replace />} />
                     
                     <Route path="questions" element={<QuestionList />} />
+                    <Route path="change-password" element={<ChangePasswordPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
