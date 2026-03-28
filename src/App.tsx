@@ -9,6 +9,9 @@ import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import { UserRole } from "./types/auth";
 
 function App() {
     return (
@@ -28,8 +31,16 @@ function App() {
                     {/* Redirect root to login for now, or dashboard if auth */}
                     <Route path="/" element={<Navigate to="/questions" replace />} />
                     
-                    <Route path="questions" element={<QuestionList />} />
-                    <Route path="change-password" element={<ChangePasswordPage />} />
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="change-password" element={<ChangePasswordPage />} />
+                    </Route>
+
+                    {/* Instructor Only Routes */}
+                    <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
+                        <Route path="questions" element={<QuestionList />} />
+                    </Route>
+
+                    <Route path="unauthorized" element={<UnauthorizedPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
