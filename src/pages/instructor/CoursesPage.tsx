@@ -5,6 +5,9 @@ import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { useDebounce } from "../../hooks/useDebounce";
 import { Spinner, Pagination } from "react-bootstrap";
 import toast from "react-hot-toast";
+import AddCourseModal from "../../components/instructor/AddCourseModal";
+import EditCourseModal from "../../components/instructor/EditCourseModal";
+import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 
 const CoursesPage = () => {
     const [courses, setCourses] = useState<CourseDto[]>([]);
@@ -15,6 +18,11 @@ const CoursesPage = () => {
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
+
+    // Modal state
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [editCourse, setEditCourse] = useState<CourseDto | null>(null);
+    const [deleteCourse, setDeleteCourse] = useState<CourseDto | null>(null);
 
     const fetchCourses = async () => {
         setLoading(true);
@@ -45,13 +53,31 @@ const CoursesPage = () => {
     useEffect(() => { fetchCourses(); }, [debouncedSearch, pageIndex, pageSize]);
 
     const totalPages = Math.ceil(totalCount / pageSize);
-
     const handlePageChange = (newIndex: number) => {
         if (newIndex >= 0 && newIndex < totalPages) setPageIndex(newIndex);
     };
 
     const formatDate = (dateStr: string) =>
         new Date(dateStr).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
+    // CRUD handlers
+    const handleCourseCreated = (course: CourseDto) => {
+        toast.success(`"${course.title}" created successfully!`);
+        fetchCourses();
+    };
+
+    const handleCourseUpdated = (updated: CourseDto) => {
+        toast.success(`"${updated.title}" updated successfully!`);
+        setCourses((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!deleteCourse) return;
+        await CourseService.deleteCourse(deleteCourse.id);
+        toast.success(`"${deleteCourse.title}" deleted successfully!`);
+        setDeleteCourse(null);
+        fetchCourses();
+    };
 
     return (
         <div className="container-fluid animate-fade-in">
@@ -63,7 +89,7 @@ const CoursesPage = () => {
                 </div>
                 <button
                     className="btn btn-primary shadow-sm d-flex align-items-center gap-2 px-4 py-2"
-                    onClick={() => toast("Create course coming soon!")}
+                    onClick={() => setShowAddModal(true)}
                 >
                     <Plus size={18} />
                     <span>New Course</span>
@@ -159,13 +185,13 @@ const CoursesPage = () => {
                                     <div className="card-footer bg-white border-0 px-4 pb-4 pt-0 d-flex gap-2">
                                         <button
                                             className="btn btn-outline-primary btn-sm flex-grow-1"
-                                            onClick={() => toast("Edit coming soon!")}
+                                            onClick={() => setEditCourse(course)}
                                         >
                                             Edit
                                         </button>
                                         <button
                                             className="btn btn-outline-danger btn-sm"
-                                            onClick={() => toast("Delete coming soon!")}
+                                            onClick={() => setDeleteCourse(course)}
                                         >
                                             Delete
                                         </button>
@@ -201,6 +227,26 @@ const CoursesPage = () => {
                     )}
                 </>
             )}
+
+            {/* Modals */}
+            <AddCourseModal
+                show={showAddModal}
+                onHide={() => setShowAddModal(false)}
+                onSuccess={handleCourseCreated}
+            />
+            <EditCourseModal
+                show={editCourse !== null}
+                onHide={() => setEditCourse(null)}
+                course={editCourse}
+                onSuccess={handleCourseUpdated}
+            />
+            <ConfirmDeleteDialog
+                show={deleteCourse !== null}
+                onHide={() => setDeleteCourse(null)}
+                onConfirm={handleDeleteConfirm}
+                title={`Delete "${deleteCourse?.title}"?`}
+                description="This will permanently remove the course. This action cannot be undone."
+            />
         </div>
     );
 };
