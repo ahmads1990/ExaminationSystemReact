@@ -41,6 +41,16 @@ const AuthService = {
     {
         const response = await api.post(`${serviceEndpoint}/verify-email`, { email, otp });
         return response.data;
+    },
+    forgotPassword: async (email: string): Promise<ApiResponse<string>> =>
+    {
+        const response = await api.post(`${serviceEndpoint}/forgot-password`, { email });
+        return response.data;
+    },
+    resetPassword: async (data: any): Promise<ApiResponse<string>> =>
+    {
+        const response = await api.post(`${serviceEndpoint}/reset-password`, data);
+        return response.data;
     }
 }
 

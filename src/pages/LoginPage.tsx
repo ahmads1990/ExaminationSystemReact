@@ -123,7 +123,7 @@ const LoginPage = () => {
 
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <Form.Check type="checkbox" label="Remember me" id="rememberMe" className="small text-muted" />
-                    <a href="#" className="text-decoration-none small fw-semibold text-primary hover-opacity">Forgot password?</a>
+                    <Link to="/forgot-password" className="text-decoration-none small fw-semibold text-primary hover-opacity">Forgot password?</Link>
                 </div>
 
                 <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-4" disabled={loading}>

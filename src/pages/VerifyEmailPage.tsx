@@ -6,7 +6,7 @@ import OtpInput from "../components/common/OtpInput";
 
 import AuthService from "../services/authService";
 
-import contactUsLottieUrl from "../assets/contactUs.lottie?url";
+import contactUsLottieUrl from "../assets/lottie-animations/contactUs.lottie?url";
 
 const VerifyEmailPage = () => {
     const navigate = useNavigate();
