@@ -11,6 +11,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import CoursesPage from "./pages/instructor/CoursesPage";
 import { UserRole } from "./types/auth";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
 
                     {/* Instructor Only Routes */}
                     <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
+                        <Route path="instructor/courses" element={<CoursesPage />} />
                         <Route path="questions" element={<QuestionList />} />
                     </Route>
 

@@ -4,9 +4,10 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { BookOpen, LayoutDashboard } from "lucide-react";
 import Navbar from "../components/common/Navbar";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { UserRole } from "../types/auth";
 
 const MainLayout = () => {
-    const { isAuthenticated, isLoading } = useAuthContext();
+    const { isAuthenticated, isLoading, user } = useAuthContext();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -35,11 +36,27 @@ const MainLayout = () => {
                                 <LayoutDashboard size={18} />
                                 <span>Dashboard</span>
                             </NavLink>
-                            <NavLink to="/questions" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
-                                <BookOpen size={18} />
-                                <span>Question Bank</span>
-                            </NavLink>
-                             {/* Add more links here */}
+                            {/* Student Routes */}
+                            {user?.role === UserRole.Student && (
+                                <NavLink to="/courses" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
+                                    <BookOpen size={18} />
+                                    <span>Browse Courses</span>
+                                </NavLink>
+                            )}
+
+                             {/* Instructor Routes */}
+                            {user?.role === UserRole.Instructor && (
+                                <>
+                                    <NavLink to="/instructor/courses" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
+                                        <BookOpen size={18} />
+                                        <span>My Courses</span>
+                                    </NavLink>
+                                    <NavLink to="/questions" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
+                                        <BookOpen size={18} />
+                                        <span>Question Bank</span>
+                                    </NavLink>
+                                </>
+                            )}
                         </Nav>
                     </div>
                 </aside>
