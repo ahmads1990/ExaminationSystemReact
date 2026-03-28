@@ -1,8 +1,23 @@
+import { useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const AuthLayout = () => {
+    const { isAuthenticated, isLoading } = useAuthContext();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoading && isAuthenticated) {
+            navigate("/");
+        }
+    }, [isAuthenticated, isLoading, navigate]);
+
+    if (isLoading) {
+        return null;
+    }
+
     return (
         <>
             <Navbar />

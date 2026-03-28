@@ -1,9 +1,24 @@
+import { useEffect } from "react";
 import { Nav } from "react-bootstrap";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { BookOpen, LayoutDashboard } from "lucide-react";
 import Navbar from "../components/common/Navbar";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const MainLayout = () => {
+    const { isAuthenticated, isLoading } = useAuthContext();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
+            navigate("/login");
+        }
+    }, [isAuthenticated, isLoading, navigate]);
+
+    if (isLoading) {
+        return null; // Or a loading spinner
+    }
+
     return (
         <div className="d-flex flex-column min-vh-100 bg-light">
             {/* TOP NAVIGATION */}

@@ -22,7 +22,6 @@ const LoginPage = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-
         // Validate form
         const validationErrors = validateLoginRequest(formData);
         setErrors(validationErrors);
@@ -37,15 +36,25 @@ const LoginPage = () => {
             
             if (response.success && response.data) {
                 // Login successful, save token and redirect
-                const { accessToken, refreshToken } = response.data;
-                login(accessToken, refreshToken);
+                const { jwtToken, refreshToken } = response.data;
+                login(jwtToken, refreshToken);
                 navigate("/");
             } else {
                 setError(response.message || "Login failed. Please try again.");
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error("Login error:", err);
-            setError("An error occurred. Please try again.");
+            
+            // Check for EmailNotVerified
+            if (err.response?.data?.errorCode === 1002) {
+                const userId = err.response.data.data; // Assumption: backend returns userId in data
+                if (userId) {
+                    navigate(`/verify-email?userId=${userId}&email=${encodeURIComponent(formData.email)}`);
+                    return; // Stop execution
+                }
+            }
+            
+            setError(err.response?.data?.message || "An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }

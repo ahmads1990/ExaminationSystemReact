@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/authService";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useAuthContext();
+    const navigate = useNavigate();
 
     const handleLogout = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -15,6 +16,7 @@ const UserMenu = () => {
             console.error("Logout API failed, continuing local cleanup", error);
         } finally {
             logout(); // Synchronously clear state in AuthContext
+            navigate("/login");
         }
     };
 
