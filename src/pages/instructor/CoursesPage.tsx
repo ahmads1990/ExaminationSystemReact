@@ -3,6 +3,8 @@ import { Search, Plus, BookOpen, Clock, User, CalendarDays } from "lucide-react"
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { useDebounce } from "../../hooks/useDebounce";
+import { formatDate } from "../../utils/dateUtils";
+import ActionButton from "../../components/common/ActionButton";
 import { Spinner, Pagination } from "react-bootstrap";
 import toast from "react-hot-toast";
 import AddCourseModal from "../../components/instructor/AddCourseModal";
@@ -34,13 +36,8 @@ const CoursesPage = () => {
             });
 
             if (response) {
-                if (Array.isArray(response)) {
-                    setCourses(response);
-                    setTotalCount(response.length);
-                } else {
-                    setCourses(response.data || []);
-                    setTotalCount(response.totalCount || 0);
-                }
+                setCourses(response.data || []);
+                setTotalCount(response.totalCount || 0);
             }
         } catch (error) {
             console.error("Failed to load courses", error);
@@ -57,8 +54,7 @@ const CoursesPage = () => {
         if (newIndex >= 0 && newIndex < totalPages) setPageIndex(newIndex);
     };
 
-    const formatDate = (dateStr: string) =>
-        new Date(dateStr).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
 
     // CRUD handlers
     const handleCourseCreated = (course: CourseDto) => {
@@ -87,13 +83,15 @@ const CoursesPage = () => {
                     <h2 className="fw-bold mb-1">My Courses</h2>
                     <p className="text-muted mb-0">Manage and organize your examination courses</p>
                 </div>
-                <button
-                    className="btn btn-primary shadow-sm d-flex align-items-center gap-2 px-4 py-2"
+                <ActionButton
+                    variant="primary"
+                    className="shadow-sm px-4"
+                    fullWidth={false}
+                    icon={<Plus size={18} />}
                     onClick={() => setShowAddModal(true)}
                 >
-                    <Plus size={18} />
-                    <span>New Course</span>
-                </button>
+                    New Course
+                </ActionButton>
             </div>
 
             {/* Search */}
@@ -132,8 +130,8 @@ const CoursesPage = () => {
             ) : (
                 <>
                     <div className="row g-4 mb-4">
-                        {courses.map((course) => (
-                            <div className="col-12 col-md-6 col-xl-4" key={course.id}>
+                        {courses.map((course, index) => (
+                            <div className="col-12 col-md-6 col-xl-4" key={course.id || index}>
                                 <div className="card h-100 border-0 shadow-sm card-custom position-relative overflow-hidden">
                                     {/* Top accent bar using primary brand color */}
                                     <div
@@ -183,18 +181,18 @@ const CoursesPage = () => {
 
                                     {/* Actions */}
                                     <div className="card-footer bg-white border-0 px-4 pb-4 pt-0 d-flex gap-2">
-                                        <button
-                                            className="btn btn-outline-primary btn-sm flex-grow-1"
+                                        <ActionButton
+                                            variant="outline-primary"
                                             onClick={() => setEditCourse(course)}
                                         >
                                             Edit
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-danger btn-sm"
+                                        </ActionButton>
+                                        <ActionButton
+                                            variant="outline-danger"
                                             onClick={() => setDeleteCourse(course)}
                                         >
                                             Delete
-                                        </button>
+                                        </ActionButton>
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +209,7 @@ const CoursesPage = () => {
                                 />
                                 {[...Array(totalPages)].map((_, i) => (
                                     <Pagination.Item 
-                                        key={i} 
+                                        key={`page-${i}`} 
                                         active={i === pageIndex}
                                         onClick={() => handlePageChange(i)}
                                     >

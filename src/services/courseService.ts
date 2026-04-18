@@ -8,7 +8,7 @@ import { ApiResponse } from "../api/responses/ApiResponse";
 const serviceEndpoint = ENDPOINTS.COURSES;
 
 const CourseService = {
-    getCourses: async (params: GetCoursesParams): Promise<PaginatedResponse<CourseDto> | CourseDto[]> => {
+    getCourses: async (params: GetCoursesParams): Promise<PaginatedResponse<CourseDto>> => {
         const response = await api.get(serviceEndpoint, { params });
         return response.data;
     },

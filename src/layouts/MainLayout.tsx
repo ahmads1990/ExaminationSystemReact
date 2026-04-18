@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { BookOpen, LayoutDashboard } from "lucide-react";
+import { BookOpen, LayoutDashboard, FileText } from "lucide-react";
 import Navbar from "../components/common/Navbar";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { UserRole } from "../types/auth";
@@ -50,6 +50,10 @@ const MainLayout = () => {
                                     <NavLink to="/instructor/courses" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
                                         <BookOpen size={18} />
                                         <span>My Courses</span>
+                                    </NavLink>
+                                    <NavLink to="/instructor/exams" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
+                                        <FileText size={18} />
+                                        <span>Exams</span>
                                     </NavLink>
                                     <NavLink to="/questions" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
                                         <BookOpen size={18} />

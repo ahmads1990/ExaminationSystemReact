@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import { User, AuthState, AuthContextType } from '../types/auth';
 import { saveToken, getToken, saveUser, getUser, clearAuth, saveRefreshToken } from '../utils/storage';
 import { extractUserFromToken, isTokenExpired } from '../utils/jwt';
@@ -98,4 +98,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+// Custom hook to use the auth context
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Modal, Form, Spinner } from "react-bootstrap";
+import { Modal, Form, Spinner, FloatingLabel } from "react-bootstrap";
 import { BookOpen } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
@@ -121,20 +121,19 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                         maxLength={500}
                     />
                     <div className="mb-3">
-                        <label htmlFor="add-credit-hours" className="form-label fw-semibold" style={{ fontSize: "var(--text-sm)" }}>
-                            Credit Hours
-                        </label>
-                        <input
-                            id="add-credit-hours"
-                            type="number"
-                            min={1}
-                            max={6}
-                            className={`form-control bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
-                            placeholder="Enter credit hours (1–6)"
-                            value={formData.creditHours}
-                            onChange={(e) => setFormData((p) => ({ ...p, creditHours: e.target.value }))}
-                        />
-                        {errors.creditHours && <div className="invalid-feedback">{errors.creditHours}</div>}
+                        <FloatingLabel controlId="add-credit-hours" label="Credit Hours *">
+                            <Form.Control
+                                type="number"
+                                min={1}
+                                max={6}
+                                className={`bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
+                                placeholder="Enter credit hours (1–6)"
+                                value={formData.creditHours}
+                                onChange={(e) => setFormData((p) => ({ ...p, creditHours: e.target.value }))}
+                                isInvalid={!!errors.creditHours}
+                            />
+                            {errors.creditHours && <Form.Control.Feedback type="invalid">{errors.creditHours}</Form.Control.Feedback>}
+                        </FloatingLabel>
                     </div>
                 </Form>
             </Modal.Body>

@@ -12,6 +12,7 @@ import ChangePasswordPage from "./pages/auth/ChangePasswordPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import UnauthorizedPage from "./pages/errors/UnauthorizedPage";
 import CoursesPage from "./pages/instructor/CoursesPage";
+import ExamsPage from "./pages/instructor/ExamsPage";
 import { UserRole } from "./types/auth";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
                     {/* Instructor Only Routes */}
                     <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
                         <Route path="instructor/courses" element={<CoursesPage />} />
+                        <Route path="instructor/exams" element={<ExamsPage />} />
                         <Route path="questions" element={<QuestionList />} />
                     </Route>
 

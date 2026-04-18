@@ -101,3 +101,73 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ─── Global Utility Classes ────────────────────────── */
+.transition-all {
+  transition: all var(--transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.border-top-dashed {
+  border-top: 2px dashed var(--color-secondary-200);
+}
+
+/* Custom card shadow for a premium feel */
+.card-custom {
+  background: white;
+  border: 1px solid var(--color-secondary-200) !important;
+}
+
+/* Animation for page transitions */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Bootstrap Overrides ────────────────────────── */
+.btn-primary {
+  background-color: var(--color-primary-500) !important;
+  border-color: var(--color-primary-500) !important;
+  color: var(--text-on-primary) !important;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+  background-color: var(--color-primary-600) !important;
+  border-color: var(--color-primary-600) !important;
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+
+.btn-outline-primary {
+  color: var(--color-primary-600) !important;
+  border-color: var(--color-primary-500) !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
+  background-color: var(--color-primary-50) !important;
+  border-color: var(--color-primary-500) !important;
+  color: var(--color-primary-700) !important;
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Fix generic links active status if used */
+a {
+  color: var(--color-primary-600);
+}
+a:hover {
+  color: var(--color-primary-700);
+}
+
+/* Replace Bootstrap default blue focus rings on inputs */
+.form-control:focus, .form-select:focus, .btn:focus {
+  border-color: var(--color-primary-400);
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
