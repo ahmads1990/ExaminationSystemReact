@@ -1,7 +1,7 @@
 export interface ListParameters {
     pageIndex: number;
     pageSize: number;
-    [key: string]: any;
+    [key: string]: string | number | boolean | undefined;
 }
 
 

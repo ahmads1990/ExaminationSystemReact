@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, DependencyList } from "react";
 import { UseQueryResult } from "../types/common";
 
-function useQuery<T>(queryFn: () => Promise<T>, deps: any[] = []): UseQueryResult<T> {
+function useQuery<T>(queryFn: () => Promise<T>, deps: DependencyList = []): UseQueryResult<T> {
     const [data, setData] = useState<T | null>(null);
     const [isPending, setIsPending] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);

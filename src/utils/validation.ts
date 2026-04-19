@@ -80,20 +80,17 @@ const validatePasswordStrength = (password: string): string | undefined =>
 // Request Validators (match backend structure)
 // ============================================================================
 
-export const validateRegisterStudentRequest = (
-    request: RegisterStudentRequest,
+export const validateSharedRegistration = (
+    request: { name: string; username: string; email: string; password: string },
     confirmPassword?: string
-): ValidationErrors =>
-{
+): ValidationErrors => {
     const errors: ValidationErrors = {};
 
     // Name validation
     const nameRequired = validateRequiredField(request.name, "Name");
-    if (nameRequired)
-    {
+    if (nameRequired) {
         errors.name = nameRequired;
-    } else
-    {
+    } else {
         const nameMin = validateMinLength(request.name, 3, "Name");
         const nameMax = validateMaxLength(request.name, 100, "Name");
         if (nameMin) errors.name = nameMin;
@@ -102,11 +99,9 @@ export const validateRegisterStudentRequest = (
 
     // Username validation
     const usernameRequired = validateRequiredField(request.username, "Username");
-    if (usernameRequired)
-    {
+    if (usernameRequired) {
         errors.username = usernameRequired;
-    } else
-    {
+    } else {
         const usernameMin = validateMinLength(request.username, 3, "Username");
         const usernameMax = validateMaxLength(request.username, 50, "Username");
         if (usernameMin) errors.username = usernameMin;
@@ -115,37 +110,40 @@ export const validateRegisterStudentRequest = (
 
     // Email validation
     const emailRequired = validateRequiredField(request.email, "Email");
-    if (emailRequired)
-    {
+    if (emailRequired) {
         errors.email = emailRequired;
-    } else
-    {
+    } else {
         const emailFormat = validateEmailFormat(request.email);
         if (emailFormat) errors.email = emailFormat;
     }
 
     // Password validation
     const passwordRequired = validateRequiredField(request.password, "Password");
-    if (passwordRequired)
-    {
+    if (passwordRequired) {
         errors.password = passwordRequired;
-    } else
-    {
+    } else {
         const passwordStrength = validatePasswordStrength(request.password);
         if (passwordStrength) errors.password = passwordStrength;
     }
 
     // Confirm password validation (frontend only)
-    if (confirmPassword !== undefined)
-    {
-        if (!confirmPassword || confirmPassword.trim() === "")
-        {
+    if (confirmPassword !== undefined) {
+        if (!confirmPassword || confirmPassword.trim() === "") {
             errors.confirmPassword = "Please confirm your password.";
-        } else if (request.password !== confirmPassword)
-        {
+        } else if (request.password !== confirmPassword) {
             errors.confirmPassword = "Passwords do not match.";
         }
     }
+
+    return errors;
+};
+
+export const validateRegisterStudentRequest = (
+    request: RegisterStudentRequest,
+    confirmPassword?: string
+): ValidationErrors =>
+{
+    const errors = validateSharedRegistration(request, confirmPassword);
 
     // Level validation
     const levelRequired = validateRequiredField(request.level, "Level");
@@ -173,67 +171,7 @@ export const validateRegisterInstructorRequest = (
     confirmPassword?: string
 ): ValidationErrors =>
 {
-    const errors: ValidationErrors = {};
-
-    // Name validation
-    const nameRequired = validateRequiredField(request.name, "Name");
-    if (nameRequired)
-    {
-        errors.name = nameRequired;
-    } else
-    {
-        const nameMin = validateMinLength(request.name, 3, "Name");
-        const nameMax = validateMaxLength(request.name, 100, "Name");
-        if (nameMin) errors.name = nameMin;
-        else if (nameMax) errors.name = nameMax;
-    }
-
-    // Username validation
-    const usernameRequired = validateRequiredField(request.username, "Username");
-    if (usernameRequired)
-    {
-        errors.username = usernameRequired;
-    } else
-    {
-        const usernameMin = validateMinLength(request.username, 3, "Username");
-        const usernameMax = validateMaxLength(request.username, 50, "Username");
-        if (usernameMin) errors.username = usernameMin;
-        else if (usernameMax) errors.username = usernameMax;
-    }
-
-    // Email validation
-    const emailRequired = validateRequiredField(request.email, "Email");
-    if (emailRequired)
-    {
-        errors.email = emailRequired;
-    } else
-    {
-        const emailFormat = validateEmailFormat(request.email);
-        if (emailFormat) errors.email = emailFormat;
-    }
-
-    // Password validation
-    const passwordRequired = validateRequiredField(request.password, "Password");
-    if (passwordRequired)
-    {
-        errors.password = passwordRequired;
-    } else
-    {
-        const passwordStrength = validatePasswordStrength(request.password);
-        if (passwordStrength) errors.password = passwordStrength;
-    }
-
-    // Confirm password validation (frontend only)
-    if (confirmPassword !== undefined)
-    {
-        if (!confirmPassword || confirmPassword.trim() === "")
-        {
-            errors.confirmPassword = "Please confirm your password.";
-        } else if (request.password !== confirmPassword)
-        {
-            errors.confirmPassword = "Passwords do not match.";
-        }
-    }
+    const errors = validateSharedRegistration(request, confirmPassword);
 
     // Bio validation (optional)
     if (request.bio)

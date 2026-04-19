@@ -4,6 +4,7 @@ import ExamService from "../../services/examService";
 import { ExamDto } from "../../api/responses/exams/ExamDto";
 import { ExamType, ExamStatus } from "../../enums";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
+import { GetExamsParams } from "../../api/requests/ExamRequests";
 import CourseService from "../../services/courseService";
 import { formatDate } from "../../utils/dateUtils";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -39,7 +40,7 @@ const ExamsPage = () => {
     const fetchExams = async () => {
         setLoading(true);
         try {
-            const params: any = {
+            const params: GetExamsParams = {
                 Title: debouncedSearch || undefined,
                 PageIndex: pageIndex,
                 PageSize: pageSize,

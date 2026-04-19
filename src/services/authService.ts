@@ -1,6 +1,12 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { LoginRequest, RegisterInstructorRequest, RegisterStudentRequest } from "../api/requests/AuthRequests";
+import { 
+    LoginRequest, 
+    RegisterInstructorRequest, 
+    RegisterStudentRequest, 
+    ResetPasswordRequest, 
+    UserTokensDto 
+} from "../api/requests/AuthRequests";
 import { ApiResponse } from "../api/responses/ApiResponse";
 
 const serviceEndpoint = ENDPOINTS.AUTH;
@@ -22,7 +28,7 @@ const AuthService = {
         const response = await api.post(endpoints.registerInstructor, request);
         return response.data;
     },
-    login: async (request: LoginRequest): Promise<ApiResponse<any>> =>
+    login: async (request: LoginRequest): Promise<ApiResponse<UserTokensDto>> =>
     {
         const response = await api.post(endpoints.login, request);
         return response.data;
@@ -47,7 +53,7 @@ const AuthService = {
         const response = await api.post(`${serviceEndpoint}/forgot-password`, { email });
         return response.data;
     },
-    resetPassword: async (data: any): Promise<ApiResponse<string>> =>
+    resetPassword: async (data: ResetPasswordRequest): Promise<ApiResponse<string>> =>
     {
         const response = await api.post(`${serviceEndpoint}/reset-password`, data);
         return response.data;

@@ -5,6 +5,7 @@ import {
     getFilteredRowModel,
     getSortedRowModel,
     PaginationState,
+    OnChangeFn,
     useReactTable
 } from "@tanstack/react-table";
 import { Table } from "react-bootstrap";
@@ -13,7 +14,7 @@ interface TableProps<T> {
     data: T[];
     columns: ColumnDef<T, any>[];
     pagination: PaginationState;
-    setPagination: any;
+    setPagination: OnChangeFn<PaginationState>;
     totalCount: number;
     onRowClick?: (row: T) => void;
     isPending?: boolean;

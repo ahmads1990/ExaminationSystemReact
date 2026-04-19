@@ -34,3 +34,21 @@ export interface ResendVerificationEmailRequest
 {
     userId: number
 }
+
+export interface ResetPasswordRequest {
+    email: string;
+    otp: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface UserTokensDto {
+    jwtToken: string;
+    refreshToken: string;
+}
