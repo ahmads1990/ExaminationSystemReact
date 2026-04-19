@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Modal, Form, Spinner, Row, Col, FloatingLabel } from "react-bootstrap";
-import { Settings } from "lucide-react";
+import { Settings, FileText } from "lucide-react";
 import ExamService from "../../../services/examService";
 import CourseService from "../../../services/courseService";
 import { CourseDto } from "../../../api/responses/courses/CourseDto";
@@ -9,14 +9,15 @@ import { ExamType } from "../../../enums";
 import TextInput from "../../common/forms/TextInput";
 import toast from "react-hot-toast";
 
-interface EditExamModalProps {
+interface SaveExamModalProps {
     show: boolean;
     onHide: () => void;
     onSuccess: () => void;
-    examToEdit: ExamDto;
+    examToEdit: ExamDto | null;
 }
 
-export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamModalProps) => {
+export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamModalProps) => {
+    const isEditMode = !!examToEdit;
 
     const [courses, setCourses] = useState<CourseDto[]>([]);
     const [isLoadingCourses, setIsLoadingCourses] = useState(false);
@@ -26,7 +27,7 @@ export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamM
     // Form state
     const [courseId, setCourseId] = useState<number | "">("");
     const [title, setTitle] = useState("");
-    const [examType, setExamType] = useState<ExamType | "">(examToEdit.examType);
+    const [examType, setExamType] = useState<ExamType | "">(isEditMode ? examToEdit.examType : "");
     const [maxDuration, setMaxDuration] = useState<string>("30");
     const [totalGrade, setTotalGrade] = useState<string>("100");
     const [passingScore, setPassingScore] = useState<string>("50");
@@ -37,12 +38,25 @@ export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamM
 
     // Reset or populate form when modal opens
     useEffect(() => {
-        if (show && examToEdit) {
+        if (show) {
             fetchCourses();
-            const examId = examToEdit.id;
-            fetchExamDetails(examId);
+            if (isEditMode && examToEdit) {
+                const examId = examToEdit.id;
+                fetchExamDetails(examId);
+            } else {
+                setCourseId("");
+                setTitle("");
+                setExamType("");
+                setMaxDuration("30");
+                setTotalGrade("100");
+                setPassingScore("50");
+                setMaxAttempts("1");
+                setShuffleQuestions(true);
+                setShowResultsImmediately(true);
+                setDeadlineDate("");
+            }
         }
-    }, [show, examToEdit]);
+    }, [show, isEditMode, examToEdit]);
 
     const fetchExamDetails = async (id: number) => {
         setIsFetchingExam(true);
@@ -118,8 +132,13 @@ export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamM
                 deadlineDate: deadlineDate ? new Date(deadlineDate).toISOString() : null,
             };
 
-            await ExamService.updateExam({ id: examToEdit.id, ...payload });
-            toast.success("Exam updated successfully!");
+            if (isEditMode && examToEdit) {
+                await ExamService.updateExam({ id: examToEdit.id, ...payload });
+                toast.success("Exam updated successfully!");
+            } else {
+                await ExamService.createExam(payload);
+                toast.success("Exam created successfully!");
+            }
             onSuccess();
             onHide();
         } catch (error: any) {
@@ -138,11 +157,11 @@ export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamM
                         className="d-flex align-items-center justify-content-center rounded-3"
                         style={{ width: 44, height: 44, backgroundColor: "var(--color-primary-50)" }}
                     >
-                        <Settings size={22} className="text-primary" />
+                        {isEditMode ? <Settings size={22} className="text-primary" /> : <FileText size={22} className="text-primary" />}
                     </div>
                     <div>
-                        <Modal.Title className="fw-bold fs-5 mb-0">Edit Exam</Modal.Title>
-                        <p className="text-muted small mb-0">Update your exam settings</p>
+                        <Modal.Title className="fw-bold fs-5 mb-0">{isEditMode ? "Edit Exam" : "Create New Exam"}</Modal.Title>
+                        <p className="text-muted small mb-0">{isEditMode ? "Update your exam settings" : "Configure a new examination"}</p>
                     </div>
                 </div>
             </Modal.Header>
@@ -164,7 +183,7 @@ export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamM
                                         value={courseId}
                                         onChange={(e) => setCourseId(e.target.value as unknown as number)}
                                         required
-                                        disabled={true} // Usually you can't reassign an exam to another course safely
+                                        disabled={isEditMode} // Usually you can't reassign an exam to another course safely
                                     >
                                         <option value="" disabled>{isLoadingCourses ? "Loading courses..." : "Select a Course"}</option>
                                         {courses.map((c, idx) => (
@@ -280,4 +299,4 @@ export const EditExamModal = ({ show, onHide, onSuccess, examToEdit }: EditExamM
     );
 };
 
-export default EditExamModal;
+export default SaveExamModal;

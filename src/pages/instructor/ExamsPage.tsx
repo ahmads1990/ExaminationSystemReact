@@ -12,8 +12,7 @@ import { usePagination } from "../../hooks/usePagination";
 import ActionButton from "../../components/common/ActionButton";
 import { Spinner, Pagination } from "react-bootstrap";
 import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LABELS } from "../../constants/examConstants";
-import AddExamModal from "../../components/instructor/exams/AddExamModal";
-import EditExamModal from "../../components/instructor/exams/EditExamModal";
+import SaveExamModal from "../../components/instructor/exams/SaveExamModal";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 
@@ -29,7 +28,7 @@ const ExamsPage = () => {
 
     const { pageIndex, pageSize, totalPages, setTotalCount, handlePageChange, resetPage } = usePagination();
 
-    const [showAddModal, setShowAddModal] = useState(false);
+    const [showSaveModal, setShowSaveModal] = useState(false);
     const [examToEdit, setExamToEdit] = useState<ExamDto | null>(null);
     const [isDeleting, setIsDeleting] = useState<number | null>(null);
     const [isStatusChanging, setIsStatusChanging] = useState<number | null>(null);
@@ -135,7 +134,7 @@ const ExamsPage = () => {
                     className="shadow-sm px-4"
                     fullWidth={false}
                     icon={<Plus size={18} />}
-                    onClick={() => setShowAddModal(true)}
+                    onClick={() => { setExamToEdit(null); setShowSaveModal(true); }}
                 >
                     New Exam
                 </ActionButton>
@@ -302,7 +301,7 @@ const ExamsPage = () => {
                                             </ActionButton>
                                             <ActionButton
                                                 variant="primary"
-                                                onClick={() => setExamToEdit(exam)}
+                                                onClick={() => { setExamToEdit(exam); setShowSaveModal(true); }}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
                                                 Edit
@@ -354,28 +353,16 @@ const ExamsPage = () => {
                     )}
                 </>
             )}
-            {/* Add Exam Modal */}
-            <AddExamModal
-                show={showAddModal}
-                onHide={() => setShowAddModal(false)}
+            {/* Save Exam Modal */}
+            <SaveExamModal
+                show={showSaveModal}
+                onHide={() => setShowSaveModal(false)}
+                examToEdit={examToEdit}
                 onSuccess={() => {
                     resetPage();
                     fetchExams();
                 }}
             />
-
-            {/* Edit Exam Modal */}
-            {examToEdit && (
-                <EditExamModal
-                    show={!!examToEdit}
-                    onHide={() => setExamToEdit(null)}
-                    examToEdit={examToEdit}
-                    onSuccess={() => {
-                        setExamToEdit(null);
-                        fetchExams();
-                    }}
-                />
-            )}
         </div>
     );
 };
