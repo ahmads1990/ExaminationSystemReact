@@ -3,11 +3,11 @@ import { Nav } from "react-bootstrap";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { BookOpen, LayoutDashboard, FileText } from "lucide-react";
 import Navbar from "../components/common/Navbar";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { UserRole } from "../types/auth";
 
 const MainLayout = () => {
-    const { isAuthenticated, isLoading, user } = useAuthContext();
+    const { isAuthenticated, isLoading, user } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {

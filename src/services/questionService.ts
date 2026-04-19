@@ -1,6 +1,7 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { ListParameters, PaginatedResponse } from "../types/common";
+import { ListParameters } from "../types/common";
+import { PaginatedResponse } from "../api/responses/PaginatedResponse";
 import { Question } from "../types/entities";
 
 const serviceEndpoint = ENDPOINTS.QUESTIONS;

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import UserMenu from "./UserMenu";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [resourcesOpen, setResourcesOpen] = useState(false);
-    const { isAuthenticated } = useAuthContext();
+    const { isAuthenticated } = useAuth();
 
     const toggleNavbar = () => setIsOpen(!isOpen);
 

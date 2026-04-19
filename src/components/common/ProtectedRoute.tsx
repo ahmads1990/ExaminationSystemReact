@@ -1,12 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ProtectedRouteProps {
     allowedRoles?: string[];
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-    const { isAuthenticated, isLoading, user } = useAuthContext();
+    const { isAuthenticated, isLoading, user } = useAuth();
 
     if (isLoading) {
         return null; // Or a loading spinner

@@ -41,7 +41,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
         if (show) {
             fetchCourses();
             if (isEditMode && examToEdit) {
-                const examId = examToEdit.id || (examToEdit as any).examId || (examToEdit as any).Id;
+                const examId = examToEdit.id;
                 fetchExamDetails(examId);
             } else {
                 setCourseId("");

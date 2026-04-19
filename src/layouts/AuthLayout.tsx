@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const AuthLayout = () => {
-    const { isAuthenticated, isLoading } = useAuthContext();
+    const { isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {

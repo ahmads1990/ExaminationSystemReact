@@ -1,4 +1,4 @@
-import { QuestionLevel } from "./enums";
+import { QuestionLevel } from "../enums";
 
 export interface Choice {
     id: number;

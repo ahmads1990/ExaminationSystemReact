@@ -1,7 +1,7 @@
 import { ReactNode, ButtonHTMLAttributes } from "react";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: "primary" | "secondary" | "danger" | "outline-primary" | "outline-secondary" | "outline-danger";
+    variant?: "primary" | "secondary" | "success" | "warning" | "danger" | "outline-primary" | "outline-secondary" | "outline-success" | "outline-warning" | "outline-danger";
     children: ReactNode;
     icon?: ReactNode;
     fullWidth?: boolean;

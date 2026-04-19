@@ -100,7 +100,7 @@ const ExamsPage = () => {
     };
 
     const handleStatusChange = async (exam: ExamDto, isPublished: boolean) => {
-        const examId = exam.id || (exam as any).examId || (exam as any).Id;
+        const examId = exam.id;
         setIsStatusChanging(examId);
         try {
             if (isPublished) {
@@ -221,7 +221,7 @@ const ExamsPage = () => {
                             const typeColor = EXAM_TYPE_COLORS[exam.examType] ?? { bg: "var(--surface-bg)", border: "var(--color-secondary-200)", text: "var(--text-secondary)" };
                             const isPublished = exam.examStatus === "Published";
                             const statusColor = isPublished ? EXAM_STATUS_COLORS.published : EXAM_STATUS_COLORS.draft;
-                            const examId = exam.id || (exam as any).examId || (exam as any).Id;
+                            const examId = exam.id;
                             return (
                                 <div className="col-12 col-md-6 col-xl-4" key={examId || index}>
                                     <div className="card h-100 border-0 shadow-sm card-custom hover-lift transition-all">

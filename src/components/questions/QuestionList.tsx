@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import useQuery from "../../hooks/useQuery";
 import QuestionService from "../../services/questionService";
-import { PaginatedResponse } from "../../types/common";
+import { PaginatedResponse } from "../../api/responses/PaginatedResponse";
 import { Question } from "../../types/entities";
 import GenericTable from "../common/Table";
 
@@ -74,7 +74,6 @@ const QuestionList = () => {
                 <Modal.Body>
                     {selectedRow ? (
                         <>
-                            {console.log("selectedRow", selectedRow)}
                             <p>
                                 <strong>ID:</strong> {selectedRow.id}
                             </p>

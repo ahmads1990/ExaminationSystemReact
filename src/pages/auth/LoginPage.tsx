@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Spinner, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import AuthService from "../../services/authService";
 import TextInput from "../../components/common/forms/TextInput";
 import PasswordInput from "../../components/common/forms/PasswordInput";
@@ -9,7 +9,7 @@ import { validateLoginRequest, ValidationErrors } from "../../utils/validation";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { login } = useAuthContext();
+    const { login } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
     

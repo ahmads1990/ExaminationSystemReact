@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/authService";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { user, logout } = useAuthContext();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async (e: React.MouseEvent) => {
