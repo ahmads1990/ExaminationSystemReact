@@ -6,6 +6,15 @@ import Navbar from "../components/common/Navbar";
 import { useAuth } from "../contexts/AuthContext";
 import { UserRole } from "../types/auth";
 
+import { LucideIcon } from "lucide-react";
+
+const SidebarLink = ({ to, icon: Icon, label }: { to: string; icon: LucideIcon; label: string }) => (
+    <NavLink to={to} className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
+        <Icon size={18} />
+        <span>{label}</span>
+    </NavLink>
+);
+
 const MainLayout = () => {
     const { isAuthenticated, isLoading, user } = useAuth();
     const navigate = useNavigate();
@@ -32,33 +41,18 @@ const MainLayout = () => {
                     <div className="p-3">
                          <small className="text-uppercase text-muted fw-bold tracking-wider" style={{ fontSize: '0.7rem' }}>Menu</small>
                         <Nav className="flex-column mt-2 gap-1">
-                            <NavLink to="/" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
-                                <LayoutDashboard size={18} />
-                                <span>Dashboard</span>
-                            </NavLink>
+                            <SidebarLink to="/" icon={LayoutDashboard} label="Dashboard" />
                             {/* Student Routes */}
                             {user?.role === UserRole.Student && (
-                                <NavLink to="/courses" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
-                                    <BookOpen size={18} />
-                                    <span>Browse Courses</span>
-                                </NavLink>
+                                <SidebarLink to="/courses" icon={BookOpen} label="Browse Courses" />
                             )}
 
                              {/* Instructor Routes */}
                             {user?.role === UserRole.Instructor && (
                                 <>
-                                    <NavLink to="/instructor/courses" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
-                                        <BookOpen size={18} />
-                                        <span>My Courses</span>
-                                    </NavLink>
-                                    <NavLink to="/instructor/exams" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
-                                        <FileText size={18} />
-                                        <span>Exams</span>
-                                    </NavLink>
-                                    <NavLink to="/questions" className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}>
-                                        <BookOpen size={18} />
-                                        <span>Question Bank</span>
-                                    </NavLink>
+                                    <SidebarLink to="/instructor/courses" icon={BookOpen} label="My Courses" />
+                                    <SidebarLink to="/instructor/exams" icon={FileText} label="Exams" />
+                                    <SidebarLink to="/questions" icon={BookOpen} label="Question Bank" />
                                 </>
                             )}
                         </Nav>
