@@ -7,6 +7,7 @@ import { CourseDto } from "../../api/responses/courses/CourseDto";
 import CourseService from "../../services/courseService";
 import { formatDate } from "../../utils/dateUtils";
 import { useDebounce } from "../../hooks/useDebounce";
+import { usePagination } from "../../hooks/usePagination";
 import ActionButton from "../../components/common/ActionButton";
 import { Spinner, Pagination } from "react-bootstrap";
 import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LABELS } from "../../constants/examConstants";
@@ -24,9 +25,7 @@ const ExamsPage = () => {
     const [courses, setCourses] = useState<CourseDto[]>([]);
     const debouncedSearch = useDebounce(searchTerm, 500);
 
-    const [pageIndex, setPageIndex] = useState(0);
-    const [pageSize] = useState(10);
-    const [totalCount, setTotalCount] = useState(0);
+    const { pageIndex, pageSize, totalPages, setTotalCount, handlePageChange, resetPage } = usePagination();
 
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [examToEdit, setExamToEdit] = useState<ExamDto | null>(null);
@@ -73,13 +72,8 @@ const ExamsPage = () => {
     };
 
     useEffect(() => { fetchCourses(); }, []);
-    useEffect(() => { setPageIndex(0); }, [debouncedSearch, typeFilter, statusFilter, courseFilter]);
+    useEffect(() => { resetPage(); }, [debouncedSearch, typeFilter, statusFilter, courseFilter, resetPage]);
     useEffect(() => { fetchExams(); }, [debouncedSearch, typeFilter, statusFilter, courseFilter, pageIndex, pageSize]);
-
-    const totalPages = Math.ceil(totalCount / pageSize);
-    const handlePageChange = (newIndex: number) => {
-        if (newIndex >= 0 && newIndex < totalPages) setPageIndex(newIndex);
-    };
 
     const handleDelete = async (id: number) => {
         if (!confirm("Are you sure you want to delete this exam?")) return;
@@ -364,7 +358,7 @@ const ExamsPage = () => {
                 onHide={() => setShowSaveModal(false)}
                 examToEdit={examToEdit}
                 onSuccess={() => {
-                    setPageIndex(0);
+                    resetPage();
                     fetchExams();
                 }}
             />

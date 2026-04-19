@@ -3,6 +3,7 @@ import { Search, Plus, BookOpen, Clock, User, CalendarDays } from "lucide-react"
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { useDebounce } from "../../hooks/useDebounce";
+import { usePagination } from "../../hooks/usePagination";
 import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
 import { Spinner, Pagination } from "react-bootstrap";
@@ -17,9 +18,7 @@ const CoursesPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearch = useDebounce(searchTerm, 500);
 
-    const [pageIndex, setPageIndex] = useState(0);
-    const [pageSize] = useState(10);
-    const [totalCount, setTotalCount] = useState(0);
+    const { pageIndex, pageSize, totalPages, setTotalCount, handlePageChange, resetPage } = usePagination();
 
     // Modal state
     const [showAddModal, setShowAddModal] = useState(false);
@@ -46,15 +45,8 @@ const CoursesPage = () => {
         }
     };
 
-    useEffect(() => { setPageIndex(0); }, [debouncedSearch]);
+    useEffect(() => { resetPage(); }, [debouncedSearch, resetPage]);
     useEffect(() => { fetchCourses(); }, [debouncedSearch, pageIndex, pageSize]);
-
-    const totalPages = Math.ceil(totalCount / pageSize);
-    const handlePageChange = (newIndex: number) => {
-        if (newIndex >= 0 && newIndex < totalPages) setPageIndex(newIndex);
-    };
-
-
 
     // CRUD handlers
     const handleCourseCreated = (course: CourseDto) => {
