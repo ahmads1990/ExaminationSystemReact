@@ -1,25 +1,38 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { ListParameters } from "../types/common";
 import { PaginatedResponse } from "../api/responses/PaginatedResponse";
-import { Question } from "../types/entities";
+import { GetQuestionsParams, CreateQuestionRequest, UpdateQuestionRequest } from "../api/requests/QuestionRequests";
+import { QuestionDto } from "../api/responses/QuestionResponses";
 
 const serviceEndpoint = ENDPOINTS.QUESTIONS;
 
 const QuestionService = {
-    getAllQuestions: async (params: ListParameters | object = {}): Promise<PaginatedResponse<Question>> =>
+    getQuestions: async (params: GetQuestionsParams): Promise<PaginatedResponse<QuestionDto>> =>
     {
-        const questions = await api.get(serviceEndpoint, {
-            params
-        });
-
-        return questions.data;
-    },
-    getQuestionById: async (id: number): Promise<Question> =>
-    {
-        const response = await api.get<Question>(`${serviceEndpoint}/${id}`);
-
+        const response = await api.get(serviceEndpoint, { params });
         return response.data;
+    },
+    
+    getQuestionById: async (id: number): Promise<QuestionDto> =>
+    {
+        const response = await api.get<QuestionDto>(`${serviceEndpoint}/${id}`);
+        return response.data;
+    },
+    
+    createQuestion: async (data: CreateQuestionRequest): Promise<number> =>
+    {
+        const response = await api.post(serviceEndpoint, data);
+        return response.data;
+    },
+    
+    updateQuestion: async (data: UpdateQuestionRequest): Promise<void> =>
+    {
+        await api.put(serviceEndpoint, data);
+    },
+    
+    deleteQuestions: async (ids: number[]): Promise<void> =>
+    {
+        await api.delete(serviceEndpoint, { data: ids });
     }
 };
 

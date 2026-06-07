@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, Plus, FileText, Clock, CalendarDays, GraduationCap, Target } from "lucide-react";
 import ExamService from "../../services/examService";
 import { ExamDto } from "../../api/responses/exams/ExamDto";
@@ -17,6 +18,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 
 const ExamsPage = () => {
+    const navigate = useNavigate();
     const [exams, setExams] = useState<ExamDto[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -308,7 +310,7 @@ const ExamsPage = () => {
                                             </ActionButton>
                                             <ActionButton
                                                 variant="outline-secondary"
-                                                onClick={() => {/* TODO: link to questions */}}
+                                                onClick={() => navigate(`/instructor/exams/${examId}/questions`)}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
                                                 Questions

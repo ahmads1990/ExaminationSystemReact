@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
-import QuestionList from "./components/questions/QuestionList";
 import AuthLayout from "./layouts/AuthLayout";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
@@ -13,6 +12,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import UnauthorizedPage from "./pages/errors/UnauthorizedPage";
 import CoursesPage from "./pages/instructor/CoursesPage";
 import ExamsPage from "./pages/instructor/ExamsPage";
+import ExamQuestionsPage from "./pages/instructor/ExamQuestionsPage";
 import { UserRole } from "./types/auth";
 
 function App() {
@@ -30,8 +30,8 @@ function App() {
 
                 {/* Dashboard / Main Routes */}
                 <Route element={<MainLayout />}>
-                    {/* Redirect root to login for now, or dashboard if auth */}
-                    <Route path="/" element={<Navigate to="/questions" replace />} />
+                    {/* Redirect root to dashboard/courses if auth */}
+                    <Route path="/" element={<Navigate to="/instructor/courses" replace />} />
                     
                     <Route element={<ProtectedRoute />}>
                         <Route path="change-password" element={<ChangePasswordPage />} />
@@ -41,7 +41,7 @@ function App() {
                     <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
                         <Route path="instructor/courses" element={<CoursesPage />} />
                         <Route path="instructor/exams" element={<ExamsPage />} />
-                        <Route path="questions" element={<QuestionList />} />
+                        <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
                     </Route>
 
                     <Route path="unauthorized" element={<UnauthorizedPage />} />
