@@ -10,13 +10,13 @@ import QuestionService from "../../services/questionService";
 import ExamService from "../../services/examService";
 import { usePagination } from "../../hooks/usePagination";
 import useQuery from "../../hooks/useQuery";
-import { QuestionLevel } from "../../enums";
+import { QuestionLevel, QuestionLevelInfo } from "../../enums";
 import toast from "react-hot-toast";
 
 const ExamQuestionsPage = () => {
     const { examId } = useParams();
     const navigate = useNavigate();
-    
+
     const examIdNum = Number(examId);
 
     // Trigger for refetching data
@@ -30,20 +30,20 @@ const ExamQuestionsPage = () => {
     );
 
     // Pagination Hook
-    const { 
-        pageIndex, 
-        pageSize, 
-        totalCount, 
-        setTotalCount, 
+    const {
+        pageIndex,
+        pageSize,
+        totalCount,
+        setTotalCount,
         setPageIndex
     } = usePagination({ defaultPageSize: 10 });
 
     // Fetch Questions
     const { data, isPending: isLoading, error } = useQuery(
-        () => QuestionService.getQuestions({ 
-            examId: examIdNum, 
-            pageIndex, 
-            pageSize 
+        () => QuestionService.getQuestions({
+            ExamID: examIdNum,
+            PageIndex: pageIndex,
+            PageSize: pageSize
         }),
         [examIdNum, pageIndex, pageSize, refreshTick]
     );
@@ -68,32 +68,21 @@ const ExamQuestionsPage = () => {
     const [questionToEdit, setQuestionToEdit] = useState<any | null>(null);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-    
-    // We don't have rowSelection on the common Generic Table, we'll implement it manually or skip it
-    // Wait, the generic table doesn't support rowSelection currently out of the box based on the error.
-    // Let's modify Table columns to support it.
-    
-    const [selectedRows, setSelectedRows] = useState<Record<string, boolean>>({});
 
-    const handleSelectRow = (id: number) => {
-        setSelectedRows(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
-    };
+    const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
     const handleDeleteSelected = async () => {
-        const idsToDelete = Object.keys(selectedRows)
-            .filter(key => selectedRows[key])
+        const idsToDelete = Object.keys(rowSelection)
+            .filter(key => rowSelection[key])
             .map(Number);
-            
+
         if (idsToDelete.length === 0) return;
-        
+
         setIsDeleting(true);
         try {
             await QuestionService.deleteQuestions(idsToDelete);
             toast.success("Questions deleted successfully");
-            setSelectedRows({});
+            setRowSelection({});
             setShowDeleteDialog(false);
             refreshData();
         } catch (err: any) {
@@ -117,14 +106,25 @@ const ExamQuestionsPage = () => {
     const columns: any[] = useMemo(() => [
         {
             id: 'select',
-            header: '',
-            cell: (info: any) => (
-                <div style={{ width: '30px' }}>
-                    <input 
-                        type="checkbox" 
-                        className="form-check-input"
-                        checked={!!selectedRows[info.row.original.id]}
-                        onChange={() => handleSelectRow(info.row.original.id)}
+            header: ({ table }: any) => (
+                <div className="d-flex align-items-center justify-content-center">
+                    <input
+                        type="checkbox"
+                        className="form-check-input m-0"
+                        checked={table.getIsAllPageRowsSelected()}
+                        onChange={table.getToggleAllPageRowsSelectedHandler()}
+                    />
+                </div>
+            ),
+            size: 36,
+            cell: ({ row }: any) => (
+                <div className="d-flex align-items-center justify-content-center">
+                    <input
+                        type="checkbox"
+                        className="form-check-input m-0"
+                        checked={row.getIsSelected()}
+                        disabled={!row.getCanSelect()}
+                        onChange={row.getToggleSelectedHandler()}
                     />
                 </div>
             )
@@ -133,8 +133,9 @@ const ExamQuestionsPage = () => {
             id: 'body',
             header: 'Question',
             accessorKey: 'body',
+            size: 600,
             cell: (info: any) => (
-                <div className="text-truncate" style={{ maxWidth: '400px' }} title={info.getValue()}>
+                <div className="text-wrap">
                     {info.getValue()}
                 </div>
             )
@@ -143,36 +144,42 @@ const ExamQuestionsPage = () => {
             id: 'score',
             header: 'Score',
             accessorKey: 'score',
+            size: 50,
             cell: (info: any) => <span className="fw-medium">{info.getValue()} pts</span>
         },
         {
             id: 'level',
             header: 'Level',
             accessorKey: 'questionLevel',
+            size: 25,
             cell: (info: any) => {
-                const level = info.getValue() as QuestionLevel;
-                const colors = {
-                    [QuestionLevel.Easy]: 'success',
-                    [QuestionLevel.Medium]: 'warning',
-                    [QuestionLevel.Hard]: 'danger'
-                };
-                return <Badge bg={colors[level] || 'secondary'}>{QuestionLevel[level]}</Badge>;
+                const level = info.getValue();
+                const infoDetails = QuestionLevelInfo[level] || { label: String(level), color: 'secondary' };
+                return <Badge bg={infoDetails.color}>{infoDetails.label}</Badge>;
             }
         },
         {
             id: 'actions',
             header: 'Actions',
+            size: 25,
             cell: (info: any) => (
-                <div className="d-flex justify-content-end">
-                    <ActionButton variant="outline-primary" onClick={() => handleEditQuestion(info.row.original)}>
-                        <Edit2 size={16} className="me-1" /> Edit
+                <div className="d-flex justify-content-center">
+                    <ActionButton 
+                        variant="primary" 
+                        onClick={() => handleEditQuestion(info.row.original)}
+                        title="Edit Question"
+                        fullWidth={false}
+                        style={{ width: '32px', height: '32px', padding: 0 }}
+                        className="d-inline-flex align-items-center justify-content-center"
+                    >
+                        <Edit2 size={14} />
                     </ActionButton>
                 </div>
             )
         }
-    ], [selectedRows]);
+    ], [rowSelection]);
 
-    const selectedCount = Object.values(selectedRows).filter(Boolean).length;
+    const selectedCount = Object.values(rowSelection).filter(Boolean).length;
     const isExamPublished = examInfo?.data?.examStatus === "Published";
 
     if (isNaN(examIdNum)) {
@@ -195,8 +202,8 @@ const ExamQuestionsPage = () => {
                 </div>
                 <div className="d-flex gap-2">
                     {selectedCount > 0 && (
-                        <ActionButton 
-                            variant="danger" 
+                        <ActionButton
+                            variant="danger"
                             onClick={() => setShowDeleteDialog(true)}
                             disabled={isDeleting}
                         >
@@ -222,6 +229,9 @@ const ExamQuestionsPage = () => {
                     totalCount={totalCount}
                     pagination={{ pageIndex, pageSize }}
                     setPagination={handleSetPagination}
+                    rowSelection={rowSelection}
+                    setRowSelection={setRowSelection}
+                    getRowId={(row) => String(row.id)}
                     isPending={isLoading}
                     error={error}
                 />

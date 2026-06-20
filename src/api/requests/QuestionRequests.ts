@@ -1,9 +1,9 @@
 import { QuestionLevel } from "../../enums";
 
 export interface GetQuestionsParams {
-    examId?: number;
-    pageIndex?: number;
-    pageSize?: number;
+    ExamID?: number;
+    PageIndex?: number;
+    PageSize?: number;
     [key: string]: string | number | boolean | undefined;
 }
 

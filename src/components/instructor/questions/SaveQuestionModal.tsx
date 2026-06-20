@@ -32,7 +32,16 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
             if (isEditMode && questionToEdit) {
                 setBody(questionToEdit.body);
                 setScore(questionToEdit.score);
-                setQuestionLevel(questionToEdit.questionLevel);
+                let levelVal = questionToEdit.questionLevel;
+                if (typeof levelVal === "string") {
+                    const parsed = Number(levelVal);
+                    if (!isNaN(parsed)) {
+                        levelVal = parsed;
+                    } else {
+                        levelVal = (QuestionLevel as any)[levelVal] ?? QuestionLevel.Medium;
+                    }
+                }
+                setQuestionLevel(levelVal);
                 setChoices(questionToEdit.choices);
             } else {
                 // Reset to defaults with 4 empty choices, first one marked correct

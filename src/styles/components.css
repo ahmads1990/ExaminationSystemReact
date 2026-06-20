@@ -152,3 +152,72 @@
   color: var(--color-primary-600);
   border-color: transparent;
 }
+
+/* --- Premium Navigation & Navbar --- */
+.navbar-premium {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  transition: all var(--transition-normal);
+}
+
+.navbar-brand-text {
+  font-weight: 800 !important;
+  letter-spacing: -0.03em;
+  color: var(--color-secondary-900) !important;
+  transition: transform var(--transition-fast);
+}
+
+.navbar-brand-text:hover {
+  transform: scale(1.02);
+}
+
+.nav-link-custom {
+  color: var(--color-secondary-600) !important;
+  font-weight: 500 !important;
+  font-size: var(--text-sm) !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: var(--radius-md) !important;
+  transition: all var(--transition-fast) !important;
+  margin: 0 0.125rem;
+}
+
+.nav-link-custom:hover {
+  color: var(--color-primary-600) !important;
+  background-color: var(--color-primary-50) !important;
+}
+
+.nav-link-custom.active {
+  color: var(--color-primary-700) !important;
+  background-color: var(--color-primary-100) !important;
+  font-weight: 600 !important;
+}
+
+.dropdown-menu-custom {
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  background-color: #ffffff !important;
+  padding: 0.5rem !important;
+  min-width: 180px !important;
+  transform: translateY(10px);
+  transition: all var(--transition-fast);
+}
+
+.dropdown-item-custom {
+  border-radius: var(--radius-md) !important;
+  padding: 0.5rem 1rem !important;
+  font-size: var(--text-sm) !important;
+  color: var(--color-secondary-600) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.dropdown-item-custom:hover, .dropdown-item-custom:focus {
+  background-color: var(--color-primary-50) !important;
+  color: var(--color-primary-700) !important;
+}
+

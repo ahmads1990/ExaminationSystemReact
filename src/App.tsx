@@ -42,6 +42,7 @@ function App() {
                         <Route path="instructor/courses" element={<CoursesPage />} />
                         <Route path="instructor/exams" element={<ExamsPage />} />
                         <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
+                        <Route path="questions" element={<Navigate to="/instructor/exams" replace />} />
                     </Route>
 
                     <Route path="unauthorized" element={<UnauthorizedPage />} />
