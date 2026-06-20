@@ -7,6 +7,7 @@ import { CourseDto } from "../../../api/responses/courses/CourseDto";
 import { ExamDto } from "../../../api/responses/exams/ExamDto";
 import { ExamType } from "../../../enums";
 import TextInput from "../../common/forms/TextInput";
+import ErrorDialog from "../../common/ErrorDialog";
 import toast from "react-hot-toast";
 
 interface SaveExamModalProps {
@@ -35,6 +36,8 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
     const [shuffleQuestions, setShuffleQuestions] = useState(true);
     const [showResultsImmediately, setShowResultsImmediately] = useState(true);
     const [deadlineDate, setDeadlineDate] = useState("");
+
+    const [apiError, setApiError] = useState<unknown>(null);
 
     // Reset or populate form when modal opens
     useEffect(() => {
@@ -84,7 +87,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                 }
             }
         } catch (error) {
-            console.error("Failed to load full exam details", error);
+            console.error("Failed to load exam details", error);
             toast.error("Could not load exam settings.");
             onHide();
         } finally {
@@ -111,6 +114,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
         if (!examType) { toast.error("Exam type is required."); return false; }
         if (Number(maxDuration) <= 0) { toast.error("Duration must be greater than 0."); return false; }
         if (Number(totalGrade) <= 0) { toast.error("Total grade must be greater than 0."); return false; }
+        if (!deadlineDate) { toast.error("Deadline date is required."); return false; }
         return true;
     };
 
@@ -133,23 +137,23 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
             };
 
             if (isEditMode && examToEdit) {
-                await ExamService.updateExam({ id: examToEdit.id, ...payload });
+                await ExamService.updateExam({ id: examToEdit.id, ...payload }, { _skipGlobalError: true });
                 toast.success("Exam updated successfully!");
             } else {
-                await ExamService.createExam(payload);
+                await ExamService.createExam(payload, { _skipGlobalError: true });
                 toast.success("Exam created successfully!");
             }
             onSuccess();
             onHide();
         } catch (error: any) {
-            // Validation errors are handled globally by interceptor
-            console.error(error);
+            setApiError(error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
+        <>
         <Modal show={show} onHide={onHide} centered size="lg" backdrop="static">
             <Modal.Header className="border-0 pb-0 px-4 pt-4" closeButton>
                 <div className="d-flex align-items-center gap-3">
@@ -258,8 +262,8 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                         </Col>
                         <Col md={8}>
                             <Form.Group>
-                                <FloatingLabel controlId="deadline" label="Deadline (Optional)">
-                                    <Form.Control type="datetime-local" className="bg-light border-light-subtle" placeholder="Deadline" value={deadlineDate} onChange={e => setDeadlineDate(e.target.value)} />
+                                <FloatingLabel controlId="deadline" label="Deadline Date *">
+                                    <Form.Control type="datetime-local" className="bg-light border-light-subtle" placeholder="Deadline" value={deadlineDate} onChange={e => setDeadlineDate(e.target.value)} required />
                                 </FloatingLabel>
                             </Form.Group>
                         </Col>
@@ -296,6 +300,9 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                 </button>
             </Modal.Footer>
         </Modal>
+
+        <ErrorDialog show={!!apiError} onHide={() => setApiError(null)} error={apiError} />
+        </>
     );
 };
 

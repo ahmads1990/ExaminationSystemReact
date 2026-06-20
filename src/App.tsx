@@ -19,35 +19,35 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Auth Routes */}
-                <Route element={<AuthLayout />}>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/verify-email" element={<VerifyEmailPage />} />
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/reset-password" element={<ResetPasswordPage />} />
-                </Route>
-
-                {/* Dashboard / Main Routes */}
-                <Route element={<MainLayout />}>
-                    {/* Redirect root to dashboard/courses if auth */}
-                    <Route path="/" element={<Navigate to="/instructor/courses" replace />} />
-                    
-                    <Route element={<ProtectedRoute />}>
-                        <Route path="change-password" element={<ChangePasswordPage />} />
+                    {/* Auth Routes */}
+                    <Route element={<AuthLayout />}>
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/verify-email" element={<VerifyEmailPage />} />
+                        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                        <Route path="/reset-password" element={<ResetPasswordPage />} />
                     </Route>
 
-                    {/* Instructor Only Routes */}
-                    <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
-                        <Route path="instructor/courses" element={<CoursesPage />} />
-                        <Route path="instructor/exams" element={<ExamsPage />} />
-                        <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
-                        <Route path="questions" element={<Navigate to="/instructor/exams" replace />} />
-                    </Route>
+                    {/* Dashboard / Main Routes */}
+                    <Route element={<MainLayout />}>
+                        {/* Redirect root to dashboard/courses if auth */}
+                        <Route path="/" element={<Navigate to="/instructor/courses" replace />} />
+                        
+                        <Route element={<ProtectedRoute />}>
+                            <Route path="change-password" element={<ChangePasswordPage />} />
+                        </Route>
 
-                    <Route path="unauthorized" element={<UnauthorizedPage />} />
-                </Route>
-            </Routes>
+                        {/* Instructor Only Routes */}
+                        <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
+                            <Route path="instructor/courses" element={<CoursesPage />} />
+                            <Route path="instructor/exams" element={<ExamsPage />} />
+                            <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
+                            <Route path="questions" element={<Navigate to="/instructor/exams" replace />} />
+                        </Route>
+
+                        <Route path="unauthorized" element={<UnauthorizedPage />} />
+                    </Route>
+                </Routes>
         </BrowserRouter>
     );
 }

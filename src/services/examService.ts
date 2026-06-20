@@ -1,9 +1,10 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { GetExamsParams, AddExamRequest, UpdateExamRequest, PublishExamRequest } from "../api/requests/ExamRequests";
+import { GetExamsParams, AddExamRequest, UpdateExamRequest, PublishExamRequest, AssignQuestionsRequest } from "../api/requests/ExamRequests";
 import { ExamDto } from "../api/responses/exams/ExamDto";
 import { PaginatedResponse } from "../api/responses/PaginatedResponse";
 import { ApiResponse } from "../api/responses/ApiResponse";
+import { RejectedEntityDto } from "../api/responses/exams/RejectedEntityDto";
 
 const serviceEndpoint = ENDPOINTS.EXAMS;
 
@@ -16,12 +17,12 @@ const ExamService = {
         const response = await api.get<ApiResponse<ExamDto>>(`${serviceEndpoint}/${id}`);
         return response.data;
     },
-    createExam: async (data: AddExamRequest): Promise<ApiResponse<number>> => {
-        const response = await api.post<ApiResponse<number>>(serviceEndpoint, data);
+    createExam: async (data: AddExamRequest, config?: any): Promise<ApiResponse<number>> => {
+        const response = await api.post<ApiResponse<number>>(serviceEndpoint, data, config);
         return response.data;
     },
-    updateExam: async (data: UpdateExamRequest): Promise<ApiResponse<string>> => {
-        const response = await api.put<ApiResponse<string>>(serviceEndpoint, data);
+    updateExam: async (data: UpdateExamRequest, config?: any): Promise<ApiResponse<string>> => {
+        const response = await api.put<ApiResponse<string>>(serviceEndpoint, data, config);
         return response.data;
     },
     deleteExam: async (id: number): Promise<ApiResponse<string>> => {
@@ -36,6 +37,15 @@ const ExamService = {
         const response = await api.patch<ApiResponse<string>>(`${serviceEndpoint}/${id}/unpublish`);
         return response.data;
     },
+    assignQuestions: async (data: AssignQuestionsRequest): Promise<ApiResponse<RejectedEntityDto[]>> => {
+        const response = await api.patch<ApiResponse<RejectedEntityDto[]>>(`${serviceEndpoint}/assign-questions`, data);
+        return response.data;
+    },
+    unassignQuestions: async (data: AssignQuestionsRequest): Promise<ApiResponse<RejectedEntityDto[]>> => {
+        const response = await api.patch<ApiResponse<RejectedEntityDto[]>>(`${serviceEndpoint}/unassign-questions`, data);
+        return response.data;
+    },
 };
 
 export default ExamService;
+

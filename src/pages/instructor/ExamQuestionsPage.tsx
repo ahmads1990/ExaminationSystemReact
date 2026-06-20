@@ -1,11 +1,13 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, Badge, Alert } from "react-bootstrap";
-import { ArrowLeft, Plus, Trash2, Edit2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Edit2, Unlink } from "lucide-react";
 import Table from "../../components/common/Table";
 import ActionButton from "../../components/common/ActionButton";
 import SaveQuestionModal from "../../components/instructor/questions/SaveQuestionModal";
+import AssignQuestionsModal from "../../components/instructor/AssignQuestionsModal";
 import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
+import ConfirmActionDialog from "../../components/common/ConfirmActionDialog";
 import QuestionService from "../../services/questionService";
 import ExamService from "../../services/examService";
 import { usePagination } from "../../hooks/usePagination";
@@ -69,7 +71,20 @@ const ExamQuestionsPage = () => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    // Assign / Unassign States
+    const [showAssignModal, setShowAssignModal] = useState(false);
+    const [showSingleUnassignDialog, setShowSingleUnassignDialog] = useState(false);
+    const [questionIdToUnassign, setQuestionIdToUnassign] = useState<number | null>(null);
+    const [showBulkUnassignDialog, setShowBulkUnassignDialog] = useState(false);
+    const [isUnassigning, setIsUnassigning] = useState(false);
+
     const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+
+    const alreadyAssignedIds = useMemo(() => {
+        return (data?.data || []).map((q: any) => q.id);
+    }, [data]);
+
+    const isExamPublished = examInfo?.data?.examStatus === "Published";
 
     const handleDeleteSelected = async () => {
         const idsToDelete = Object.keys(rowSelection)
@@ -90,6 +105,66 @@ const ExamQuestionsPage = () => {
             setShowDeleteDialog(false);
         } finally {
             setIsDeleting(false);
+        }
+    };
+
+    const handleUnassignSingle = async () => {
+        if (questionIdToUnassign === null) return;
+        setIsUnassigning(true);
+        try {
+            const res = await ExamService.unassignQuestions({
+                examId: examIdNum,
+                questionIds: [questionIdToUnassign]
+            });
+            if (res.success) {
+                const rejected = res.data || [];
+                if (rejected.length > 0) {
+                    toast.error(`Could not unassign question: ${rejected[0].reason}`);
+                } else {
+                    toast.success("Question unassigned successfully.");
+                    refreshData();
+                }
+            }
+        } catch (err: any) {
+            console.error(err);
+            const errorMsg = err.response?.data?.message || "Failed to unassign question.";
+            toast.error(errorMsg);
+        } finally {
+            setIsUnassigning(false);
+            setShowSingleUnassignDialog(false);
+            setQuestionIdToUnassign(null);
+        }
+    };
+
+    const handleUnassignSelected = async () => {
+        const idsToUnassign = Object.keys(rowSelection)
+            .filter(key => rowSelection[key])
+            .map(Number);
+
+        if (idsToUnassign.length === 0) return;
+        setIsUnassigning(true);
+        try {
+            const res = await ExamService.unassignQuestions({
+                examId: examIdNum,
+                questionIds: idsToUnassign
+            });
+            if (res.success) {
+                const rejected = res.data || [];
+                if (rejected.length > 0) {
+                    toast.error(`Failed to unassign ${rejected.length} question(s).`);
+                } else {
+                    toast.success("Questions unassigned successfully.");
+                    setRowSelection({});
+                    refreshData();
+                }
+            }
+        } catch (err: any) {
+            console.error(err);
+            const errorMsg = err.response?.data?.message || "Failed to unassign questions.";
+            toast.error(errorMsg);
+        } finally {
+            setIsUnassigning(false);
+            setShowBulkUnassignDialog(false);
         }
     };
 
@@ -133,7 +208,7 @@ const ExamQuestionsPage = () => {
             id: 'body',
             header: 'Question',
             accessorKey: 'body',
-            size: 600,
+            size: 550,
             cell: (info: any) => (
                 <div className="text-wrap">
                     {info.getValue()}
@@ -161,9 +236,9 @@ const ExamQuestionsPage = () => {
         {
             id: 'actions',
             header: 'Actions',
-            size: 25,
+            size: 70,
             cell: (info: any) => (
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center gap-2">
                     <ActionButton 
                         variant="primary" 
                         onClick={() => handleEditQuestion(info.row.original)}
@@ -174,13 +249,26 @@ const ExamQuestionsPage = () => {
                     >
                         <Edit2 size={14} />
                     </ActionButton>
+                    <ActionButton 
+                        variant="outline-warning" 
+                        onClick={() => {
+                            setQuestionIdToUnassign(info.row.original.id);
+                            setShowSingleUnassignDialog(true);
+                        }}
+                        disabled={isExamPublished}
+                        title={isExamPublished ? "Cannot unassign questions from a published exam" : "Unassign Question"}
+                        fullWidth={false}
+                        style={{ width: '32px', height: '32px', padding: 0 }}
+                        className="d-inline-flex align-items-center justify-content-center"
+                    >
+                        <Unlink size={14} />
+                    </ActionButton>
                 </div>
             )
         }
-    ], [rowSelection]);
+    ], [rowSelection, isExamPublished]);
 
     const selectedCount = Object.values(rowSelection).filter(Boolean).length;
-    const isExamPublished = examInfo?.data?.examStatus === "Published";
 
     if (isNaN(examIdNum)) {
         return <Alert variant="danger">Invalid Exam ID</Alert>;
@@ -202,14 +290,31 @@ const ExamQuestionsPage = () => {
                 </div>
                 <div className="d-flex gap-2">
                     {selectedCount > 0 && (
-                        <ActionButton
-                            variant="danger"
-                            onClick={() => setShowDeleteDialog(true)}
-                            disabled={isDeleting}
-                        >
-                            <Trash2 size={18} className="me-2" /> Delete Selected ({selectedCount})
-                        </ActionButton>
+                        <>
+                            <ActionButton
+                                variant="outline-warning"
+                                onClick={() => setShowBulkUnassignDialog(true)}
+                                disabled={isUnassigning || isExamPublished}
+                            >
+                                <Unlink size={18} className="me-2" /> Unassign Selected ({selectedCount})
+                            </ActionButton>
+                            <ActionButton
+                                variant="danger"
+                                onClick={() => setShowDeleteDialog(true)}
+                                disabled={isDeleting}
+                            >
+                                <Trash2 size={18} className="me-2" /> Delete Selected ({selectedCount})
+                            </ActionButton>
+                        </>
                     )}
+                    <ActionButton 
+                        variant="outline-primary" 
+                        onClick={() => setShowAssignModal(true)}
+                        disabled={isExamPublished}
+                        title={isExamPublished ? "Cannot assign questions to a published exam" : "Assign Questions"}
+                    >
+                        <Plus size={18} className="me-2" /> Assign Questions
+                    </ActionButton>
                     <ActionButton variant="primary" onClick={handleAddQuestion}>
                         <Plus size={18} className="me-2" /> New Question
                     </ActionButton>
@@ -245,12 +350,47 @@ const ExamQuestionsPage = () => {
                 questionToEdit={questionToEdit}
             />
 
+            <AssignQuestionsModal
+                show={showAssignModal}
+                onHide={() => setShowAssignModal(false)}
+                onSuccess={refreshData}
+                examId={examIdNum}
+                alreadyAssignedIds={alreadyAssignedIds}
+            />
+
             <ConfirmDeleteDialog
                 show={showDeleteDialog}
                 onHide={() => setShowDeleteDialog(false)}
                 onConfirm={handleDeleteSelected}
                 title="Delete Questions"
                 description={`Are you sure you want to delete ${selectedCount} selected question(s)? This action cannot be undone.`}
+            />
+
+            <ConfirmActionDialog
+                show={showSingleUnassignDialog}
+                onHide={() => {
+                    setShowSingleUnassignDialog(false);
+                    setQuestionIdToUnassign(null);
+                }}
+                onConfirm={handleUnassignSingle}
+                title="Unassign Question"
+                description="Are you sure you want to unassign this question? It will be removed from this exam but will remain in the general question pool."
+                confirmLabel="Unassign"
+                confirmVariant="warning"
+                icon={<Unlink size={24} style={{ color: "#d97706" }} />}
+                iconBgColor="#fef3c7"
+            />
+
+            <ConfirmActionDialog
+                show={showBulkUnassignDialog}
+                onHide={() => setShowBulkUnassignDialog(false)}
+                onConfirm={handleUnassignSelected}
+                title="Unassign Questions"
+                description={`Are you sure you want to unassign ${selectedCount} selected question(s)? They will be removed from this exam but will remain in the general question pool.`}
+                confirmLabel="Unassign"
+                confirmVariant="warning"
+                icon={<Unlink size={24} style={{ color: "#d97706" }} />}
+                iconBgColor="#fef3c7"
             />
         </div>
     );

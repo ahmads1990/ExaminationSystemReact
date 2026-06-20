@@ -27,3 +27,10 @@ export enum ExamStatus {
     Published = "Published",
     Archived = "Archived"
 }
+
+export enum RejectionReason {
+    NotFound = "NotFound",
+    AlreadyAssigned = "AlreadyAssigned",
+    NotAssigned = "NotAssigned"
+}
+

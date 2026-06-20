@@ -35,3 +35,9 @@ export interface PublishExamRequest {
     id: number;
     publishDate?: string | null;
 }
+
+export interface AssignQuestionsRequest {
+    examId: number;
+    questionIds: number[];
+}
+
