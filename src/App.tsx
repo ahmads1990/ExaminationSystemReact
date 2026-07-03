@@ -14,6 +14,7 @@ import CoursesPage from "./pages/instructor/CoursesPage";
 import ExamsPage from "./pages/instructor/ExamsPage";
 import ExamQuestionsPage from "./pages/instructor/ExamQuestionsPage";
 import DashboardPage from "./pages/instructor/DashboardPage";
+import SubmissionsPage from "./pages/instructor/SubmissionsPage";
 import { UserRole } from "./types/auth";
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                             <Route path="instructor/courses" element={<CoursesPage />} />
                             <Route path="instructor/exams" element={<ExamsPage />} />
                             <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
+                            <Route path="instructor/exams/:examId/submissions" element={<SubmissionsPage />} />
                             <Route path="questions" element={<Navigate to="/instructor/exams" replace />} />
                         </Route>
 

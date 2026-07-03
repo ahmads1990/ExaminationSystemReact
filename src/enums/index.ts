@@ -34,3 +34,12 @@ export enum RejectionReason {
     NotAssigned = "NotAssigned"
 }
 
+export enum ExamAttemptStatus {
+    NotStarted = "NotStarted",
+    InProgress = "InProgress",
+    Completed = "Completed",
+    TimedOut = "TimedOut",
+    Grading = "Grading",
+    Graded = "Graded"
+}
+

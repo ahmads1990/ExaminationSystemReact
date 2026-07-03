@@ -316,6 +316,13 @@ const ExamsPage = () => {
                                                 Questions
                                             </ActionButton>
                                             <ActionButton
+                                                variant="outline-primary"
+                                                onClick={() => navigate(`/instructor/exams/${examId}/submissions`)}
+                                                disabled={isDeleting === examId || isStatusChanging === examId}
+                                            >
+                                                Submissions
+                                            </ActionButton>
+                                            <ActionButton
                                                 variant="outline-danger"
                                                 onClick={() => handleDelete(examId)}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
