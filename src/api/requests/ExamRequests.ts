@@ -23,7 +23,6 @@ export interface AddExamRequest {
     passingScore: number;
     maxAttempts: number;
     shuffleQuestions: boolean;
-    showResultsImmediately: boolean;
     deadlineDate: string | null;
 }
 

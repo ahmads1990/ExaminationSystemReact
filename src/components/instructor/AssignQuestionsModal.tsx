@@ -6,7 +6,7 @@ import QuestionService from "../../services/questionService";
 import ExamService from "../../services/examService";
 import { usePagination } from "../../hooks/usePagination";
 import useQuery from "../../hooks/useQuery";
-import { QuestionLevel, QuestionLevelInfo, RejectionReason } from "../../enums";
+import { QuestionLevelInfo, RejectionReason } from "../../enums";
 import { RejectedEntityDto } from "../../api/responses/exams/RejectedEntityDto";
 import toast from "react-hot-toast";
 
@@ -27,7 +27,7 @@ const AssignQuestionsModal = ({
 }: AssignQuestionsModalProps) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchVal, setSearchVal] = useState("");
-    
+
     // Track selected rows (question IDs)
     const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -270,7 +270,7 @@ const AssignQuestionsModal = ({
                     <span>Assign Questions to Exam</span>
                 </BModal.Title>
             </BModal.Header>
-            
+
             <BModal.Body className="py-4 px-4" style={{ minHeight: '400px' }}>
                 {rejectedList.length > 0 && (
                     <BAlert variant="danger" onClose={() => setRejectedList([])} dismissible className="mb-4 border-danger border-opacity-20 rounded-3 shadow-sm">
@@ -295,9 +295,9 @@ const AssignQuestionsModal = ({
                             className="border-0 shadow-none py-2 px-3"
                         />
                         {searchVal && (
-                            <BButton 
-                                variant="link" 
-                                className="text-muted p-0 px-2 d-flex align-items-center border-0 bg-transparent shadow-none" 
+                            <BButton
+                                variant="link"
+                                className="text-muted p-0 px-2 d-flex align-items-center border-0 bg-transparent shadow-none"
                                 onClick={handleClearSearch}
                             >
                                 <X size={18} />
@@ -319,7 +319,7 @@ const AssignQuestionsModal = ({
                         setPagination={handleSetPagination}
                         getRowId={(row) => String(row.id)}
                         isPending={isLoading}
-                        error={error?.message}
+                        error={error}
                     />
                 </div>
             </BModal.Body>
@@ -331,9 +331,9 @@ const AssignQuestionsModal = ({
                 <BButton variant="secondary" onClick={onHide} disabled={isSubmitting} className="rounded-3">
                     Cancel
                 </BButton>
-                <BButton 
-                    variant="primary" 
-                    onClick={handleAssign} 
+                <BButton
+                    variant="primary"
+                    onClick={handleAssign}
                     disabled={isSubmitting || selectedCount === 0}
                     className="px-4 rounded-3 d-flex align-items-center gap-2"
                 >

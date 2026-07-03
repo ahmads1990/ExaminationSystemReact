@@ -5,6 +5,9 @@ function useQuery<T>(queryFn: () => Promise<T>, deps: DependencyList = []): UseQ
     const [data, setData] = useState<T | null>(null);
     const [isPending, setIsPending] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [trigger, setTrigger] = useState(0);
+
+    const refetch = () => setTrigger(prev => prev + 1);
 
     useEffect(() => {
         let isMounted = true;
@@ -34,9 +37,9 @@ function useQuery<T>(queryFn: () => Promise<T>, deps: DependencyList = []): UseQ
         return () => {
             isMounted = false;
         };
-    }, deps);
+    }, [...deps, trigger]);
 
-    return { data, isPending, error };
+    return { data, isPending, error, refetch };
 }
 
 export default useQuery;

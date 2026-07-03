@@ -12,7 +12,7 @@ import QuestionService from "../../services/questionService";
 import ExamService from "../../services/examService";
 import { usePagination } from "../../hooks/usePagination";
 import useQuery from "../../hooks/useQuery";
-import { QuestionLevel, QuestionLevelInfo } from "../../enums";
+import { QuestionLevelInfo } from "../../enums";
 import toast from "react-hot-toast";
 
 const ExamQuestionsPage = () => {
@@ -239,8 +239,8 @@ const ExamQuestionsPage = () => {
             size: 70,
             cell: (info: any) => (
                 <div className="d-flex justify-content-center gap-2">
-                    <ActionButton 
-                        variant="primary" 
+                    <ActionButton
+                        variant="primary"
                         onClick={() => handleEditQuestion(info.row.original)}
                         title="Edit Question"
                         fullWidth={false}
@@ -249,8 +249,8 @@ const ExamQuestionsPage = () => {
                     >
                         <Edit2 size={14} />
                     </ActionButton>
-                    <ActionButton 
-                        variant="outline-warning" 
+                    <ActionButton
+                        variant="outline-warning"
                         onClick={() => {
                             setQuestionIdToUnassign(info.row.original.id);
                             setShowSingleUnassignDialog(true);
@@ -307,8 +307,8 @@ const ExamQuestionsPage = () => {
                             </ActionButton>
                         </>
                     )}
-                    <ActionButton 
-                        variant="outline-primary" 
+                    <ActionButton
+                        variant="outline-primary"
                         onClick={() => setShowAssignModal(true)}
                         disabled={isExamPublished}
                         title={isExamPublished ? "Cannot assign questions to a published exam" : "Assign Questions"}

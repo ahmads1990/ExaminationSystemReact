@@ -10,4 +10,5 @@ export interface UseQueryResult<T> {
     data: T | null;
     isPending: boolean;
     error: string | null;
+    refetch: () => void;
 }

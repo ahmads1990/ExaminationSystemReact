@@ -13,7 +13,6 @@ export interface ExamDto
     passingScore: number;
     maxAttempts: number;
     shuffleQuestions?: boolean;
-    showResultsImmediately?: boolean;
     deadlineDate?: string;
     createdDate?: string;
 }
