@@ -11,7 +11,7 @@ import { formatDate } from "../../utils/dateUtils";
 import { useDebounce } from "../../hooks/useDebounce";
 import { usePagination } from "../../hooks/usePagination";
 import ActionButton from "../../components/common/ActionButton";
-import { Spinner, Pagination } from "react-bootstrap";
+import { Spinner, Pagination, Modal } from "react-bootstrap";
 import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LABELS } from "../../constants/examConstants";
 import SaveExamModal from "../../components/instructor/exams/SaveExamModal";
 import { useAuth } from "../../contexts/AuthContext";
@@ -34,6 +34,46 @@ const ExamsPage = () => {
     const [examToEdit, setExamToEdit] = useState<ExamDto | null>(null);
     const [isDeleting, setIsDeleting] = useState<number | null>(null);
     const [isStatusChanging, setIsStatusChanging] = useState<number | null>(null);
+
+    // Publish Modal States
+    const [showPublishModal, setShowPublishModal] = useState(false);
+    const [publishDate, setPublishDate] = useState("");
+    const [examIdToPublish, setExamIdToPublish] = useState<number | null>(null);
+    const [isPublishing, setIsPublishing] = useState(false);
+
+    const getMinDateTime = () => {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + 1);
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
+    const executePublish = async () => {
+        if (examIdToPublish === null || !publishDate) return;
+        setIsPublishing(true);
+        try {
+            const isoDate = new Date(publishDate).toISOString();
+            const resp = await ExamService.publishExam({ id: examIdToPublish, publishDate: isoDate });
+            if (resp.success) {
+                toast.success("Exam published successfully.");
+                setShowPublishModal(false);
+                setPublishDate("");
+                setExamIdToPublish(null);
+                fetchExams();
+            } else {
+                toast.error(resp.message || "Failed to publish exam.");
+            }
+        } catch (err: any) {
+            const errorMsg = err.response?.data?.message || "An error occurred while publishing the exam.";
+            toast.error(errorMsg);
+        } finally {
+            setIsPublishing(false);
+        }
+    };
     
     // Auth context to filter exams
     const authContext = useAuth();
@@ -98,9 +138,9 @@ const ExamsPage = () => {
 
     const handleStatusChange = async (exam: ExamDto, isPublished: boolean) => {
         const examId = exam.id;
-        setIsStatusChanging(examId);
-        try {
-            if (isPublished) {
+        if (isPublished) {
+            setIsStatusChanging(examId);
+            try {
                 const resp = await ExamService.unpublishExam(examId);
                 if (resp.success) {
                     toast.success("Exam unpublished successfully.");
@@ -108,19 +148,25 @@ const ExamsPage = () => {
                 } else {
                     toast.error(resp.message || "Failed to unpublish exam.");
                 }
-            } else {
-                const resp = await ExamService.publishExam({ id: examId, publishDate: new Date().toISOString() });
-                if (resp.success) {
-                    toast.success("Exam published successfully.");
-                    fetchExams();
-                } else {
-                    toast.error(resp.message || "Failed to publish exam.");
-                }
+            } catch {
+                toast.error("An error occurred while unpublishing exam.");
+            } finally {
+                setIsStatusChanging(null);
             }
-        } catch {
-            toast.error("An error occurred while changing exam status.");
-        } finally {
-            setIsStatusChanging(null);
+        } else {
+            // Default value to tomorrow at 9:00 AM (ensures it is in the future)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(9, 0, 0, 0);
+            const y = tomorrow.getFullYear();
+            const m = String(tomorrow.getMonth() + 1).padStart(2, "0");
+            const d = String(tomorrow.getDate()).padStart(2, "0");
+            const h = String(tomorrow.getHours()).padStart(2, "0");
+            const min = String(tomorrow.getMinutes()).padStart(2, "0");
+            
+            setPublishDate(`${y}-${m}-${d}T${h}:${min}`);
+            setExamIdToPublish(examId);
+            setShowPublishModal(true);
         }
     };
 
@@ -372,6 +418,42 @@ const ExamsPage = () => {
                     fetchExams();
                 }}
             />
+
+            {/* Publish Date Selection Modal */}
+            <Modal show={showPublishModal} onHide={() => setShowPublishModal(false)} centered>
+                <Modal.Header closeButton className="border-0 pb-0">
+                    <Modal.Title className="fw-bold text-dark">Publish Exam</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="py-3">
+                    <p className="text-muted small mb-3">
+                        Please select a future date and time to publish this exam. Students will not be able to attempt it before this date.
+                    </p>
+                    <div className="form-group">
+                        <label className="form-label fw-semibold text-secondary-800" htmlFor="publish-date-input">Publish Date & Time</label>
+                        <input
+                            id="publish-date-input"
+                            type="datetime-local"
+                            className="form-control py-2 bg-light border-0"
+                            value={publishDate}
+                            onChange={(e) => setPublishDate(e.target.value)}
+                            min={getMinDateTime()}
+                        />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer className="border-0 pt-0">
+                    <ActionButton variant="outline-secondary" onClick={() => setShowPublishModal(false)}>
+                        Cancel
+                    </ActionButton>
+                    <ActionButton 
+                        variant="success" 
+                        onClick={executePublish}
+                        disabled={isPublishing || !publishDate}
+                        fullWidth={false}
+                    >
+                        {isPublishing ? <Spinner animation="border" size="sm" /> : "Confirm Publish"}
+                    </ActionButton>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
