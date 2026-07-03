@@ -13,6 +13,7 @@ import UnauthorizedPage from "./pages/errors/UnauthorizedPage";
 import CoursesPage from "./pages/instructor/CoursesPage";
 import ExamsPage from "./pages/instructor/ExamsPage";
 import ExamQuestionsPage from "./pages/instructor/ExamQuestionsPage";
+import DashboardPage from "./pages/instructor/DashboardPage";
 import { UserRole } from "./types/auth";
 
 function App() {
@@ -30,8 +31,8 @@ function App() {
 
                     {/* Dashboard / Main Routes */}
                     <Route element={<MainLayout />}>
-                        {/* Redirect root to dashboard/courses if auth */}
-                        <Route path="/" element={<Navigate to="/instructor/courses" replace />} />
+                        {/* Redirect root to dashboard if auth */}
+                        <Route path="/" element={<Navigate to="/instructor/dashboard" replace />} />
                         
                         <Route element={<ProtectedRoute />}>
                             <Route path="change-password" element={<ChangePasswordPage />} />
@@ -39,6 +40,7 @@ function App() {
 
                         {/* Instructor Only Routes */}
                         <Route element={<ProtectedRoute allowedRoles={[UserRole.Instructor]} />}>
+                            <Route path="instructor/dashboard" element={<DashboardPage />} />
                             <Route path="instructor/courses" element={<CoursesPage />} />
                             <Route path="instructor/exams" element={<ExamsPage />} />
                             <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />

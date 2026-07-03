@@ -41,7 +41,11 @@ const MainLayout = () => {
                     <div className="p-3">
                          <small className="text-uppercase text-muted fw-bold tracking-wider" style={{ fontSize: '0.7rem' }}>Menu</small>
                         <Nav className="flex-column mt-2 gap-1">
-                            <SidebarLink to="/" icon={LayoutDashboard} label="Dashboard" />
+                            {user?.role === UserRole.Instructor ? (
+                                <SidebarLink to="/instructor/dashboard" icon={LayoutDashboard} label="Dashboard" />
+                            ) : (
+                                <SidebarLink to="/" icon={LayoutDashboard} label="Dashboard" />
+                            )}
                             {/* Student Routes */}
                             {user?.role === UserRole.Student && (
                                 <SidebarLink to="/courses" icon={BookOpen} label="Browse Courses" />
