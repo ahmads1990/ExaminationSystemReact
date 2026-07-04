@@ -1,6 +1,6 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { AvailableExamDto, ExamQuestionDto, AttemptResultDto } from "../api/responses/StudentExamResponses";
+import { AvailableExamDto, ExamQuestionDto, AttemptResultDto, StudentAttemptSummaryDto } from "../api/responses/StudentExamResponses";
 import { ApiResponse } from "../api/responses/ApiResponse";
 
 const serviceEndpoint = ENDPOINTS.STUDENT_EXAMS;
@@ -40,6 +40,11 @@ const StudentExamService = {
         const response = await api.get<ApiResponse<AttemptResultDto>>(`${serviceEndpoint}/result`, {
             params: { attemptId }
         });
+        return response.data;
+    },
+
+    getExamHistory: async (): Promise<ApiResponse<StudentAttemptSummaryDto[]>> => {
+        const response = await api.get<ApiResponse<StudentAttemptSummaryDto[]>>(`${serviceEndpoint}/history`);
         return response.data;
     }
 };

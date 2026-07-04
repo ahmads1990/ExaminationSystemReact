@@ -28,3 +28,13 @@ export interface AttemptResultDto {
     isPassed: boolean;
     completionTime: string;
 }
+
+export interface StudentAttemptSummaryDto {
+    attemptId: number;
+    examTitle: string;
+    courseTitle: string;
+    score: number;
+    maxGrade: number;
+    isPassed: boolean;
+    submittedAt: string;
+}

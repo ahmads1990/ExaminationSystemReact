@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { BookOpen, LayoutDashboard, FileText } from "lucide-react";
+import { BookOpen, LayoutDashboard, FileText, History } from "lucide-react";
 import Navbar from "../components/common/Navbar";
 import { useAuth } from "../contexts/AuthContext";
 import { UserRole } from "../types/auth";
@@ -48,7 +48,10 @@ const MainLayout = () => {
                             )}
                             {/* Student Routes */}
                             {user?.role === UserRole.Student && (
-                                <SidebarLink to="/courses" icon={BookOpen} label="Browse Courses" />
+                                <>
+                                    <SidebarLink to="/courses" icon={BookOpen} label="Browse Courses" />
+                                    <SidebarLink to="/student/history" icon={History} label="Exam History" />
+                                </>
                             )}
 
                              {/* Instructor Routes */}

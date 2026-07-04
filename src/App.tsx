@@ -20,6 +20,7 @@ import StudentDashboardPage from "./pages/student/DashboardPage";
 import ExamStartPage from "./pages/student/ExamStartPage";
 import ExamTakingPage from "./pages/student/ExamTakingPage";
 import ExamResultPage from "./pages/student/ExamResultPage";
+import ExamHistoryPage from "./pages/student/ExamHistoryPage";
 import { UserRole } from "./types/auth";
 import { useAuth } from "./contexts/AuthContext";
 
@@ -74,6 +75,7 @@ function App() {
                             <Route path="courses" element={<StudentCoursesPage />} />
                             <Route path="student/exams/:examId/start" element={<ExamStartPage />} />
                             <Route path="student/exams/result" element={<ExamResultPage />} />
+                            <Route path="student/history" element={<ExamHistoryPage />} />
                         </Route>
 
                         <Route path="unauthorized" element={<UnauthorizedPage />} />
