@@ -1,6 +1,6 @@
 import { getErrorMessage } from "../utils/errorMessages";
 import axios from "axios";
-import { getToken, getRefreshToken, saveToken, saveRefreshToken, getUser, clearAuth } from "../utils/storage";
+import { getToken, getRefreshToken, saveToken, saveRefreshToken, getUser, clearAuth, getExamToken } from "../utils/storage";
 import { User } from "../types/auth";
 import { ENDPOINTS } from "./endpoints";
 import toast from "react-hot-toast";
@@ -17,10 +17,22 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) =>
     {
-        const token = getToken();
-        if (token)
+        const examToken = getExamToken();
+        const isExamTakingEndpoint = config.url?.includes('/StudentExams/questions') ||
+                                     config.url?.includes('/StudentExams/answer') ||
+                                     config.url?.includes('/StudentExams/submit-attempt');
+
+        if (examToken && isExamTakingEndpoint)
         {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${examToken}`;
+        }
+        else
+        {
+            const token = getToken();
+            if (token)
+            {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
         }
         return config;
     },

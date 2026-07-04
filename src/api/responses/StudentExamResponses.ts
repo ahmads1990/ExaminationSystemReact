@@ -10,3 +10,21 @@ export interface AvailableExamDto {
     maxAttempts: number;
     attemptsTaken: number;
 }
+
+export interface ChoiceDto {
+    choiceId: number;
+    body: string;
+}
+
+export interface ExamQuestionDto {
+    questionId: number;
+    body: string;
+    choices: ChoiceDto[];
+}
+
+export interface AttemptResultDto {
+    currentGrade: number;
+    maxGrade: number;
+    isPassed: boolean;
+    completionTime: string;
+}

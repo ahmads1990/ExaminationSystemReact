@@ -3,7 +3,8 @@
 const STORAGE_KEYS = {
     TOKEN: 'auth_token',
     REFRESH_TOKEN: 'auth_refresh_token',
-    USER: 'auth_user'
+    USER: 'auth_user',
+    EXAM_TOKEN: 'exam_token'
 } as const;
 
 // Token management
@@ -38,6 +39,22 @@ export const removeRefreshToken = (): void =>
     localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
 };
 
+// Exam Token management
+export const saveExamToken = (token: string): void =>
+{
+    localStorage.setItem(STORAGE_KEYS.EXAM_TOKEN, token);
+};
+
+export const getExamToken = (): string | null =>
+{
+    return localStorage.getItem(STORAGE_KEYS.EXAM_TOKEN);
+};
+
+export const removeExamToken = (): void =>
+{
+    localStorage.removeItem(STORAGE_KEYS.EXAM_TOKEN);
+};
+
 // User management
 export const saveUser = (user: object): void =>
 {
@@ -69,4 +86,5 @@ export const clearAuth = (): void =>
     removeToken();
     removeRefreshToken();
     removeUser();
+    removeExamToken();
 };

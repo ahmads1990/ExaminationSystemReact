@@ -17,6 +17,9 @@ import DashboardPage from "./pages/instructor/DashboardPage";
 import SubmissionsPage from "./pages/instructor/SubmissionsPage";
 import StudentCoursesPage from "./pages/student/CoursesPage";
 import StudentDashboardPage from "./pages/student/DashboardPage";
+import ExamStartPage from "./pages/student/ExamStartPage";
+import ExamTakingPage from "./pages/student/ExamTakingPage";
+import ExamResultPage from "./pages/student/ExamResultPage";
 import { UserRole } from "./types/auth";
 import { useAuth } from "./contexts/AuthContext";
 
@@ -39,6 +42,11 @@ function App() {
                         <Route path="/verify-email" element={<VerifyEmailPage />} />
                         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                         <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    </Route>
+
+                    {/* Focused Exam Taking Layout/Page - Outside MainLayout */}
+                    <Route element={<ProtectedRoute allowedRoles={[UserRole.Student]} />}>
+                        <Route path="student/exams/take" element={<ExamTakingPage />} />
                     </Route>
 
                     {/* Dashboard / Main Routes */}
@@ -64,6 +72,8 @@ function App() {
                         <Route element={<ProtectedRoute allowedRoles={[UserRole.Student]} />}>
                             <Route path="student/dashboard" element={<StudentDashboardPage />} />
                             <Route path="courses" element={<StudentCoursesPage />} />
+                            <Route path="student/exams/:examId/start" element={<ExamStartPage />} />
+                            <Route path="student/exams/result" element={<ExamResultPage />} />
                         </Route>
 
                         <Route path="unauthorized" element={<UnauthorizedPage />} />
