@@ -15,7 +15,18 @@ import ExamsPage from "./pages/instructor/ExamsPage";
 import ExamQuestionsPage from "./pages/instructor/ExamQuestionsPage";
 import DashboardPage from "./pages/instructor/DashboardPage";
 import SubmissionsPage from "./pages/instructor/SubmissionsPage";
+import StudentCoursesPage from "./pages/student/CoursesPage";
+import StudentDashboardPage from "./pages/student/DashboardPage";
 import { UserRole } from "./types/auth";
+import { useAuth } from "./contexts/AuthContext";
+
+const RootRedirect = () => {
+    const { user } = useAuth();
+    if (user?.role === UserRole.Instructor) {
+        return <Navigate to="/instructor/dashboard" replace />;
+    }
+    return <Navigate to="/student/dashboard" replace />;
+};
 
 function App() {
     return (
@@ -33,7 +44,7 @@ function App() {
                     {/* Dashboard / Main Routes */}
                     <Route element={<MainLayout />}>
                         {/* Redirect root to dashboard if auth */}
-                        <Route path="/" element={<Navigate to="/instructor/dashboard" replace />} />
+                        <Route path="/" element={<RootRedirect />} />
                         
                         <Route element={<ProtectedRoute />}>
                             <Route path="change-password" element={<ChangePasswordPage />} />
@@ -47,6 +58,12 @@ function App() {
                             <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
                             <Route path="instructor/exams/:examId/submissions" element={<SubmissionsPage />} />
                             <Route path="questions" element={<Navigate to="/instructor/exams" replace />} />
+                        </Route>
+
+                        {/* Student Only Routes */}
+                        <Route element={<ProtectedRoute allowedRoles={[UserRole.Student]} />}>
+                            <Route path="student/dashboard" element={<StudentDashboardPage />} />
+                            <Route path="courses" element={<StudentCoursesPage />} />
                         </Route>
 
                         <Route path="unauthorized" element={<UnauthorizedPage />} />
