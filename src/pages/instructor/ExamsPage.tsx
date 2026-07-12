@@ -11,7 +11,8 @@ import { formatDate } from "../../utils/dateUtils";
 import { useDebounce } from "../../hooks/useDebounce";
 import { usePagination } from "../../hooks/usePagination";
 import ActionButton from "../../components/common/ActionButton";
-import { Spinner, Pagination, Modal } from "react-bootstrap";
+import { Spinner, Modal } from "react-bootstrap";
+import AppPagination from "../../components/common/Pagination";
 import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LABELS } from "../../constants/examConstants";
 import SaveExamModal from "../../components/instructor/exams/SaveExamModal";
 import { useAuth } from "../../contexts/AuthContext";
@@ -383,29 +384,11 @@ const ExamsPage = () => {
                     </div>
 
                     {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className="d-flex justify-content-center mt-4 mb-5">
-                            <Pagination>
-                                <Pagination.Prev
-                                    onClick={() => handlePageChange(pageIndex - 1)}
-                                    disabled={pageIndex === 0}
-                                />
-                                {[...Array(totalPages)].map((_, i) => (
-                                    <Pagination.Item
-                                        key={`page-${i}`}
-                                        active={i === pageIndex}
-                                        onClick={() => handlePageChange(i)}
-                                    >
-                                        {i + 1}
-                                    </Pagination.Item>
-                                ))}
-                                <Pagination.Next
-                                    onClick={() => handlePageChange(pageIndex + 1)}
-                                    disabled={pageIndex === totalPages - 1}
-                                />
-                            </Pagination>
-                        </div>
-                    )}
+                    <AppPagination
+                        pageIndex={pageIndex}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </>
             )}
             {/* Save Exam Modal */}

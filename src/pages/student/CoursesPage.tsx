@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Card, Badge, Spinner, Row, Col, Pagination } from "react-bootstrap";
+import { Card, Badge, Spinner, Row, Col } from "react-bootstrap";
+import AppPagination from "../../components/common/Pagination";
 import { Search, BookOpen, GraduationCap, Clock } from "lucide-react";
 import StudentCourseService from "../../services/studentCourseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
@@ -194,29 +195,11 @@ const StudentCoursesPage = () => {
                     </Row>
 
                     {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className="d-flex justify-content-center mt-4 mb-5">
-                            <Pagination>
-                                <Pagination.Prev
-                                    onClick={() => handlePageChange(pageIndex - 1)}
-                                    disabled={pageIndex === 0}
-                                />
-                                {[...Array(totalPages)].map((_, i) => (
-                                    <Pagination.Item
-                                        key={`page-${i}`}
-                                        active={i === pageIndex}
-                                        onClick={() => handlePageChange(i)}
-                                    >
-                                        {i + 1}
-                                    </Pagination.Item>
-                                ))}
-                                <Pagination.Next
-                                    onClick={() => handlePageChange(pageIndex + 1)}
-                                    disabled={pageIndex === totalPages - 1}
-                                />
-                            </Pagination>
-                        </div>
-                    )}
+                    <AppPagination
+                        pageIndex={pageIndex}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </>
             )}
         </div>

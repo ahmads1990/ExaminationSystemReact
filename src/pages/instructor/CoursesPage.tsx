@@ -6,7 +6,8 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { usePagination } from "../../hooks/usePagination";
 import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
-import { Spinner, Pagination } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import AppPagination from "../../components/common/Pagination";
 import toast from "react-hot-toast";
 import AddCourseModal from "../../components/instructor/AddCourseModal";
 import EditCourseModal from "../../components/instructor/EditCourseModal";
@@ -192,29 +193,11 @@ const CoursesPage = () => {
                     </div>
 
                     {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className="d-flex justify-content-center mt-4 mb-5">
-                            <Pagination>
-                                <Pagination.Prev 
-                                    onClick={() => handlePageChange(pageIndex - 1)} 
-                                    disabled={pageIndex === 0} 
-                                />
-                                {[...Array(totalPages)].map((_, i) => (
-                                    <Pagination.Item 
-                                        key={`page-${i}`} 
-                                        active={i === pageIndex}
-                                        onClick={() => handlePageChange(i)}
-                                    >
-                                        {i + 1}
-                                    </Pagination.Item>
-                                ))}
-                                <Pagination.Next 
-                                    onClick={() => handlePageChange(pageIndex + 1)} 
-                                    disabled={pageIndex === totalPages - 1} 
-                                />
-                            </Pagination>
-                        </div>
-                    )}
+                    <AppPagination
+                        pageIndex={pageIndex}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </>
             )}
 
