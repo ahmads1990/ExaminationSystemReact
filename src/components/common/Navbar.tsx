@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import { useAuth } from "../../contexts/AuthContext";
+import { UserRole } from "../../types/auth";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [resourcesOpen, setResourcesOpen] = useState(false);
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
 
     const toggleNavbar = () => setIsOpen(!isOpen);
 
@@ -34,21 +35,61 @@ const Navbar = () => {
                 <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="mainNavbar">
                     {/* SECTION 2: CENTERED LINKS */}
                     <ul className="navbar-nav mx-auto mb-2 mb-lg-0 align-items-center gap-1">
-                        <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom" to="/">
-                                Questions
-                            </NavLink>
-                        </li>
-
-                        <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom" to="/login">
-                                Login
-                            </NavLink>
-                        </li>    <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom" to="/register">
-                                Registration
-                            </NavLink>
-                        </li>
+                        {!isAuthenticated ? (
+                            <>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/login">
+                                        Login
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/register">
+                                        Registration
+                                    </NavLink>
+                                </li>
+                            </>
+                        ) : user?.role === UserRole.Instructor ? (
+                            <>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/instructor/dashboard">
+                                        Dashboard
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/instructor/courses">
+                                        My Courses
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/instructor/exams">
+                                        Exams
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/questions">
+                                        Question Bank
+                                    </NavLink>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/student/dashboard">
+                                        Dashboard
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/courses">
+                                        Browse Courses
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link nav-link-custom" to="/student/history">
+                                        Exam History
+                                    </NavLink>
+                                </li>
+                            </>
+                        )}
 
                         {/* Dropdown for Resources (Placeholder) */}
                         <li className="nav-item dropdown" onMouseEnter={() => setResourcesOpen(true)} onMouseLeave={() => setResourcesOpen(false)}>
@@ -66,27 +107,6 @@ const Navbar = () => {
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><a className="dropdown-item dropdown-item-custom" href="#">Community Forum</a></li>
                             </ul>
-                        </li>
-
-                        {/* TODO: Delete this temporary link later */}
-                        <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom text-warning" to="/verify-email">
-                                [TEST OTP]
-                            </NavLink>
-                        </li>
-
-                        {/* TODO: Delete this temporary link later */}
-                        <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom text-warning" to="/forgot-password">
-                                [FORGOT PASS]
-                            </NavLink>
-                        </li>
-
-                        {/* TODO: Delete this temporary link later */}
-                        <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom text-warning" to="/change-password">
-                                [CHANGE PASS]
-                            </NavLink>
                         </li>
 
                         <li className="nav-item">
