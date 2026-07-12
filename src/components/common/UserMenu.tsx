@@ -23,7 +23,7 @@ const UserMenu = () => {
     // Use context user, fallback to dummy data if missing
     const displayUser = {
         name: user?.name || "Admin",
-        avatar: "https://ui-avatars.com/api/?name=" + (user?.name || "Admin") + "&background=4f46e5&color=fff&rounded=true"
+        avatar: "https://ui-avatars.com/api/?name=" + (user?.name || "Admin") + "&background=10B981&color=fff&rounded=true"
     };
 
     return (

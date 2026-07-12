@@ -221,3 +221,68 @@
   color: var(--color-primary-700) !important;
 }
 
+/* ─── Dropdown Hover Gap Fix ─── */
+.dropdown-menu-custom::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: transparent;
+}
+
+/* ─── Font Size Utilities ─── */
+.font-size-10 { font-size: 0.625rem !important; }
+.font-size-11 { font-size: 0.6875rem !important; }
+.font-size-12 { font-size: 0.75rem !important; }
+.font-size-13 { font-size: 0.8125rem !important; }
+.font-size-14 { font-size: 0.875rem !important; }
+.font-size-15 { font-size: 0.9375rem !important; }
+
+/* ─── Spacing Utilities ─── */
+.p-3\.5 { padding: 1.25rem !important; }
+.py-3\.5 { padding-top: 1.25rem !important; padding-bottom: 1.25rem !important; }
+.px-3\.5 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+.ps-3\.5 { padding-left: 1.25rem !important; }
+.pe-3\.5 { padding-right: 1.25rem !important; }
+
+/* ─── Bootstrap Semantic Color Overrides ─── */
+.bg-success {
+  background-color: var(--color-success) !important;
+}
+.text-success {
+  color: var(--color-success) !important;
+}
+.bg-success-subtle {
+  background-color: var(--color-primary-50) !important;
+}
+.text-success-800 {
+  color: var(--color-primary-700) !important;
+}
+.bg-danger {
+  background-color: var(--color-error) !important;
+}
+.text-danger {
+  color: var(--color-error) !important;
+}
+.bg-danger-subtle {
+  background-color: #FEF2F2 !important;
+}
+.text-danger-800 {
+  color: #991B1B !important;
+}
+.bg-warning {
+  background-color: var(--color-warning) !important;
+}
+.text-warning {
+  color: var(--color-warning) !important;
+}
+.bg-warning-subtle {
+  background-color: #FFFBEB !important;
+}
+.text-warning-800 {
+  color: var(--color-accent-700) !important;
+}
+
+
