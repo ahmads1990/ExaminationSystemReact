@@ -23,10 +23,10 @@ const StudentExamService = {
         return response.data;
     },
 
-    submitAnswer: async (questionId: number, selectedChoiceId: number): Promise<ApiResponse<string>> => {
+    submitAnswer: async (questionId: number, choiceId: number): Promise<ApiResponse<string>> => {
         const response = await api.post<ApiResponse<string>>(`${serviceEndpoint}/answer`, {
             questionId,
-            selectedChoiceId
+            choiceId
         });
         return response.data;
     },

@@ -4,5 +4,5 @@ export interface StartExamAttemptRequest {
 
 export interface SubmitAnswerRequest {
     questionId: number;
-    selectedChoiceId: number;
+    choiceId: number;
 }
