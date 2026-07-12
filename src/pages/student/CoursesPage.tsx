@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, Badge, Spinner, Row, Col, Pagination } from "react-bootstrap";
 import { Search, BookOpen, GraduationCap, Clock } from "lucide-react";
-import CourseService from "../../services/courseService";
 import StudentCourseService from "../../services/studentCourseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { usePagination } from "../../hooks/usePagination";
@@ -40,7 +39,7 @@ const StudentCoursesPage = () => {
     const fetchCourses = async () => {
         setLoading(true);
         try {
-            const resp = await CourseService.getCourses({
+            const resp = await StudentCourseService.getCourses({
                 Title: debouncedSearch || undefined,
                 PageIndex: pageIndex,
                 PageSize: pageSize

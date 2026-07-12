@@ -31,10 +31,15 @@ export interface AttemptResultDto {
 
 export interface StudentAttemptSummaryDto {
     attemptId: number;
+    studentId: number;
+    studentName: string;
+    courseName: string;
     examTitle: string;
-    courseTitle: string;
-    score: number;
+    examType: ExamType;
+    grade: number;
     maxGrade: number;
+    status: string;
+    completionTime: string;
+    createDate: string;
     isPassed: boolean;
-    submittedAt: string;
 }

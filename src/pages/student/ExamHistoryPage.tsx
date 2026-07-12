@@ -73,7 +73,7 @@ const ExamHistoryPage = () => {
                 <Card className="border-0 shadow-sm rounded-4 bg-white overflow-hidden">
                     <Card.Body className="p-0">
                         <div className="table-responsive">
-                            <Table hover className="align-middle mb-0" style={{ borderCollapse: "separate" }}>
+                            <Table className="align-middle mb-0" style={{ borderCollapse: "separate" }}>
                                 <thead className="bg-light text-uppercase text-secondary" style={{ fontSize: "0.75rem", letterSpacing: "0.05em" }}>
                                     <tr>
                                         <th className="py-3 px-4 border-0">Exam Details</th>
@@ -86,10 +86,11 @@ const ExamHistoryPage = () => {
                                 </thead>
                                 <tbody>
                                     {attempts.map((attempt) => {
-                                        const scorePercent = attempt.maxGrade > 0 ? Math.round((attempt.score / attempt.maxGrade) * 100) : 0;
+                                        const isGraded = attempt.status === "Graded";
+                                        const scorePercent = (isGraded && attempt.maxGrade > 0) ? Math.round((attempt.grade / attempt.maxGrade) * 100) : 0;
 
                                         return (
-                                            <tr key={attempt.attemptId} className="transition-all hover-bg-light">
+                                            <tr key={attempt.attemptId} className="transition-all">
                                                 {/* EXAM TITLE */}
                                                 <td className="py-3.5 px-4 border-bottom border-light">
                                                     <div className="d-flex align-items-center gap-3">
@@ -111,38 +112,53 @@ const ExamHistoryPage = () => {
                                                 <td className="py-3.5 px-4 border-bottom border-light text-secondary font-size-14">
                                                     <div className="d-flex align-items-center gap-1.5">
                                                         <BookOpen size={14} className="text-muted" />
-                                                        <span>{attempt.courseTitle}</span>
+                                                        <span>{attempt.courseName}</span>
                                                     </div>
                                                 </td>
 
                                                 {/* SCORE */}
                                                 <td className="py-3.5 px-4 border-bottom border-light text-center">
-                                                    <div>
-                                                        <strong className="text-dark font-size-15">{attempt.score}</strong>
-                                                        <span className="text-muted font-size-12"> / {attempt.maxGrade}</span>
-                                                    </div>
-                                                    <span className="text-muted font-size-11 d-block mt-0.5">
-                                                        {scorePercent}% Grade
-                                                    </span>
+                                                    {isGraded ? (
+                                                        <>
+                                                            <div>
+                                                                <strong className="text-dark font-size-15">{attempt.grade}</strong>
+                                                                <span className="text-muted font-size-12"> / {attempt.maxGrade}</span>
+                                                            </div>
+                                                            <span className="text-muted font-size-11 d-block mt-0.5">
+                                                                {scorePercent}% Grade
+                                                            </span>
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-muted font-size-12 italic">Pending</span>
+                                                    )}
                                                 </td>
 
                                                 {/* RESULT BADGE */}
                                                 <td className="py-3.5 px-4 border-bottom border-light text-center">
-                                                    <Badge
-                                                        bg={attempt.isPassed ? "success-subtle" : "danger-subtle"}
-                                                        className={`rounded-pill px-2.5 py-1.5 font-size-11 fw-bold ${
-                                                            attempt.isPassed ? "text-success-800" : "text-danger-800"
-                                                        }`}
-                                                    >
-                                                        {attempt.isPassed ? "PASSED" : "FAILED"}
-                                                    </Badge>
+                                                    {isGraded ? (
+                                                        <Badge
+                                                            bg={attempt.isPassed ? "success-subtle" : "danger-subtle"}
+                                                            className={`rounded-pill px-2.5 py-1.5 font-size-11 fw-bold ${
+                                                                attempt.isPassed ? "text-success-800" : "text-danger-800"
+                                                            }`}
+                                                        >
+                                                            {attempt.isPassed ? "PASSED" : "FAILED"}
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge
+                                                            bg="warning-subtle"
+                                                            className="rounded-pill px-2.5 py-1.5 font-size-11 fw-bold text-warning-800"
+                                                        >
+                                                            GRADING
+                                                        </Badge>
+                                                    )}
                                                 </td>
 
                                                 {/* SUBMITTED DATE */}
                                                 <td className="py-3.5 px-4 border-bottom border-light text-secondary font-size-13">
                                                     <div className="d-flex align-items-center gap-1.5">
                                                         <Calendar size={14} className="text-muted" />
-                                                        <span>{formatDate(attempt.submittedAt)}</span>
+                                                        <span>{formatDate(attempt.createDate)}</span>
                                                     </div>
                                                 </td>
 
@@ -153,7 +169,7 @@ const ExamHistoryPage = () => {
                                                         className="btn btn-sm btn-outline-primary rounded-3 px-3 py-1.5 d-inline-flex align-items-center gap-1 fw-semibold"
                                                         style={{ fontSize: "0.75rem" }}
                                                     >
-                                                        View Result <ChevronRight size={14} />
+                                                        {isGraded ? "View Result" : "Check Status"} <ChevronRight size={14} />
                                                     </button>
                                                 </td>
                                             </tr>
