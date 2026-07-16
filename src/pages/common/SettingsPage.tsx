@@ -51,7 +51,6 @@ const SettingsPage = () => {
     const [email, setEmail] = useState(user?.email || "");
     const [countryCode, setCountryCode] = useState("+1");
     const [phone, setPhone] = useState("555-019-2834");
-    const [isPhoneVerified, setIsPhoneVerified] = useState(false);
     const [timezone, setTimezone] = useState("Asia/Riyadh");
     const [bio, setBio] = useState("Academic account on ExamSys platform.");
     const [role] = useState(user?.role || "Student");

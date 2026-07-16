@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import { useAuth } from "../../contexts/AuthContext";
-import { UserRole } from "../../types/auth";
-import { Menu } from "lucide-react";
+import { Menu, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface NavbarProps {
     onToggleSidebar?: () => void;
@@ -11,7 +11,8 @@ interface NavbarProps {
 
 const Navbar = ({ onToggleSidebar }: NavbarProps) => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated } = useAuth();
+    const { theme, toggleTheme } = useTheme();
 
     const toggleNavbar = () => setIsOpen(!isOpen);
 
@@ -55,6 +56,16 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
 
                     {/* SECTION 3: AUTH / USER ACTIONS */}
                     <div className="d-flex align-items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={toggleTheme}
+                            className="btn-theme-toggle"
+                            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                            title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                        >
+                            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+                        </button>
+
                         {isAuthenticated ? (
                             <UserMenu />
                         ) : (

@@ -13,26 +13,26 @@ export const EXAM_STATUS_LABELS: Record<string, string> = {
 
 export const EXAM_TYPE_COLORS: Record<string, { bg: string; border: string; text: string }> = {
     [ExamType.Quiz]: { 
-        bg: "var(--color-primary-50)", 
-        border: "var(--color-primary-500)", 
-        text: "var(--color-primary-700)" 
+        bg: "var(--type-quiz-bg)", 
+        border: "var(--type-quiz-border)", 
+        text: "var(--type-quiz-text)" 
     },
     [ExamType.Final]: { 
-        bg: "var(--surface-bg)", 
-        border: "var(--color-info)", 
-        text: "var(--color-secondary-800)" 
+        bg: "var(--type-final-bg)", 
+        border: "var(--type-final-border)", 
+        text: "var(--type-final-text)" 
     },
 };
 
 export const EXAM_STATUS_COLORS = {
     published: {
-        bg: "var(--color-primary-50)",
-        border: "var(--color-primary-100)",
-        text: "var(--color-primary-700)",
+        bg: "var(--status-published-bg)",
+        border: "var(--status-published-border)",
+        text: "var(--status-published-text)",
     },
     draft: {
-        bg: "#FFFBEB", // or a warning light tone from index.css if exists
-        border: "#FEF3C7",
-        text: "var(--color-accent-700)",
+        bg: "var(--status-draft-bg)",
+        border: "var(--status-draft-border)",
+        text: "var(--status-draft-text)",
     }
 };

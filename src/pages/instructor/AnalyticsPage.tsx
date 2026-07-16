@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { BarChart2, TrendingUp, Users, Award, BookOpen } from "lucide-react";
+import { TrendingUp, Users, Award, BookOpen } from "lucide-react";
 
 const AnalyticsPage = () => {
     // Mock general stats

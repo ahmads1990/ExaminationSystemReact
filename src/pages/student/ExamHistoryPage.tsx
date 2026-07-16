@@ -5,7 +5,6 @@ import { History, FileText, Calendar, ChevronRight, BookOpen } from "lucide-reac
 import StudentExamService from "../../services/studentExamService";
 import { StudentAttemptSummaryDto } from "../../api/responses/StudentExamResponses";
 import { formatDate } from "../../utils/dateUtils";
-import ActionButton from "../../components/common/ActionButton";
 import SkeletonTable from "../../components/common/SkeletonTable";
 import EmptyState from "../../components/common/EmptyState";
 

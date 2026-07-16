@@ -1,5 +1,5 @@
 import { Card, Container } from "react-bootstrap";
-import { FileText, Shield } from "lucide-react";
+import { FileText } from "lucide-react";
 
 const TermsOfServicePage = () => {
     return (

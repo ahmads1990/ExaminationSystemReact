@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, Plus, BookOpen, Clock, User, CalendarDays, Users } from "lucide-react";
+import { Search, Plus, BookOpen, Clock, CalendarDays, Users } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { useDebounce } from "../../hooks/useDebounce";

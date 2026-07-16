@@ -1,5 +1,5 @@
-import { Card, Row, Col, Badge, ListGroup, Button } from "react-bootstrap";
-import { User, Mail, Smartphone, Globe, BookOpen, FileCheck, Edit, ShieldCheck } from "lucide-react";
+import { Card, Row, Col, Badge, ListGroup } from "react-bootstrap";
+import { Smartphone, Globe, BookOpen, FileCheck, Edit, ShieldCheck } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 

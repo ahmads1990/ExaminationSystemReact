@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Table, Badge, Button, Modal, Form } from "react-bootstrap";
-import { CheckSquare, User, Calendar, BookOpen, PenTool, CheckCircle } from "lucide-react";
+import { User, Calendar, BookOpen, PenTool, CheckCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Submission {

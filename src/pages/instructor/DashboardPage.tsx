@@ -283,9 +283,8 @@ const DashboardPage = () => {
                 {/* Courses Card */}
                 <Col md={4}>
                     <Card
-                        className="border-0 shadow-sm rounded-4 h-100"
+                        className="border-0 shadow-sm rounded-4 h-100 dashboard-card-courses"
                         style={{
-                            background: 'linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%)',
                             transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease',
                         }}
                         onMouseEnter={(e) => {
@@ -299,10 +298,10 @@ const DashboardPage = () => {
                     >
                         <Card.Body className="d-flex align-items-center p-4">
                             <div className="flex-grow-1">
-                                <span className="text-uppercase fw-bold tracking-wider" style={{ fontSize: "0.75rem", color: "#4f46e5" }}>
+                                <span className="text-uppercase fw-bold tracking-wider" style={{ fontSize: "0.75rem", color: "var(--dashboard-card-label)" }}>
                                     Total Courses
                                 </span>
-                                <h1 className="fw-extrabold mt-2 mb-0" style={{ fontSize: '2.5rem', color: '#312e81', letterSpacing: '-0.5px' }}>
+                                <h1 className="fw-extrabold mt-2 mb-0" style={{ fontSize: '2.5rem', color: 'var(--dashboard-card-value)', letterSpacing: '-0.5px' }}>
                                     {totalCourses}
                                 </h1>
                             </div>
@@ -325,9 +324,8 @@ const DashboardPage = () => {
                 {/* Students Card */}
                 <Col md={4}>
                     <Card
-                        className="border-0 shadow-sm rounded-4 h-100"
+                        className="border-0 shadow-sm rounded-4 h-100 dashboard-card-students"
                         style={{
-                            background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
                             transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease',
                         }}
                         onMouseEnter={(e) => {
@@ -341,10 +339,10 @@ const DashboardPage = () => {
                     >
                         <Card.Body className="d-flex align-items-center p-4">
                             <div className="flex-grow-1">
-                                <span className="text-uppercase fw-bold tracking-wider" style={{ fontSize: "0.75rem", color: "#059669" }}>
+                                <span className="text-uppercase fw-bold tracking-wider" style={{ fontSize: "0.75rem", color: "var(--dashboard-card-label)" }}>
                                     Enrolled Students
                                 </span>
-                                <h1 className="fw-extrabold mt-2 mb-0" style={{ fontSize: '2.5rem', color: '#064e3b', letterSpacing: '-0.5px' }}>
+                                <h1 className="fw-extrabold mt-2 mb-0" style={{ fontSize: '2.5rem', color: 'var(--dashboard-card-value)', letterSpacing: '-0.5px' }}>
                                     {totalStudents}
                                 </h1>
                             </div>
@@ -367,9 +365,8 @@ const DashboardPage = () => {
                 {/* Exams Card */}
                 <Col md={4}>
                     <Card
-                        className="border-0 shadow-sm rounded-4 h-100"
+                        className="border-0 shadow-sm rounded-4 h-100 dashboard-card-exams"
                         style={{
-                            background: 'linear-gradient(135deg, #ecfeff 0%, #cffafe 100%)',
                             transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease',
                         }}
                         onMouseEnter={(e) => {
@@ -383,10 +380,10 @@ const DashboardPage = () => {
                     >
                         <Card.Body className="d-flex align-items-center p-4">
                             <div className="flex-grow-1">
-                                <span className="text-uppercase fw-bold tracking-wider" style={{ fontSize: "0.75rem", color: "#0891b2" }}>
+                                <span className="text-uppercase fw-bold tracking-wider" style={{ fontSize: "0.75rem", color: "var(--dashboard-card-label)" }}>
                                     Total Exams
                                 </span>
-                                <h1 className="fw-extrabold mt-2 mb-0" style={{ fontSize: '2.5rem', color: '#164e63', letterSpacing: '-0.5px' }}>
+                                <h1 className="fw-extrabold mt-2 mb-0" style={{ fontSize: '2.5rem', color: 'var(--dashboard-card-value)', letterSpacing: '-0.5px' }}>
                                     {totalExams}
                                 </h1>
                             </div>

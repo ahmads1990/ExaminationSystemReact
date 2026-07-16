@@ -1,5 +1,5 @@
 import { Card, Container } from "react-bootstrap";
-import { Shield, Eye } from "lucide-react";
+import { Shield } from "lucide-react";
 
 const PrivacyPolicyPage = () => {
     return (
