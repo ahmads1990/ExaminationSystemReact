@@ -1,0 +1,202 @@
+import { BookOpen } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Col, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { CourseDto } from "../../api/responses/courses/CourseDto";
+import CourseService from "../../services/courseService";
+import TextAreaInput from "../common/forms/TextAreaInput";
+import TextInput from "../common/forms/TextInput";
+
+interface AddCourseModalProps {
+    show: boolean;
+    onHide: () => void;
+    onSuccess: (course: CourseDto) => void;
+}
+
+interface FormData {
+    title: string;
+    description: string;
+    creditHours: string;
+    maxEnrollment: string;
+}
+
+interface FormErrors {
+    title?: string;
+    description?: string;
+    creditHours?: string;
+    maxEnrollment?: string;
+}
+
+const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
+    const [formData, setFormData] = useState<FormData>({
+        title: "",
+        description: "",
+        creditHours: "",
+        maxEnrollment: "50"
+    });
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (show) {
+            setFormData({ title: "", description: "", creditHours: "", maxEnrollment: "50" });
+            setErrors({});
+        }
+    }, [show]);
+
+    const validate = (): boolean => {
+        const newErrors: FormErrors = {};
+        if (!formData.title.trim()) newErrors.title = "Course title is required.";
+        else if (formData.title.length > 100) newErrors.title = "Course title must not exceed 100 characters.";
+
+        if (!formData.description.trim()) newErrors.description = "Course description is required.";
+        else if (formData.description.trim().length < 20)
+            newErrors.description = "Course description must be at least 20 characters long.";
+        else if (formData.description.length > 500)
+            newErrors.description = "Course description must not exceed 500 characters.";
+
+        const hours = parseInt(formData.creditHours);
+        if (!formData.creditHours) newErrors.creditHours = "Credit hours is required.";
+        else if (isNaN(hours) || hours < 1 || hours > 6)
+            newErrors.creditHours = "Credit hours must be between 1 and 6.";
+
+        const maxEnroll = parseInt(formData.maxEnrollment);
+        if (!formData.maxEnrollment) newErrors.maxEnrollment = "Max enrollment limit is required.";
+        else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000)
+            newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!validate()) return;
+        setIsSubmitting(true);
+        try {
+            const response = await CourseService.createCourse({
+                title: formData.title.trim(),
+                description: formData.description.trim(),
+                creditHours: parseInt(formData.creditHours),
+                maxEnrollment: parseInt(formData.maxEnrollment)
+            });
+            if (response.success) {
+                onSuccess({
+                    id: response.data!,
+                    title: formData.title.trim(),
+                    description: formData.description.trim(),
+                    creditHours: parseInt(formData.creditHours),
+                    maxEnrollment: parseInt(formData.maxEnrollment),
+                    instructorID: 0,
+                    instructorName: "",
+                    createdDate: new Date().toISOString()
+                });
+                onHide();
+            }
+        } catch {
+            // Global toast handles API errors
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <Modal show={show} onHide={onHide} centered size="lg">
+            <Modal.Header className="border-0 pb-0 px-4 pt-4" closeButton style={{ borderBottom: "none" }}>
+                <div className="d-flex align-items-center gap-3">
+                    <div
+                        className="d-flex align-items-center justify-content-center rounded-3"
+                        style={{ width: 44, height: 44, backgroundColor: "var(--color-primary-50)" }}
+                    >
+                        <BookOpen size={22} style={{ color: "var(--color-primary-600)" }} />
+                    </div>
+                    <div>
+                        <Modal.Title className="fw-bold fs-5 mb-0">Create New Course</Modal.Title>
+                        <p className="text-muted small mb-0">Fill in the details to add a new course</p>
+                    </div>
+                </div>
+            </Modal.Header>
+
+            <Modal.Body className="px-4 pb-0 pt-4">
+                <Form id="add-course-form" onSubmit={handleSubmit}>
+                    <TextInput
+                        id="add-course-title"
+                        name="title"
+                        label="Course Title"
+                        placeholder="e.g. Introduction to Computer Science"
+                        value={formData.title}
+                        onChange={(v: string) => setFormData((p) => ({ ...p, title: v }))}
+                        error={errors.title}
+                        required
+                        maxLength={100}
+                    />
+                    <TextAreaInput
+                        id="add-course-description"
+                        name="description"
+                        label="Description"
+                        placeholder="Describe what students will learn in this course"
+                        value={formData.description}
+                        onChange={(v: string) => setFormData((p) => ({ ...p, description: v }))}
+                        error={errors.description}
+                        required
+                        rows={4}
+                        maxLength={500}
+                    />
+                    <Row className="g-3 mb-3">
+                        <Col md={6}>
+                            <FloatingLabel controlId="add-credit-hours" label="Credit Hours *">
+                                <Form.Control
+                                    type="number"
+                                    min={1}
+                                    max={6}
+                                    className={`bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
+                                    placeholder="Enter credit hours (1–6)"
+                                    value={formData.creditHours}
+                                    onChange={(e) => setFormData((p) => ({ ...p, creditHours: e.target.value }))}
+                                    isInvalid={!!errors.creditHours}
+                                />
+                                {errors.creditHours && (
+                                    <Form.Control.Feedback type="invalid">{errors.creditHours}</Form.Control.Feedback>
+                                )}
+                            </FloatingLabel>
+                        </Col>
+                        <Col md={6}>
+                            <FloatingLabel controlId="add-max-enrollment" label="Max Enrollment *">
+                                <Form.Control
+                                    type="number"
+                                    min={1}
+                                    max={1000}
+                                    className={`bg-light border-light-subtle ${errors.maxEnrollment ? "is-invalid" : ""}`}
+                                    placeholder="Enter max enrollment limit"
+                                    value={formData.maxEnrollment}
+                                    onChange={(e) => setFormData((p) => ({ ...p, maxEnrollment: e.target.value }))}
+                                    isInvalid={!!errors.maxEnrollment}
+                                />
+                                {errors.maxEnrollment && (
+                                    <Form.Control.Feedback type="invalid">{errors.maxEnrollment}</Form.Control.Feedback>
+                                )}
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal.Body>
+
+            <Modal.Footer className="border-0 px-4 pb-4 pt-3 gap-2">
+                <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isSubmitting}>
+                    Cancel
+                </button>
+                <button type="submit" form="add-course-form" className="btn btn-primary px-4" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <>
+                            <Spinner animation="border" size="sm" className="me-2" />
+                            Creating...
+                        </>
+                    ) : (
+                        "Create Course"
+                    )}
+                </button>
+            </Modal.Footer>
+        </Modal>
+    );
+};
+
+export default AddCourseModal;

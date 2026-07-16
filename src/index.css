@@ -1,68 +1,448 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    /* ─── Brand Colors ─────────────────────── */
+    --color-primary-50: #ecfdf5;
+    --color-primary-100: #d1fae5;
+    --color-primary-400: #34d399;
+    --color-primary-500: #10b981;
+    --color-primary-600: #059669;
+    --color-primary-700: #047857;
+    --color-primary-900: #064e3b;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    --color-secondary-50: #f8fafc;
+    --color-secondary-200: #e2e8f0;
+    --color-secondary-400: #94a3b8;
+    --color-secondary-600: #475569;
+    --color-secondary-800: #334155;
+    --color-secondary-900: #1e293b;
+    --color-secondary-950: #0f172a;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    --color-accent-400: #fbbf24;
+    --color-accent-500: #f59e0b;
+    --color-accent-700: #b45309;
+
+    /* ─── Semantic ─────────────────────────── */
+    --color-success: var(--color-primary-500);
+    --color-warning: var(--color-accent-500);
+    --color-error: #ef4444;
+    --color-info: #64748b;
+
+    /* ─── Surface ──────────────────────────── */
+    --surface-bg: var(--color-secondary-50);
+    --surface-card: #ffffff;
+    --surface-sidebar: var(--color-secondary-950);
+    --surface-border: var(--color-secondary-200);
+
+    /* ─── Text ─────────────────────────────── */
+    --text-primary: var(--color-secondary-950);
+    --text-secondary: var(--color-secondary-600);
+    --text-muted: var(--color-secondary-400);
+    --text-on-dark: #ffffff;
+    --text-on-primary: #ffffff;
+
+    /* ─── Typography ───────────────────────── */
+    --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+
+    /* ─── Spacing ──────────────────────────── */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* ─── Radius ───────────────────────────── */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 9999px;
+
+    /* ─── Shadows ──────────────────────────── */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-primary: 0 4px 14px 0 rgb(16 185 129 / 0.3);
+
+    /* ─── Transitions ──────────────────────── */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ─── Layout ───────────────────────────── */
+    --sidebar-width: 260px;
+    --topbar-height: 64px;
+    --content-max-width: 1280px;
+
+    /* ─── Dashboard Stats & Badges ────────── */
+    --dashboard-card-label: #4f46e5;
+    --dashboard-card-value: #312e81;
+
+    --type-quiz-bg: var(--color-primary-50);
+    --type-quiz-border: var(--color-primary-500);
+    --type-quiz-text: var(--color-primary-700);
+
+    --type-final-bg: var(--color-secondary-50);
+    --type-final-border: var(--color-secondary-200);
+    --type-final-text: var(--color-secondary-800);
+
+    --status-published-bg: var(--color-primary-50);
+    --status-published-border: var(--color-primary-100);
+    --status-published-text: var(--color-primary-700);
+
+    --status-draft-bg: #fffbeb;
+    --status-draft-border: #fef3c7;
+    --status-draft-text: var(--color-accent-700);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* ─── Base Reset ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    background-color: var(--surface-bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* ─── Global Utility Classes ────────────────────────── */
+.transition-all {
+    transition: all var(--transition-normal);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg) !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.border-top-dashed {
+    border-top: 2px dashed var(--color-secondary-200);
+}
+
+/* Custom card shadow for a premium feel */
+.card-custom {
+    background: white;
+    border: 1px solid var(--color-secondary-200) !important;
+}
+
+/* Animation for page transitions */
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── Bootstrap Overrides ────────────────────────── */
+.btn-primary {
+    background-color: var(--color-primary-500) !important;
+    border-color: var(--color-primary-500) !important;
+    color: var(--text-on-primary) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: var(--color-primary-600) !important;
+    border-color: var(--color-primary-600) !important;
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+
+.btn-outline-primary {
+    color: var(--color-primary-600) !important;
+    border-color: var(--color-primary-500) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-primary:focus {
+    background-color: var(--color-primary-50) !important;
+    border-color: var(--color-primary-500) !important;
+    color: var(--color-primary-700) !important;
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Fix generic links active status if used */
+a {
+    color: var(--color-primary-600);
+}
+a:hover {
+    color: var(--color-primary-700);
+}
+
+/* Replace Bootstrap default blue focus rings on inputs */
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    border-color: var(--color-primary-400);
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+
+[data-theme="dark"] {
+    --surface-bg: #0b0f19; /* slate-950 */
+    --surface-card: #111827; /* slate-900 */
+    --surface-border: #1f2937; /* slate-800 */
+
+    --text-primary: #f9fafb; /* gray-50 */
+    --text-secondary: #d1d5db; /* gray-300 */
+    --text-muted: #9ca3af; /* gray-400 */
+
+    /* Customize outline button background on dark hover */
+    --color-primary-50: #022c22;
+    --color-primary-100: #064e3b;
+    --color-primary-400: #10b981;
+    --color-primary-500: #059669; /* Make primary color darker/emerald in dark mode */
+    --color-primary-600: #047857;
+    --color-primary-700: #065f46;
+
+    /* Dashboard Stats & Badges in Dark Mode */
+    --dashboard-card-label: #cbd5e1;
+    --dashboard-card-value: #f9fafb;
+
+    --type-quiz-bg: rgba(16, 185, 129, 0.1);
+    --type-quiz-border: rgba(16, 185, 129, 0.2);
+    --type-quiz-text: #34d399;
+
+    --type-final-bg: rgba(148, 163, 184, 0.1);
+    --type-final-border: rgba(148, 163, 184, 0.2);
+    --type-final-text: #cbd5e1;
+
+    --status-published-bg: rgba(16, 185, 129, 0.1);
+    --status-published-border: rgba(16, 185, 129, 0.2);
+    --status-published-text: #34d399;
+
+    --status-draft-bg: rgba(245, 158, 11, 0.1);
+    --status-draft-border: rgba(245, 158, 11, 0.2);
+    --status-draft-text: #fbbf24;
+}
+
+/* Dashboard Cards Light/Dark Gradient Definitions */
+.dashboard-card-courses {
+    background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%) !important;
+}
+.dashboard-card-students {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+}
+.dashboard-card-exams {
+    background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%) !important;
+}
+
+[data-theme="dark"] .dashboard-card-courses {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+}
+[data-theme="dark"] .dashboard-card-students {
+    background: linear-gradient(135deg, #022c22 0%, #064e3b 100%) !important;
+}
+[data-theme="dark"] .dashboard-card-exams {
+    background: linear-gradient(135deg, #164e63 0%, #0891b2 100%) !important;
+}
+
+/* Dark mode adjustments for custom elements */
+[data-theme="dark"] .card-custom {
+    background: var(--surface-card) !important;
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: var(--surface-card) !important;
+}
+
+[data-theme="dark"] .text-dark {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-secondary-800 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-secondary-600 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-secondary-500 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-secondary-400 {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .bg-light {
+    background-color: #1f2937 !important;
+}
+
+[data-theme="dark"] .border-light-subtle {
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .border {
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .form-control.bg-light {
+    background-color: #1f2937 !important;
+    color: var(--text-primary) !important;
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .form-select.bg-light {
+    background-color: #1f2937 !important;
+    color: var(--text-primary) !important;
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .input-group-text.bg-light {
+    background-color: #1f2937 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Theme Toggle Button Styles */
+.btn-theme-toggle {
+    color: var(--text-secondary);
+    border: none;
+    background: transparent;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.btn-theme-toggle:hover {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+}
+
+/* Dark Mode Nav, Dropdown & Sidebar Overrides */
+[data-theme="dark"] .navbar-premium {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border-bottom: 1px solid rgba(31, 41, 55, 0.8) !important;
+}
+
+[data-theme="dark"] .navbar-brand-text {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+[data-theme="dark"] .dropdown-menu-custom {
+    background-color: var(--surface-card) !important;
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .dropdown-item-custom {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dropdown-item-custom:hover {
+    background-color: var(--color-primary-50) !important;
+    color: var(--color-primary-600) !important;
+}
+
+[data-theme="dark"] aside.bg-white {
+    background-color: var(--surface-card) !important;
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .offcanvas,
+[data-theme="dark"] .offcanvas-body {
+    background-color: var(--surface-card) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-dark {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .nav-link:not(.active).text-secondary:hover {
+    background-color: var(--color-primary-50) !important;
+    color: var(--color-primary-600) !important;
+}
+
+[data-theme="dark"] .hover-bg-light:hover {
+    background-color: #1f2937 !important;
+}
+
+/* Quick Demo Access Card in Dark Mode */
+[data-theme="dark"] .demo-credentials-card {
+    background-color: rgba(245, 158, 11, 0.05) !important; /* light warm yellow tint */
+    border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+[data-theme="dark"] .demo-credentials-card .bg-white {
+    background-color: var(--surface-bg) !important;
+    border-color: var(--surface-border) !important;
+}
+
+[data-theme="dark"] .demo-credentials-card code {
+    color: var(--text-primary) !important;
+    background-color: transparent !important;
+}
+
+/* Dark mode semantic badge background/text adjustments */
+[data-theme="dark"] .bg-primary-subtle {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+[data-theme="dark"] .bg-success-subtle {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+[data-theme="dark"] .bg-warning-subtle {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+}
+
+[data-theme="dark"] .bg-info-subtle {
+    background-color: rgba(6, 182, 212, 0.15) !important;
+}
+
+[data-theme="dark"] .text-warning {
+    color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .text-info {
+    color: #22d3ee !important;
 }
