@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, Plus, BookOpen, Clock, User, CalendarDays } from "lucide-react";
+import { Search, Plus, BookOpen, Clock, User, CalendarDays, Users } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -161,8 +161,8 @@ const CoursesPage = () => {
                                                 {course.creditHours} Credit {course.creditHours === 1 ? "Hour" : "Hours"}
                                             </span>
                                             <span className="d-flex align-items-center gap-1">
-                                                <User size={15} />
-                                                {course.instructorName}
+                                                <Users size={15} />
+                                                Max: {course.maxEnrollment ?? 50}
                                             </span>
                                             <span className="d-flex align-items-center gap-1">
                                                 <CalendarDays size={15} />

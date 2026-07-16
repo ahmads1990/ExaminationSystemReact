@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Modal, Form, Spinner } from "react-bootstrap";
+import { Modal, Form, Spinner, Row, Col } from "react-bootstrap";
 import { Pencil } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
@@ -17,12 +17,14 @@ interface FormErrors {
     title?: string;
     description?: string;
     creditHours?: string;
+    maxEnrollment?: string;
 }
 
 const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalProps) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [creditHours, setCreditHours] = useState("");
+    const [maxEnrollment, setMaxEnrollment] = useState("");
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -31,6 +33,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
             setTitle(course.title);
             setDescription(course.description);
             setCreditHours(String(course.creditHours));
+            setMaxEnrollment(String(course.maxEnrollment ?? 50));
             setErrors({});
         }
     }, [course]);
@@ -47,6 +50,10 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
         const hours = parseInt(creditHours);
         if (!creditHours) newErrors.creditHours = "Credit hours is required.";
         else if (isNaN(hours) || hours < 1 || hours > 6) newErrors.creditHours = "Credit hours must be between 1 and 6.";
+
+        const maxEnroll = parseInt(maxEnrollment);
+        if (!maxEnrollment) newErrors.maxEnrollment = "Max enrollment limit is required.";
+        else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000) newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
         
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -62,9 +69,10 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                 title: title.trim(),
                 description: description.trim(),
                 creditHours: parseInt(creditHours),
+                maxEnrollment: parseInt(maxEnrollment),
             });
             if (response.success) {
-                onSuccess({ ...course, title: title.trim(), description: description.trim(), creditHours: parseInt(creditHours) });
+                onSuccess({ ...course, title: title.trim(), description: description.trim(), creditHours: parseInt(creditHours), maxEnrollment: parseInt(maxEnrollment) });
                 onHide();
             }
         } catch {
@@ -118,22 +126,40 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                         rows={4}
                         maxLength={500}
                     />
-                    <div className="mb-3">
-                        <label htmlFor="edit-credit-hours" className="form-label fw-semibold" style={{ fontSize: "var(--text-sm)" }}>
-                            Credit Hours
-                        </label>
-                        <input
-                            id="edit-credit-hours"
-                            type="number"
-                            min={1}
-                            max={6}
-                            className={`form-control bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
-                            placeholder="Enter credit hours (1–6)"
-                            value={creditHours}
-                            onChange={(e) => setCreditHours(e.target.value)}
-                        />
-                        {errors.creditHours && <div className="invalid-feedback">{errors.creditHours}</div>}
-                    </div>
+                    <Row className="g-3 mb-3">
+                        <Col md={6}>
+                            <label htmlFor="edit-credit-hours" className="form-label fw-semibold" style={{ fontSize: "var(--text-sm)" }}>
+                                Credit Hours
+                            </label>
+                            <input
+                                id="edit-credit-hours"
+                                type="number"
+                                min={1}
+                                max={6}
+                                className={`form-control bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
+                                placeholder="Enter credit hours (1–6)"
+                                value={creditHours}
+                                onChange={(e) => setCreditHours(e.target.value)}
+                            />
+                            {errors.creditHours && <div className="invalid-feedback">{errors.creditHours}</div>}
+                        </Col>
+                        <Col md={6}>
+                            <label htmlFor="edit-max-enrollment" className="form-label fw-semibold" style={{ fontSize: "var(--text-sm)" }}>
+                                Max Enrollment Limit
+                            </label>
+                            <input
+                                id="edit-max-enrollment"
+                                type="number"
+                                min={1}
+                                max={1000}
+                                className={`form-control bg-light border-light-subtle ${errors.maxEnrollment ? "is-invalid" : ""}`}
+                                placeholder="Enter max enrollment limit"
+                                value={maxEnrollment}
+                                onChange={(e) => setMaxEnrollment(e.target.value)}
+                            />
+                            {errors.maxEnrollment && <div className="invalid-feedback">{errors.maxEnrollment}</div>}
+                        </Col>
+                    </Row>
                 </Form>
             </Modal.Body>
 

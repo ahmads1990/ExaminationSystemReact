@@ -5,6 +5,7 @@ export interface CourseStatsDto {
     courseName: string;
     studentCount: number;
     examsCount: number;
+    maxEnrollment: number;
 }
 
 export interface AttemptSummaryDto {

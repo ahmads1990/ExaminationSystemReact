@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Modal, Form, Spinner, FloatingLabel } from "react-bootstrap";
+import { Modal, Form, Spinner, FloatingLabel, Row, Col } from "react-bootstrap";
 import { BookOpen } from "lucide-react";
 import CourseService from "../../services/courseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
@@ -16,22 +16,24 @@ interface FormData {
     title: string;
     description: string;
     creditHours: string;
+    maxEnrollment: string;
 }
 
 interface FormErrors {
     title?: string;
     description?: string;
     creditHours?: string;
+    maxEnrollment?: string;
 }
 
 const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
-    const [formData, setFormData] = useState<FormData>({ title: "", description: "", creditHours: "" });
+    const [formData, setFormData] = useState<FormData>({ title: "", description: "", creditHours: "", maxEnrollment: "50" });
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (show) {
-            setFormData({ title: "", description: "", creditHours: "" });
+            setFormData({ title: "", description: "", creditHours: "", maxEnrollment: "50" });
             setErrors({});
         }
     }, [show]);
@@ -48,6 +50,10 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
         const hours = parseInt(formData.creditHours);
         if (!formData.creditHours) newErrors.creditHours = "Credit hours is required.";
         else if (isNaN(hours) || hours < 1 || hours > 6) newErrors.creditHours = "Credit hours must be between 1 and 6.";
+
+        const maxEnroll = parseInt(formData.maxEnrollment);
+        if (!formData.maxEnrollment) newErrors.maxEnrollment = "Max enrollment limit is required.";
+        else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000) newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
         
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -62,9 +68,19 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                 title: formData.title.trim(),
                 description: formData.description.trim(),
                 creditHours: parseInt(formData.creditHours),
+                maxEnrollment: parseInt(formData.maxEnrollment),
             });
             if (response.success) {
-                onSuccess({ ...formData, id: response.data!, creditHours: parseInt(formData.creditHours), instructorID: 0, instructorName: "", createdDate: new Date().toISOString() });
+                onSuccess({ 
+                    id: response.data!, 
+                    title: formData.title.trim(), 
+                    description: formData.description.trim(), 
+                    creditHours: parseInt(formData.creditHours), 
+                    maxEnrollment: parseInt(formData.maxEnrollment),
+                    instructorID: 0, 
+                    instructorName: "", 
+                    createdDate: new Date().toISOString() 
+                });
                 onHide();
             }
         } catch {
@@ -120,21 +136,38 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                         rows={4}
                         maxLength={500}
                     />
-                    <div className="mb-3">
-                        <FloatingLabel controlId="add-credit-hours" label="Credit Hours *">
-                            <Form.Control
-                                type="number"
-                                min={1}
-                                max={6}
-                                className={`bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
-                                placeholder="Enter credit hours (1–6)"
-                                value={formData.creditHours}
-                                onChange={(e) => setFormData((p) => ({ ...p, creditHours: e.target.value }))}
-                                isInvalid={!!errors.creditHours}
-                            />
-                            {errors.creditHours && <Form.Control.Feedback type="invalid">{errors.creditHours}</Form.Control.Feedback>}
-                        </FloatingLabel>
-                    </div>
+                    <Row className="g-3 mb-3">
+                        <Col md={6}>
+                            <FloatingLabel controlId="add-credit-hours" label="Credit Hours *">
+                                <Form.Control
+                                    type="number"
+                                    min={1}
+                                    max={6}
+                                    className={`bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
+                                    placeholder="Enter credit hours (1–6)"
+                                    value={formData.creditHours}
+                                    onChange={(e) => setFormData((p) => ({ ...p, creditHours: e.target.value }))}
+                                    isInvalid={!!errors.creditHours}
+                                />
+                                {errors.creditHours && <Form.Control.Feedback type="invalid">{errors.creditHours}</Form.Control.Feedback>}
+                            </FloatingLabel>
+                        </Col>
+                        <Col md={6}>
+                            <FloatingLabel controlId="add-max-enrollment" label="Max Enrollment *">
+                                <Form.Control
+                                    type="number"
+                                    min={1}
+                                    max={1000}
+                                    className={`bg-light border-light-subtle ${errors.maxEnrollment ? "is-invalid" : ""}`}
+                                    placeholder="Enter max enrollment limit"
+                                    value={formData.maxEnrollment}
+                                    onChange={(e) => setFormData((p) => ({ ...p, maxEnrollment: e.target.value }))}
+                                    isInvalid={!!errors.maxEnrollment}
+                                />
+                                {errors.maxEnrollment && <Form.Control.Feedback type="invalid">{errors.maxEnrollment}</Form.Control.Feedback>}
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
                 </Form>
             </Modal.Body>
 

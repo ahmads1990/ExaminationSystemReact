@@ -10,6 +10,7 @@ export interface AddCourseRequest {
     title: string;
     description: string;
     creditHours: number;
+    maxEnrollment: number;
 }
 
 export interface UpdateCourseRequest {
@@ -17,4 +18,5 @@ export interface UpdateCourseRequest {
     title: string;
     description: string;
     creditHours: number;
+    maxEnrollment: number;
 }

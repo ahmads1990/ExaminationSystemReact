@@ -140,7 +140,7 @@ const DashboardPage = () => {
                 size: 220,
                 cell: ({ row }: any) => {
                     const course = row.original;
-                    const limit = Math.floor(Math.random() * 41) + 10;
+                    const limit = course.maxEnrollment ?? 50;
                     const isOverLimit = course.studentCount > limit;
                     const percentage = Math.min((course.studentCount / limit) * 100, 100);
                     const progressColor = isOverLimit ? "bg-danger" : "bg-success";
