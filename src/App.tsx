@@ -33,6 +33,7 @@ import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
 import AboutPage from "./pages/common/AboutPage";
 import ContactPage from "./pages/common/ContactPage";
 import ProfilePage from "./pages/common/ProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const RootRedirect = () => {
     const { user } = useAuth();
@@ -99,6 +100,7 @@ function App() {
                         </Route>
 
                         <Route path="unauthorized" element={<UnauthorizedPage />} />
+                        <Route path="*" element={<NotFoundPage />} />
                     </Route>
                 </Routes>
         </BrowserRouter>
