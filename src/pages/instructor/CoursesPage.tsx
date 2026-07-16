@@ -6,8 +6,9 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { usePagination } from "../../hooks/usePagination";
 import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
-import { Spinner } from "react-bootstrap";
+import { } from "react-bootstrap";
 import AppPagination from "../../components/common/Pagination";
+import SkeletonCard from "../../components/common/SkeletonCard";
 import toast from "react-hot-toast";
 import AddCourseModal from "../../components/instructor/AddCourseModal";
 import EditCourseModal from "../../components/instructor/EditCourseModal";
@@ -111,9 +112,7 @@ const CoursesPage = () => {
 
             {/* Content */}
             {loading && courses.length === 0 ? (
-                <div className="d-flex justify-content-center py-5">
-                    <Spinner animation="border" variant="primary" />
-                </div>
+                <SkeletonCard count={6} />
             ) : courses.length === 0 ? (
                 <div className="text-center py-5 bg-white rounded-3 shadow-sm border">
                     <BookOpen size={56} className="text-muted opacity-25 mb-3" />

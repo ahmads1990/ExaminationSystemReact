@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Table, Badge, Spinner, Alert } from "react-bootstrap";
+import { Card, Table, Badge, Alert } from "react-bootstrap";
 import { History, FileText, Calendar, ChevronRight, BookOpen } from "lucide-react";
 import StudentExamService from "../../services/studentExamService";
 import { StudentAttemptSummaryDto } from "../../api/responses/StudentExamResponses";
 import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
+import SkeletonTable from "../../components/common/SkeletonTable";
 
 const ExamHistoryPage = () => {
     const navigate = useNavigate();
@@ -50,10 +51,11 @@ const ExamHistoryPage = () => {
             )}
 
             {loading ? (
-                <div className="d-flex flex-column justify-content-center align-items-center py-5 bg-white rounded-4 border border-light shadow-sm min-vh-50">
-                    <Spinner animation="border" variant="primary" className="mb-3" />
-                    <p className="text-muted fw-semibold">Loading your attempts history...</p>
-                </div>
+                <Card className="border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+                    <Card.Body className="p-0">
+                        <SkeletonTable rows={5} cols={6} />
+                    </Card.Body>
+                </Card>
             ) : attempts.length === 0 ? (
                 <Card className="border-0 shadow-sm rounded-4 text-center py-5 px-4 bg-white">
                     <Card.Body className="d-flex flex-column align-items-center gap-3">

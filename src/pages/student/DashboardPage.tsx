@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card, Badge, Spinner, Alert } from "react-bootstrap";
+import { Row, Col, Card, Badge, Alert } from "react-bootstrap";
+import SkeletonCard from "../../components/common/SkeletonCard";
 import { FileText, BookOpen, Clock, CalendarDays, Target } from "lucide-react";
 import StudentCourseService from "../../services/studentCourseService";
 import StudentExamService from "../../services/studentExamService";
@@ -90,9 +91,7 @@ const StudentDashboardPage = () => {
                     </div>
 
                     {loadingExams ? (
-                        <div className="d-flex justify-content-center py-5 bg-white rounded-4 border border-light shadow-sm">
-                            <Spinner animation="border" variant="primary" />
-                        </div>
+                        <SkeletonCard count={3} />
                     ) : availableExams.length === 0 ? (
                         <Card className="border-0 shadow-sm rounded-4 text-center py-5 px-4 bg-white">
                             <Card.Body className="d-flex flex-column align-items-center gap-3">
@@ -189,9 +188,7 @@ const StudentDashboardPage = () => {
                     </div>
 
                     {loadingEnrollments ? (
-                        <div className="d-flex justify-content-center py-5 bg-white rounded-4 border border-light shadow-sm">
-                            <Spinner animation="border" variant="primary" />
-                        </div>
+                        <SkeletonCard count={3} />
                     ) : enrollments.length === 0 ? (
                         <Card className="border-0 shadow-sm rounded-4 text-center py-4 px-3 bg-white">
                             <Card.Body className="d-flex flex-column align-items-center gap-3">

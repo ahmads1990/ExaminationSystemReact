@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, Badge, Spinner, Row, Col } from "react-bootstrap";
 import AppPagination from "../../components/common/Pagination";
+import SkeletonCard from "../../components/common/SkeletonCard";
 import { Search, BookOpen, GraduationCap, Clock } from "lucide-react";
 import StudentCourseService from "../../services/studentCourseService";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
@@ -122,9 +123,7 @@ const StudentCoursesPage = () => {
 
             {/* Courses Cards Grid */}
             {loading && courses.length === 0 ? (
-                <div className="d-flex justify-content-center py-5">
-                    <Spinner animation="border" variant="primary" />
-                </div>
+                <SkeletonCard count={9} />
             ) : courses.length === 0 ? (
                 <div className="text-center py-5 bg-white rounded-4 shadow-sm border border-0">
                     <BookOpen size={56} className="text-muted opacity-25 mb-3" />

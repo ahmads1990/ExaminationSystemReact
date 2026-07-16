@@ -285,4 +285,39 @@
   color: var(--color-accent-700) !important;
 }
 
+/* ─── Skeleton Animations & Classes ─── */
+@keyframes skeleton-pulse-fade {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse-fade 1.5s ease-in-out infinite;
+}
+
+.skeleton-line {
+  height: 1rem;
+  background-color: #E5E7EB;
+  border-radius: 0.25rem;
+  width: 100%;
+}
+
+.skeleton-title {
+  height: 1.5rem;
+  background-color: #E5E7EB;
+  border-radius: 0.375rem;
+  width: 75%;
+}
+
+.skeleton-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #E5E7EB;
+  border-radius: 50%;
+}
+
 

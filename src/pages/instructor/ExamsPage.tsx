@@ -13,6 +13,7 @@ import { usePagination } from "../../hooks/usePagination";
 import ActionButton from "../../components/common/ActionButton";
 import { Spinner, Modal } from "react-bootstrap";
 import AppPagination from "../../components/common/Pagination";
+import SkeletonCard from "../../components/common/SkeletonCard";
 import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LABELS } from "../../constants/examConstants";
 import SaveExamModal from "../../components/instructor/exams/SaveExamModal";
 import { useAuth } from "../../contexts/AuthContext";
@@ -249,9 +250,7 @@ const ExamsPage = () => {
 
             {/* Content */}
             {loading && exams.length === 0 ? (
-                <div className="d-flex justify-content-center py-5">
-                    <Spinner animation="border" variant="primary" />
-                </div>
+                <SkeletonCard count={6} />
             ) : exams.length === 0 ? (
                 <div className="text-center py-5 bg-white rounded-3 shadow-sm border">
                     <FileText size={56} className="text-muted opacity-25 mb-3" />

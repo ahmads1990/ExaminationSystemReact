@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { Table } from "react-bootstrap";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import SkeletonTable from "./SkeletonTable";
 
 interface TableProps<T> {
     data: T[];
@@ -58,7 +59,7 @@ const GenericTable = <T,>({
         }
     });
 
-    if (isPending) return <p>Loading...</p>;
+    if (isPending) return <SkeletonTable rows={pagination.pageSize || 5} cols={columns.length} />;
     if (error) return <p>Error: {error}</p>;
 
     return (
