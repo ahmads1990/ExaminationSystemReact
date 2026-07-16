@@ -18,6 +18,7 @@ import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LAB
 import SaveExamModal from "../../components/instructor/exams/SaveExamModal";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
+import EmptyState from "../../components/common/EmptyState";
 
 const ExamsPage = () => {
     const navigate = useNavigate();
@@ -252,11 +253,13 @@ const ExamsPage = () => {
             {loading && exams.length === 0 ? (
                 <SkeletonCard count={6} />
             ) : exams.length === 0 ? (
-                <div className="text-center py-5 bg-white rounded-3 shadow-sm border">
-                    <FileText size={56} className="text-muted opacity-25 mb-3" />
-                    <h5 className="fw-bold">No exams found</h5>
-                    <p className="text-muted">You haven't created any exams yet, or nothing matches your filters.</p>
-                </div>
+                <EmptyState 
+                    title="No exams found"
+                    message="You haven't created any examinations yet, or nothing matches your active filter query."
+                    icon={FileText}
+                    ctaText="Create First Exam"
+                    onCtaClick={() => { setExamToEdit(null); setShowSaveModal(true); }}
+                />
             ) : (
                 <>
                     <div className="row g-4 mb-4">

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Badge, Alert } from "react-bootstrap";
 import SkeletonCard from "../../components/common/SkeletonCard";
-import { FileText, BookOpen, Clock, CalendarDays, Target } from "lucide-react";
+import { FileText, BookOpen, Clock, CalendarDays, Target, CheckCircle } from "lucide-react";
+import EmptyState from "../../components/common/EmptyState";
 import StudentCourseService from "../../services/studentCourseService";
 import StudentExamService from "../../services/studentExamService";
 import { StudentEnrollmentDto } from "../../api/responses/StudentCourseResponses";
@@ -93,17 +94,11 @@ const StudentDashboardPage = () => {
                     {loadingExams ? (
                         <SkeletonCard count={3} />
                     ) : availableExams.length === 0 ? (
-                        <Card className="border-0 shadow-sm rounded-4 text-center py-5 px-4 bg-white">
-                            <Card.Body className="d-flex flex-column align-items-center gap-3">
-                                <div className="bg-light rounded-circle p-3 text-muted">
-                                    <CheckCircleIcon size={32} />
-                                </div>
-                                <h5 className="fw-bold mb-1">All caught up!</h5>
-                                <p className="text-muted small mb-0 max-w-sm">
-                                    There are no pending exams available for your enrolled courses right now.
-                                </p>
-                            </Card.Body>
-                        </Card>
+                        <EmptyState 
+                            title="All caught up!"
+                            message="There are no pending exams available for your enrolled courses right now."
+                            icon={CheckCircle}
+                        />
                     ) : (
                         <Row className="g-3">
                             {availableExams.map((exam) => {
@@ -190,18 +185,13 @@ const StudentDashboardPage = () => {
                     {loadingEnrollments ? (
                         <SkeletonCard count={3} />
                     ) : enrollments.length === 0 ? (
-                        <Card className="border-0 shadow-sm rounded-4 text-center py-4 px-3 bg-white">
-                            <Card.Body className="d-flex flex-column align-items-center gap-3">
-                                <BookOpen size={28} className="text-muted opacity-40" />
-                                <h6 className="fw-bold mb-1">Not enrolled in any courses</h6>
-                                <p className="text-muted small mb-3">
-                                    Browse available courses and enroll in them to start taking exams.
-                                </p>
-                                <ActionButton variant="outline-primary" onClick={() => navigate("/courses")} fullWidth>
-                                    Browse Courses
-                                </ActionButton>
-                            </Card.Body>
-                        </Card>
+                        <EmptyState 
+                            title="No courses yet"
+                            message="Browse available courses and enroll in them to start taking exams."
+                            icon={BookOpen}
+                            ctaText="Browse Courses"
+                            ctaLink="/courses"
+                        />
                     ) : (
                         <div className="d-flex flex-column gap-3">
                             {enrollments.map((enrollment) => (

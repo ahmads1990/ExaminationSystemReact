@@ -7,6 +7,7 @@ import { StudentAttemptSummaryDto } from "../../api/responses/StudentExamRespons
 import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
 import SkeletonTable from "../../components/common/SkeletonTable";
+import EmptyState from "../../components/common/EmptyState";
 
 const ExamHistoryPage = () => {
     const navigate = useNavigate();
@@ -57,20 +58,13 @@ const ExamHistoryPage = () => {
                     </Card.Body>
                 </Card>
             ) : attempts.length === 0 ? (
-                <Card className="border-0 shadow-sm rounded-4 text-center py-5 px-4 bg-white">
-                    <Card.Body className="d-flex flex-column align-items-center gap-3">
-                        <div className="bg-light rounded-circle p-3 text-muted">
-                            <History size={32} />
-                        </div>
-                        <h5 className="fw-bold mb-1">No attempts yet</h5>
-                        <p className="text-muted small mb-3 max-w-sm">
-                            You have not taken any exams yet. Start by browsing available courses or check your dashboard for active exams.
-                        </p>
-                        <ActionButton variant="primary" onClick={() => navigate("/student/dashboard")} fullWidth={false} className="px-4">
-                            Go to Dashboard
-                        </ActionButton>
-                    </Card.Body>
-                </Card>
+                <EmptyState 
+                    title="No exam attempts yet"
+                    message="You have not taken any examinations yet. Check your dashboard for active exams or search for courses."
+                    icon={History}
+                    ctaText="Go to Dashboard"
+                    ctaLink="/student/dashboard"
+                />
             ) : (
                 <Card className="border-0 shadow-sm rounded-4 bg-white overflow-hidden">
                     <Card.Body className="p-0">
