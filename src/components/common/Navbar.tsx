@@ -3,8 +3,13 @@ import { Link, NavLink } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import { useAuth } from "../../contexts/AuthContext";
 import { UserRole } from "../../types/auth";
+import { Menu } from "lucide-react";
 
-const Navbar = () => {
+interface NavbarProps {
+    onToggleSidebar?: () => void;
+}
+
+const Navbar = ({ onToggleSidebar }: NavbarProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated, user } = useAuth();
 
@@ -13,6 +18,18 @@ const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-premium sticky-top">
             <div className="container-fluid px-4 px-lg-5">
+                {/* Mobile Sidebar Toggle Button */}
+                {isAuthenticated && onToggleSidebar && (
+                    <button
+                        type="button"
+                        className="btn btn-link text-dark p-0 me-3 d-lg-none border-0 shadow-none d-flex align-items-center"
+                        onClick={onToggleSidebar}
+                        aria-label="Toggle Sidebar"
+                    >
+                        <Menu size={24} />
+                    </button>
+                )}
+
                 {/* SECTION 1: LOGO */}
                 <Link className="navbar-brand navbar-brand-text fw-bold fs-4" to="/">
                     Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
