@@ -6,7 +6,6 @@ import { UserRole } from "../../types/auth";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [resourcesOpen, setResourcesOpen] = useState(false);
     const { isAuthenticated, user } = useAuth();
 
     const toggleNavbar = () => setIsOpen(!isOpen);
@@ -33,88 +32,9 @@ const Navbar = () => {
 
                 {/* Collapsible Content */}
                 <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="mainNavbar">
-                    {/* SECTION 2: CENTERED LINKS */}
-                    <ul className="navbar-nav mx-auto mb-2 mb-lg-0 align-items-center gap-1">
-                        {!isAuthenticated ? (
-                            <>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/login">
-                                        Login
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/register">
-                                        Registration
-                                    </NavLink>
-                                </li>
-                            </>
-                        ) : user?.role === UserRole.Instructor ? (
-                            <>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/instructor/dashboard">
-                                        Dashboard
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/instructor/courses">
-                                        My Courses
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/instructor/exams">
-                                        Exams
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/questions">
-                                        Question Bank
-                                    </NavLink>
-                                </li>
-                            </>
-                        ) : (
-                            <>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/student/dashboard">
-                                        Dashboard
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/courses">
-                                        Browse Courses
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link nav-link-custom" to="/student/history">
-                                        Exam History
-                                    </NavLink>
-                                </li>
-                            </>
-                        )}
+                    {/* SECTION 2: CENTERED LINKS REMOVED */}
+                    <div className="mx-auto" />
 
-                        {/* Dropdown for Resources (Placeholder) */}
-                        <li className="nav-item dropdown" onMouseEnter={() => setResourcesOpen(true)} onMouseLeave={() => setResourcesOpen(false)}>
-                            <a
-                                className={`nav-link nav-link-custom dropdown-toggle ${resourcesOpen ? "show" : ""}`}
-                                href="#"
-                                role="button"
-                                aria-expanded={resourcesOpen}
-                            >
-                                Resources
-                            </a>
-                            <ul className={`dropdown-menu dropdown-menu-custom ${resourcesOpen ? "show" : ""}`} style={{ marginTop: 0 }}>
-                                <li><a className="dropdown-item dropdown-item-custom" href="#">Study Guides</a></li>
-                                <li><a className="dropdown-item dropdown-item-custom" href="#">Past Papers</a></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item dropdown-item-custom" href="#">Community Forum</a></li>
-                            </ul>
-                        </li>
-
-                        <li className="nav-item">
-                            <NavLink className="nav-link nav-link-custom" to="/docs">
-                                Docs
-                            </NavLink>
-                        </li>
-                    </ul>
 
                     {/* SECTION 3: AUTH / USER ACTIONS */}
                     <div className="d-flex align-items-center gap-3">

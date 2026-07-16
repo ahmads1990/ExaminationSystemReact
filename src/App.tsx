@@ -23,6 +23,16 @@ import ExamResultPage from "./pages/student/ExamResultPage";
 import ExamHistoryPage from "./pages/student/ExamHistoryPage";
 import { UserRole } from "./types/auth";
 import { useAuth } from "./contexts/AuthContext";
+import SettingsPage from "./pages/common/SettingsPage";
+import HelpSupportPage from "./pages/common/HelpSupportPage";
+import CalendarPage from "./pages/student/CalendarPage";
+import AnalyticsPage from "./pages/instructor/AnalyticsPage";
+import GradingPage from "./pages/instructor/GradingPage";
+import TermsOfServicePage from "./pages/common/TermsOfServicePage";
+import PrivacyPolicyPage from "./pages/common/PrivacyPolicyPage";
+import AboutPage from "./pages/common/AboutPage";
+import ContactPage from "./pages/common/ContactPage";
+import ProfilePage from "./pages/common/ProfilePage";
 
 const RootRedirect = () => {
     const { user } = useAuth();
@@ -57,6 +67,13 @@ function App() {
                         
                         <Route element={<ProtectedRoute />}>
                             <Route path="change-password" element={<ChangePasswordPage />} />
+                            <Route path="settings" element={<SettingsPage />} />
+                            <Route path="support" element={<HelpSupportPage />} />
+                            <Route path="terms" element={<TermsOfServicePage />} />
+                            <Route path="privacy" element={<PrivacyPolicyPage />} />
+                            <Route path="about" element={<AboutPage />} />
+                            <Route path="contact" element={<ContactPage />} />
+                            <Route path="profile" element={<ProfilePage />} />
                         </Route>
 
                         {/* Instructor Only Routes */}
@@ -66,6 +83,8 @@ function App() {
                             <Route path="instructor/exams" element={<ExamsPage />} />
                             <Route path="instructor/exams/:examId/questions" element={<ExamQuestionsPage />} />
                             <Route path="instructor/exams/:examId/submissions" element={<SubmissionsPage />} />
+                            <Route path="instructor/grading" element={<GradingPage />} />
+                            <Route path="instructor/analytics" element={<AnalyticsPage />} />
                             <Route path="questions" element={<Navigate to="/instructor/exams" replace />} />
                         </Route>
 
@@ -76,6 +95,7 @@ function App() {
                             <Route path="student/exams/:examId/start" element={<ExamStartPage />} />
                             <Route path="student/exams/result" element={<ExamResultPage />} />
                             <Route path="student/history" element={<ExamHistoryPage />} />
+                            <Route path="student/calendar" element={<CalendarPage />} />
                         </Route>
 
                         <Route path="unauthorized" element={<UnauthorizedPage />} />

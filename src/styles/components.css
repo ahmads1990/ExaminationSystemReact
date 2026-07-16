@@ -320,4 +320,49 @@
   border-radius: 50%;
 }
 
+/* ─── Sidebar Resize Handle ─── */
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle:active {
+  background-color: var(--color-primary-500) !important;
+  width: 6px !important;
+}
+
+/* ─── Premium Dark Footer ─── */
+.footer-premium {
+  background-color: #111827 !important; /* Dark Slate Gray */
+  color: #9CA3AF !important;
+  border-top: 1px solid #374151 !important;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.footer-premium a {
+  color: #9CA3AF !important;
+  transition: color var(--transition-normal);
+}
+
+.footer-premium a:hover {
+  color: #F3F4F6 !important;
+}
+
+/* ─── Custom Premium Large Switch (Green) ─── */
+.custom-switch-large .form-check-input {
+  width: 2.8rem !important;
+  height: 1.4rem !important;
+  cursor: pointer !important;
+}
+
+.custom-switch-large .form-check-input:checked {
+  background-color: var(--color-primary-500) !important; /* Emerald green */
+  border-color: var(--color-primary-500) !important;
+}
+
+.custom-switch-large .form-check-input:focus {
+  border-color: var(--color-primary-500) !important;
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+}
+
+
+
+
 
