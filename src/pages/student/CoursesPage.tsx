@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import { Card, Badge, Spinner, Row, Col } from "react-bootstrap";
+import { BookOpen, Clock, GraduationCap, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Badge, Card, Col, Row, Spinner } from "react-bootstrap";
+import toast from "react-hot-toast";
+import { CourseDto } from "../../api/responses/courses/CourseDto";
+import ActionButton from "../../components/common/ActionButton";
 import AppPagination from "../../components/common/Pagination";
 import SkeletonCard from "../../components/common/SkeletonCard";
-import { Search, BookOpen, GraduationCap, Clock } from "lucide-react";
-import StudentCourseService from "../../services/studentCourseService";
-import { CourseDto } from "../../api/responses/courses/CourseDto";
-import { usePagination } from "../../hooks/usePagination";
 import { useDebounce } from "../../hooks/useDebounce";
-import ActionButton from "../../components/common/ActionButton";
-import toast from "react-hot-toast";
+import { usePagination } from "../../hooks/usePagination";
+import StudentCourseService from "../../services/studentCourseService";
 
 const StudentCoursesPage = () => {
     const [courses, setCourses] = useState<CourseDto[]>([]);
@@ -19,19 +19,14 @@ const StudentCoursesPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearch = useDebounce(searchTerm, 500);
 
-    const {
-        pageIndex,
-        pageSize,
-        totalPages,
-        setTotalCount,
-        handlePageChange,
-        resetPage
-    } = usePagination({ defaultPageSize: 9 });
+    const { pageIndex, pageSize, totalPages, setTotalCount, handlePageChange, resetPage } = usePagination({
+        defaultPageSize: 9
+    });
 
     const fetchEnrollments = async () => {
         try {
             const resp = await StudentCourseService.getMyEnrollments({ OnlyEnrolled: true });
-            const enrolled = new Set(resp.data?.map(e => e.courseID) || []);
+            const enrolled = new Set(resp.data?.map((e) => e.courseID) || []);
             setEnrolledIds(enrolled);
         } catch (err) {
             console.error("Failed to load student enrollments", err);
@@ -73,7 +68,7 @@ const StudentCoursesPage = () => {
             const resp = await StudentCourseService.enrollInCourse({ courseID: courseId });
             if (resp.success) {
                 toast.success("Successfully enrolled in the course!");
-                setEnrolledIds(prev => {
+                setEnrolledIds((prev) => {
                     const next = new Set(prev);
                     next.add(courseId);
                     return next;
@@ -150,31 +145,56 @@ const StudentCoursesPage = () => {
                                             />
 
                                             <div className="d-flex justify-content-between align-items-start gap-2 pt-2">
-                                                <h5 className="fw-bold mb-0 text-dark" style={{ minHeight: "2.8rem", lineHeight: "1.4" }}>
+                                                <h5
+                                                    className="fw-bold mb-0 text-dark"
+                                                    style={{ minHeight: "2.8rem", lineHeight: "1.4" }}
+                                                >
                                                     {course.title}
                                                 </h5>
-                                                <Badge bg="light" className="text-primary border border-primary-subtle py-1.5 px-2.5 rounded-pill fw-semibold">
+                                                <Badge
+                                                    bg="light"
+                                                    className="text-primary border border-primary-subtle py-1.5 px-2.5 rounded-pill fw-semibold"
+                                                >
                                                     {course.creditHours} Credits
                                                 </Badge>
                                             </div>
 
-                                            <p className="text-secondary small mb-0 flex-grow-1" style={{ minHeight: "3.2rem", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                                            <p
+                                                className="text-secondary small mb-0 flex-grow-1"
+                                                style={{
+                                                    minHeight: "3.2rem",
+                                                    display: "-webkit-box",
+                                                    WebkitLineClamp: 3,
+                                                    WebkitBoxOrient: "vertical",
+                                                    overflow: "hidden"
+                                                }}
+                                            >
                                                 {course.description || "No course description available."}
                                             </p>
 
-                                            <div className="d-flex align-items-center gap-2 border-top-dashed pt-3" style={{ fontSize: "var(--text-xs)" }}>
-                                                <div className="d-flex align-items-center gap-1 text-muted" title="Instructor">
+                                            <div
+                                                className="d-flex align-items-center gap-2 border-top-dashed pt-3"
+                                                style={{ fontSize: "var(--text-xs)" }}
+                                            >
+                                                <div
+                                                    className="d-flex align-items-center gap-1 text-muted"
+                                                    title="Instructor"
+                                                >
                                                     <GraduationCap size={15} className="text-primary opacity-75" />
-                                                    <span className="fw-medium">Instructor: {course.instructorName || "N/A"}</span>
+                                                    <span className="fw-medium">
+                                                        Instructor: {course.instructorName || "N/A"}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </Card.Body>
 
                                         <Card.Footer className="bg-white border-0 px-4 pb-4 pt-0">
                                             {isEnrolled ? (
-                                                <div className="d-flex align-items-center justify-content-center bg-success-subtle text-success py-2 px-3 rounded-3 fw-bold w-100" style={{ fontSize: "0.9rem" }}>
-                                                    <Clock size={16} className="me-2" />
-                                                    ✓ Enrolled
+                                                <div
+                                                    className="d-flex align-items-center justify-content-center bg-success-subtle text-success py-2 px-3 rounded-3 fw-bold w-100"
+                                                    style={{ fontSize: "0.9rem" }}
+                                                >
+                                                    <Clock size={16} className="me-2" />✓ Enrolled
                                                 </div>
                                             ) : (
                                                 <ActionButton
@@ -183,7 +203,11 @@ const StudentCoursesPage = () => {
                                                     disabled={enrollingId === course.id}
                                                     fullWidth
                                                 >
-                                                    {enrollingId === course.id ? <Spinner animation="border" size="sm" /> : "Enroll in Course"}
+                                                    {enrollingId === course.id ? (
+                                                        <Spinner animation="border" size="sm" />
+                                                    ) : (
+                                                        "Enroll in Course"
+                                                    )}
                                                 </ActionButton>
                                             )}
                                         </Card.Footer>
@@ -194,11 +218,7 @@ const StudentCoursesPage = () => {
                     </Row>
 
                     {/* Pagination */}
-                    <AppPagination
-                        pageIndex={pageIndex}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+                    <AppPagination pageIndex={pageIndex} totalPages={totalPages} onPageChange={handlePageChange} />
                 </>
             )}
         </div>

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { Card, Alert, Spinner } from "react-bootstrap";
-import { CheckCircle2, XCircle, Clock, Award, LayoutDashboard, AlertTriangle } from "lucide-react";
-import StudentExamService from "../../services/studentExamService";
+import { AlertTriangle, Award, CheckCircle2, Clock, LayoutDashboard, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Alert, Card, Spinner } from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
 import { AttemptResultDto } from "../../api/responses/StudentExamResponses";
 import ActionButton from "../../components/common/ActionButton";
-import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
+import StudentExamService from "../../services/studentExamService";
 
 const ExamResultPage = () => {
     const [searchParams] = useSearchParams();
@@ -74,7 +74,8 @@ const ExamResultPage = () => {
                         </div>
                         <h4 className="fw-bold mb-2">Grading in Progress</h4>
                         <p className="text-muted small mb-4">
-                            Your submission is currently being processed and graded by the system. Please check back in a few minutes.
+                            Your submission is currently being processed and graded by the system. Please check back in
+                            a few minutes.
                         </p>
                         <div className="d-flex gap-2 flex-column">
                             <ActionButton variant="primary" onClick={() => navigate("/student/dashboard")} fullWidth>
@@ -132,19 +133,25 @@ const ExamResultPage = () => {
                     </div>
                     <h3 className="fw-bold mb-1">{result.isPassed ? "Congratulations!" : "Attempt Completed"}</h3>
                     <p className="mb-0 text-white-50 font-size-14">
-                        {result.isPassed ? "You passed the examination successfully." : "You did not achieve the required passing score."}
+                        {result.isPassed
+                            ? "You passed the examination successfully."
+                            : "You did not achieve the required passing score."}
                     </p>
                 </div>
 
                 <Card.Body className="p-4">
                     {/* Score display circle */}
                     <div className="text-center py-4 my-2 border-bottom">
-                        <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider mb-1">Your Score</span>
+                        <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider mb-1">
+                            Your Score
+                        </span>
                         <div className="d-flex align-items-baseline justify-content-center">
                             <span className="display-4 fw-extrabold text-dark leading-none">{result.currentGrade}</span>
                             <span className="fs-5 text-muted ms-1">/ {result.maxGrade}</span>
                         </div>
-                        <span className={`badge rounded-pill mt-3 px-3 py-1.5 fw-bold ${result.isPassed ? "bg-success-subtle text-success-800" : "bg-danger-subtle text-danger-800"}`}>
+                        <span
+                            className={`badge rounded-pill mt-3 px-3 py-1.5 fw-bold ${result.isPassed ? "bg-success-subtle text-success-800" : "bg-danger-subtle text-danger-800"}`}
+                        >
                             {percentage}% Grade — {result.isPassed ? "PASSED" : "FAILED"}
                         </span>
                     </div>
@@ -155,7 +162,9 @@ const ExamResultPage = () => {
                             <span className="text-muted d-flex align-items-center gap-1.5 font-size-13">
                                 <Award size={16} className="text-primary" /> Grade Status
                             </span>
-                            <strong className={result.isPassed ? "text-success font-size-14" : "text-danger font-size-14"}>
+                            <strong
+                                className={result.isPassed ? "text-success font-size-14" : "text-danger font-size-14"}
+                            >
                                 {result.isPassed ? "Passed" : "Needs Review"}
                             </strong>
                         </div>
@@ -163,14 +172,17 @@ const ExamResultPage = () => {
                             <span className="text-muted d-flex align-items-center gap-1.5 font-size-13">
                                 <Clock size={16} className="text-primary" /> Completion Time
                             </span>
-                            <strong className="text-dark font-size-14">
-                                {result.completionTime || "N/A"}
-                            </strong>
+                            <strong className="text-dark font-size-14">{result.completionTime || "N/A"}</strong>
                         </div>
                     </div>
 
                     <div className="d-flex flex-column gap-2">
-                        <ActionButton variant="primary" onClick={() => navigate("/student/dashboard")} fullWidth className="py-2.5">
+                        <ActionButton
+                            variant="primary"
+                            onClick={() => navigate("/student/dashboard")}
+                            fullWidth
+                            className="py-2.5"
+                        >
                             <LayoutDashboard size={16} className="me-2" /> Go to Dashboard
                         </ActionButton>
                     </div>

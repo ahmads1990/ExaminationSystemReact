@@ -4,8 +4,6 @@ export interface ListParameters {
     [key: string]: string | number | boolean | undefined;
 }
 
-
-
 export interface UseQueryResult<T> {
     data: T | null;
     isPending: boolean;

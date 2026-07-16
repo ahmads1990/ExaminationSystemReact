@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Card, Alert, Spinner } from "react-bootstrap";
-import { FileText, Clock, AlertTriangle, ArrowLeft, PlayCircle, Target, Calendar } from "lucide-react";
-import StudentExamService from "../../services/studentExamService";
+import { AlertTriangle, ArrowLeft, Calendar, Clock, FileText, PlayCircle, Target } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Alert, Card, Spinner } from "react-bootstrap";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
 import { AvailableExamDto } from "../../api/responses/StudentExamResponses";
-import { saveExamToken } from "../../utils/storage";
 import ActionButton from "../../components/common/ActionButton";
 import { EXAM_TYPE_LABELS } from "../../constants/examConstants";
+import StudentExamService from "../../services/studentExamService";
 import { formatDate } from "../../utils/dateUtils";
-import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
-import toast from "react-hot-toast";
+import { saveExamToken } from "../../utils/storage";
 
 const ExamStartPage = () => {
     const { examId } = useParams<{ examId: string }>();
@@ -29,7 +29,7 @@ const ExamStartPage = () => {
             try {
                 const response = await StudentExamService.getAvailableExams();
                 if (response.success && response.data) {
-                    const foundExam = response.data.find(e => e.examId === Number(examId));
+                    const foundExam = response.data.find((e) => e.examId === Number(examId));
                     if (foundExam) {
                         setExam(foundExam);
                     } else {
@@ -114,7 +114,11 @@ const ExamStartPage = () => {
                         <Alert variant="danger" className="text-start py-2.5 px-3">
                             {error || "We couldn't retrieve the exam info."}
                         </Alert>
-                        <ActionButton variant="outline-primary" onClick={() => navigate("/student/dashboard")} fullWidth>
+                        <ActionButton
+                            variant="outline-primary"
+                            onClick={() => navigate("/student/dashboard")}
+                            fullWidth
+                        >
                             <ArrowLeft size={16} className="me-2" /> Back to Dashboard
                         </ActionButton>
                     </Card.Body>
@@ -140,7 +144,10 @@ const ExamStartPage = () => {
             <Card className="border-0 shadow-sm rounded-4 bg-white overflow-hidden">
                 <div className="bg-primary p-4 text-white position-relative">
                     <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="text-white-50 fw-bold text-uppercase" style={{ fontSize: "0.7rem", letterSpacing: "0.05em" }}>
+                        <span
+                            className="text-white-50 fw-bold text-uppercase"
+                            style={{ fontSize: "0.7rem", letterSpacing: "0.05em" }}
+                        >
                             {exam.courseName}
                         </span>
                         <span
@@ -149,7 +156,7 @@ const ExamStartPage = () => {
                                 backgroundColor: "rgba(255,255,255,0.15)",
                                 color: "white",
                                 fontSize: "0.65rem",
-                                padding: "0.3em 0.7em",
+                                padding: "0.3em 0.7em"
                             }}
                         >
                             {EXAM_TYPE_LABELS[exam.examType] ?? exam.examType}
@@ -163,7 +170,9 @@ const ExamStartPage = () => {
                         <div className="col-sm-4">
                             <div className="p-3 bg-light rounded-3 text-center h-100 d-flex flex-column justify-content-center align-items-center">
                                 <Clock size={20} className="text-primary mb-2" />
-                                <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">Duration</span>
+                                <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">
+                                    Duration
+                                </span>
                                 <strong className="fs-5 text-dark mt-0.5">{exam.maxDurationInMinutes} mins</strong>
                             </div>
                         </div>
@@ -171,16 +180,25 @@ const ExamStartPage = () => {
                         <div className="col-sm-4">
                             <div className="p-3 bg-light rounded-3 text-center h-100 d-flex flex-column justify-content-center align-items-center">
                                 <Target size={20} className="text-primary mb-2" />
-                                <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">Attempts</span>
+                                <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">
+                                    Attempts
+                                </span>
                                 <strong className="fs-5 text-dark mt-0.5">{remainingAttempts} left</strong>
-                                <span className="text-muted" style={{ fontSize: "0.65rem" }}>of {exam.maxAttempts} max</span>
+                                <span className="text-muted" style={{ fontSize: "0.65rem" }}>
+                                    of {exam.maxAttempts} max
+                                </span>
                             </div>
                         </div>
 
                         <div className="col-sm-4">
                             <div className="p-3 bg-light rounded-3 text-center h-100 d-flex flex-column justify-content-center align-items-center">
-                                <Calendar size={20} className={isDeadlinePassed ? "text-danger mb-2" : "text-primary mb-2"} />
-                                <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">Due Date</span>
+                                <Calendar
+                                    size={20}
+                                    className={isDeadlinePassed ? "text-danger mb-2" : "text-primary mb-2"}
+                                />
+                                <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">
+                                    Due Date
+                                </span>
                                 <strong className={`fs-6 mt-0.5 ${isDeadlinePassed ? "text-danger" : "text-dark"}`}>
                                     {formatDate(exam.deadlineDate)}
                                 </strong>
@@ -193,11 +211,26 @@ const ExamStartPage = () => {
                             <FileText size={18} className="text-primary" />
                             Exam Rules & Instructions
                         </h5>
-                        <ul className="text-secondary ps-3.5 mb-0" style={{ fontSize: "var(--text-sm)", lineHeight: "1.7" }}>
-                            <li className="mb-2"><strong>Time Limit:</strong> Once you click "Begin Exam", the timer starts and cannot be paused. Refreshing or closing the tab will <strong>NOT</strong> stop the timer.</li>
-                            <li className="mb-2"><strong>Auto-Save:</strong> Your answers are saved automatically when selected. If you lose connection, they will remain stored locally and sync when you're back.</li>
-                            <li className="mb-2"><strong>Submission:</strong> You can submit early at any time. When the timer hits 0, your exam will be automatically submitted with your currently saved answers.</li>
-                            <li className="mb-2"><strong>Integrity:</strong> Do not open multiple tabs or switch screens as it might violate examination policies. Ensure a stable internet connection.</li>
+                        <ul
+                            className="text-secondary ps-3.5 mb-0"
+                            style={{ fontSize: "var(--text-sm)", lineHeight: "1.7" }}
+                        >
+                            <li className="mb-2">
+                                <strong>Time Limit:</strong> Once you click "Begin Exam", the timer starts and cannot be
+                                paused. Refreshing or closing the tab will <strong>NOT</strong> stop the timer.
+                            </li>
+                            <li className="mb-2">
+                                <strong>Auto-Save:</strong> Your answers are saved automatically when selected. If you
+                                lose connection, they will remain stored locally and sync when you're back.
+                            </li>
+                            <li className="mb-2">
+                                <strong>Submission:</strong> You can submit early at any time. When the timer hits 0,
+                                your exam will be automatically submitted with your currently saved answers.
+                            </li>
+                            <li className="mb-2">
+                                <strong>Integrity:</strong> Do not open multiple tabs or switch screens as it might
+                                violate examination policies. Ensure a stable internet connection.
+                            </li>
                         </ul>
                     </div>
 
@@ -223,7 +256,10 @@ const ExamStartPage = () => {
                         </ActionButton>
 
                         {!canTake && (
-                            <Alert variant="warning" className="d-flex align-items-center gap-2.5 py-2.5 px-3 mb-0 text-start mt-2">
+                            <Alert
+                                variant="warning"
+                                className="d-flex align-items-center gap-2.5 py-2.5 px-3 mb-0 text-start mt-2"
+                            >
                                 <AlertTriangle size={20} className="flex-shrink-0" />
                                 <span style={{ fontSize: "var(--text-sm)" }}>
                                     {isDeadlinePassed

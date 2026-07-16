@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { BookOpen, CalendarDays, CheckCircle, Clock, FileText, Target } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Alert, Badge, Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card, Badge, Alert } from "react-bootstrap";
-import SkeletonCard from "../../components/common/SkeletonCard";
-import { FileText, BookOpen, Clock, CalendarDays, Target, CheckCircle } from "lucide-react";
-import EmptyState from "../../components/common/EmptyState";
-import StudentCourseService from "../../services/studentCourseService";
-import StudentExamService from "../../services/studentExamService";
 import { StudentEnrollmentDto } from "../../api/responses/StudentCourseResponses";
 import { AvailableExamDto } from "../../api/responses/StudentExamResponses";
-import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS } from "../../constants/examConstants";
-import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
+import EmptyState from "../../components/common/EmptyState";
+import SkeletonCard from "../../components/common/SkeletonCard";
+import { EXAM_TYPE_COLORS, EXAM_TYPE_LABELS } from "../../constants/examConstants";
 import { useAuth } from "../../contexts/AuthContext";
+import StudentCourseService from "../../services/studentCourseService";
+import StudentExamService from "../../services/studentExamService";
+import { formatDate } from "../../utils/dateUtils";
 
 const StudentDashboardPage = () => {
     const navigate = useNavigate();
@@ -45,11 +45,11 @@ const StudentDashboardPage = () => {
             if (examsResp.success) {
                 setAvailableExams(examsResp.data || []);
             } else {
-                setError(prev => prev ? `${prev} ` : "" + (examsResp.message || "Failed to load available exams."));
+                setError((prev) => (prev ? `${prev} ` : "" + (examsResp.message || "Failed to load available exams.")));
             }
         } catch (err) {
             console.error("Failed to load available exams", err);
-            setError(prev => prev ? `${prev} ` : "" + "Failed to load available exams.");
+            setError((prev) => (prev ? `${prev} ` : "" + "Failed to load available exams."));
         } finally {
             setLoadingExams(false);
         }
@@ -94,7 +94,7 @@ const StudentDashboardPage = () => {
                     {loadingExams ? (
                         <SkeletonCard count={3} />
                     ) : availableExams.length === 0 ? (
-                        <EmptyState 
+                        <EmptyState
                             title="All caught up!"
                             message="There are no pending exams available for your enrolled courses right now."
                             icon={CheckCircle}
@@ -102,7 +102,11 @@ const StudentDashboardPage = () => {
                     ) : (
                         <Row className="g-3">
                             {availableExams.map((exam) => {
-                                const typeColor = EXAM_TYPE_COLORS[exam.examType] ?? { bg: "var(--surface-bg)", border: "var(--color-secondary-200)", text: "var(--text-secondary)" };
+                                const typeColor = EXAM_TYPE_COLORS[exam.examType] ?? {
+                                    bg: "var(--surface-bg)",
+                                    border: "var(--color-secondary-200)",
+                                    text: "var(--text-secondary)"
+                                };
                                 const hasAttemptsLeft = exam.attemptsTaken < exam.maxAttempts;
                                 const deadlinePassed = new Date(exam.deadlineDate) < new Date();
                                 const canTake = hasAttemptsLeft && !deadlinePassed;
@@ -113,7 +117,10 @@ const StudentDashboardPage = () => {
                                             <Card.Body className="p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                                                 <div className="d-flex flex-column gap-2 flex-grow-1">
                                                     <div className="d-flex align-items-center gap-2 flex-wrap">
-                                                        <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: "0.65rem", letterSpacing: "0.05em" }}>
+                                                        <span
+                                                            className="text-secondary fw-bold text-uppercase"
+                                                            style={{ fontSize: "0.65rem", letterSpacing: "0.05em" }}
+                                                        >
                                                             {exam.courseName}
                                                         </span>
                                                         <span
@@ -122,30 +129,52 @@ const StudentDashboardPage = () => {
                                                                 backgroundColor: typeColor.bg,
                                                                 color: typeColor.text,
                                                                 fontSize: "0.65rem",
-                                                                padding: "0.3em 0.7em",
+                                                                padding: "0.3em 0.7em"
                                                             }}
                                                         >
                                                             {EXAM_TYPE_LABELS[exam.examType] ?? exam.examType}
                                                         </span>
                                                     </div>
 
-                                                    <h5 className="fw-bold mb-1 text-dark">
-                                                        {exam.title}
-                                                    </h5>
+                                                    <h5 className="fw-bold mb-1 text-dark">{exam.title}</h5>
 
-                                                    <div className="d-flex align-items-center gap-4 flex-wrap mt-1" style={{ fontSize: "var(--text-xs)", color: "var(--text-secondary)" }}>
-                                                        <div className="d-flex align-items-center gap-1" title="Duration">
+                                                    <div
+                                                        className="d-flex align-items-center gap-4 flex-wrap mt-1"
+                                                        style={{
+                                                            fontSize: "var(--text-xs)",
+                                                            color: "var(--text-secondary)"
+                                                        }}
+                                                    >
+                                                        <div
+                                                            className="d-flex align-items-center gap-1"
+                                                            title="Duration"
+                                                        >
                                                             <Clock size={14} className="text-primary opacity-75" />
-                                                            <span className="fw-medium">{exam.maxDurationInMinutes} mins</span>
+                                                            <span className="fw-medium">
+                                                                {exam.maxDurationInMinutes} mins
+                                                            </span>
                                                         </div>
-                                                        <div className="d-flex align-items-center gap-1" title="Attempts Remaining">
+                                                        <div
+                                                            className="d-flex align-items-center gap-1"
+                                                            title="Attempts Remaining"
+                                                        >
                                                             <Target size={14} className="text-primary opacity-75" />
-                                                            <span className="fw-medium">{getRemainingAttemptsStr(exam)}</span>
+                                                            <span className="fw-medium">
+                                                                {getRemainingAttemptsStr(exam)}
+                                                            </span>
                                                         </div>
                                                         {exam.deadlineDate && (
-                                                            <div className="d-flex align-items-center gap-1" title="Deadline">
-                                                                <CalendarDays size={14} className="text-primary opacity-75" />
-                                                                <span className="fw-medium text-danger">Due: {formatDate(exam.deadlineDate)}</span>
+                                                            <div
+                                                                className="d-flex align-items-center gap-1"
+                                                                title="Deadline"
+                                                            >
+                                                                <CalendarDays
+                                                                    size={14}
+                                                                    className="text-primary opacity-75"
+                                                                />
+                                                                <span className="fw-medium text-danger">
+                                                                    Due: {formatDate(exam.deadlineDate)}
+                                                                </span>
                                                             </div>
                                                         )}
                                                     </div>
@@ -158,7 +187,11 @@ const StudentDashboardPage = () => {
                                                         disabled={!canTake}
                                                         fullWidth
                                                     >
-                                                        {!hasAttemptsLeft ? "Attempts Used" : (deadlinePassed ? "Expired" : "Take Exam")}
+                                                        {!hasAttemptsLeft
+                                                            ? "Attempts Used"
+                                                            : deadlinePassed
+                                                              ? "Expired"
+                                                              : "Take Exam"}
                                                     </ActionButton>
                                                 </div>
                                             </Card.Body>
@@ -177,7 +210,10 @@ const StudentDashboardPage = () => {
                             <BookOpen size={22} className="text-primary" />
                             My Courses
                         </h4>
-                        <Badge bg="secondary" className="rounded-pill px-2.5 py-1.5 fw-semibold bg-secondary-subtle text-secondary-800">
+                        <Badge
+                            bg="secondary"
+                            className="rounded-pill px-2.5 py-1.5 fw-semibold bg-secondary-subtle text-secondary-800"
+                        >
                             {enrollments.length} Enrolled
                         </Badge>
                     </div>
@@ -185,7 +221,7 @@ const StudentDashboardPage = () => {
                     {loadingEnrollments ? (
                         <SkeletonCard count={3} />
                     ) : enrollments.length === 0 ? (
-                        <EmptyState 
+                        <EmptyState
                             title="No courses yet"
                             message="Browse available courses and enroll in them to start taking exams."
                             icon={BookOpen}
@@ -198,16 +234,20 @@ const StudentDashboardPage = () => {
                                 <Card key={enrollment.courseID} className="border-0 shadow-sm card-custom-dark">
                                     <Card.Body className="p-3.5 d-flex flex-column gap-2">
                                         <div className="d-flex justify-content-between align-items-start gap-2">
-                                            <h6 className="fw-bold mb-0 text-dark">
-                                                {enrollment.courseName}
-                                            </h6>
+                                            <h6 className="fw-bold mb-0 text-dark">{enrollment.courseName}</h6>
                                             {enrollment.finished && (
-                                                <Badge bg="success" className="rounded-pill py-1 px-2 text-uppercase font-size-10">
+                                                <Badge
+                                                    bg="success"
+                                                    className="rounded-pill py-1 px-2 text-uppercase font-size-10"
+                                                >
                                                     Finished
                                                 </Badge>
                                             )}
                                         </div>
-                                        <div className="d-flex align-items-center gap-1 text-muted mt-1" style={{ fontSize: "0.75rem" }}>
+                                        <div
+                                            className="d-flex align-items-center gap-1 text-muted mt-1"
+                                            style={{ fontSize: "0.75rem" }}
+                                        >
                                             <CalendarDays size={13} className="text-secondary opacity-75" />
                                             <span>Enrolled: {formatDate(enrollment.enrollmentDate)}</span>
                                         </div>

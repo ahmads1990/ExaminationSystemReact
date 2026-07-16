@@ -23,7 +23,10 @@ export const SkeletonTable = ({ rows = 5, cols = 4 }: SkeletonTableProps) => {
                         <tr key={r}>
                             {[...Array(cols)].map((_, c) => (
                                 <td key={c} className="py-3.5 px-4 border-bottom border-light">
-                                    <div className="skeleton-line" style={{ width: c === 0 ? "40%" : "75%", height: "0.875rem" }} />
+                                    <div
+                                        className="skeleton-line"
+                                        style={{ width: c === 0 ? "40%" : "75%", height: "0.875rem" }}
+                                    />
                                 </td>
                             ))}
                         </tr>

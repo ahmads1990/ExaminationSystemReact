@@ -43,11 +43,7 @@ const TextAreaInput = ({
                     style={{ height: `${rows * 33}px` }}
                     className="bg-light border-light-subtle focus-ring"
                 />
-                {error && (
-                    <Form.Control.Feedback type="invalid">
-                        {error}
-                    </Form.Control.Feedback>
-                )}
+                {error && <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>}
             </FloatingLabel>
         </div>
     );

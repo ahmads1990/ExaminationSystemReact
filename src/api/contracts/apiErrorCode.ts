@@ -2,8 +2,7 @@
  * API Error Codes
  * Shared enum between frontend and backend for consistent error handling
  */
-export enum ApiErrorCode
-{
+export enum ApiErrorCode {
     None = 0,
 
     // Authentication & Authorization (1000-1999)

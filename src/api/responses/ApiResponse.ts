@@ -3,8 +3,7 @@ import { ApiErrorCode } from "../contracts/apiErrorCode";
 /**
  * Unified API Response structure matching backend
  */
-export interface ApiResponse<T>
-{
+export interface ApiResponse<T> {
     success: boolean;
     data: T | null;
     message: string;

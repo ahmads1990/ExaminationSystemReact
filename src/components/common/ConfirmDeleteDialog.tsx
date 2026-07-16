@@ -1,6 +1,6 @@
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
-import { Trash2 } from "lucide-react";
 
 interface ConfirmDeleteDialogProps {
     show: boolean;
@@ -17,7 +17,7 @@ const ConfirmDeleteDialog = ({
     onConfirm,
     title,
     description = "This action cannot be undone.",
-    confirmLabel = "Delete",
+    confirmLabel = "Delete"
 }: ConfirmDeleteDialogProps) => {
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -45,22 +45,15 @@ const ConfirmDeleteDialog = ({
                 <p className="text-muted small mb-4">{description}</p>
 
                 <div className="d-flex gap-2 justify-content-center">
-                    <button
-                        type="button"
-                        className="btn btn-secondary px-4"
-                        onClick={onHide}
-                        disabled={isDeleting}
-                    >
+                    <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isDeleting}>
                         Cancel
                     </button>
-                    <button
-                        type="button"
-                        className="btn btn-danger px-4"
-                        onClick={handleConfirm}
-                        disabled={isDeleting}
-                    >
+                    <button type="button" className="btn btn-danger px-4" onClick={handleConfirm} disabled={isDeleting}>
                         {isDeleting ? (
-                            <><Spinner animation="border" size="sm" className="me-2" />{confirmLabel}ing...</>
+                            <>
+                                <Spinner animation="border" size="sm" className="me-2" />
+                                {confirmLabel}ing...
+                            </>
                         ) : (
                             confirmLabel
                         )}

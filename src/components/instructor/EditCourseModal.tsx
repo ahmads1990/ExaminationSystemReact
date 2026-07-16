@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Modal, Form, Spinner, Row, Col } from "react-bootstrap";
 import { Pencil } from "lucide-react";
-import CourseService from "../../services/courseService";
+import { useEffect, useState } from "react";
+import { Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
-import TextInput from "../common/forms/TextInput";
+import CourseService from "../../services/courseService";
 import TextAreaInput from "../common/forms/TextAreaInput";
+import TextInput from "../common/forms/TextInput";
 
 interface EditCourseModalProps {
     show: boolean;
@@ -42,19 +42,22 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
         const newErrors: FormErrors = {};
         if (!title.trim()) newErrors.title = "Course title is required.";
         else if (title.length > 100) newErrors.title = "Course title must not exceed 100 characters.";
-        
+
         if (!description.trim()) newErrors.description = "Course description is required.";
-        else if (description.trim().length < 20) newErrors.description = "Course description must be at least 20 characters long.";
+        else if (description.trim().length < 20)
+            newErrors.description = "Course description must be at least 20 characters long.";
         else if (description.length > 500) newErrors.description = "Course description must not exceed 500 characters.";
-        
+
         const hours = parseInt(creditHours);
         if (!creditHours) newErrors.creditHours = "Credit hours is required.";
-        else if (isNaN(hours) || hours < 1 || hours > 6) newErrors.creditHours = "Credit hours must be between 1 and 6.";
+        else if (isNaN(hours) || hours < 1 || hours > 6)
+            newErrors.creditHours = "Credit hours must be between 1 and 6.";
 
         const maxEnroll = parseInt(maxEnrollment);
         if (!maxEnrollment) newErrors.maxEnrollment = "Max enrollment limit is required.";
-        else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000) newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
-        
+        else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000)
+            newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -69,10 +72,16 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                 title: title.trim(),
                 description: description.trim(),
                 creditHours: parseInt(creditHours),
-                maxEnrollment: parseInt(maxEnrollment),
+                maxEnrollment: parseInt(maxEnrollment)
             });
             if (response.success) {
-                onSuccess({ ...course, title: title.trim(), description: description.trim(), creditHours: parseInt(creditHours), maxEnrollment: parseInt(maxEnrollment) });
+                onSuccess({
+                    ...course,
+                    title: title.trim(),
+                    description: description.trim(),
+                    creditHours: parseInt(creditHours),
+                    maxEnrollment: parseInt(maxEnrollment)
+                });
                 onHide();
             }
         } catch {
@@ -94,7 +103,15 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                     </div>
                     <div>
                         <Modal.Title className="fw-bold fs-5 mb-0">Edit Course</Modal.Title>
-                        <p className="text-muted small mb-0" style={{ maxWidth: 340, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <p
+                            className="text-muted small mb-0"
+                            style={{
+                                maxWidth: 340,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap"
+                            }}
+                        >
                             {course?.title}
                         </p>
                     </div>
@@ -128,7 +145,11 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                     />
                     <Row className="g-3 mb-3">
                         <Col md={6}>
-                            <label htmlFor="edit-credit-hours" className="form-label fw-semibold" style={{ fontSize: "var(--text-sm)" }}>
+                            <label
+                                htmlFor="edit-credit-hours"
+                                className="form-label fw-semibold"
+                                style={{ fontSize: "var(--text-sm)" }}
+                            >
                                 Credit Hours
                             </label>
                             <input
@@ -144,7 +165,11 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                             {errors.creditHours && <div className="invalid-feedback">{errors.creditHours}</div>}
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="edit-max-enrollment" className="form-label fw-semibold" style={{ fontSize: "var(--text-sm)" }}>
+                            <label
+                                htmlFor="edit-max-enrollment"
+                                className="form-label fw-semibold"
+                                style={{ fontSize: "var(--text-sm)" }}
+                            >
                                 Max Enrollment Limit
                             </label>
                             <input
@@ -169,7 +194,10 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                 </button>
                 <button type="submit" form="edit-course-form" className="btn btn-primary px-4" disabled={isSubmitting}>
                     {isSubmitting ? (
-                        <><Spinner animation="border" size="sm" className="me-2" />Saving...</>
+                        <>
+                            <Spinner animation="border" size="sm" className="me-2" />
+                            Saving...
+                        </>
                     ) : (
                         "Save Changes"
                     )}

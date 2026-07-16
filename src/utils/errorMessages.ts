@@ -1,8 +1,8 @@
-import { ApiErrorCode } from '../api/contracts/apiErrorCode';
+import { ApiErrorCode } from "../api/contracts/apiErrorCode";
 
 export const ErrorMessages: Record<ApiErrorCode, string> = {
     [ApiErrorCode.None]: "An unknown error occurred.",
-    
+
     // Authentication & Authorization
     [ApiErrorCode.InvalidCredentials]: "Invalid email or password.",
     [ApiErrorCode.EmailNotVerified]: "Your email address is not verified yet.",
@@ -53,7 +53,7 @@ export const ErrorMessages: Record<ApiErrorCode, string> = {
     [ApiErrorCode.InternalServerError]: "An internal server error occurred. Please try again later.",
     [ApiErrorCode.DatabaseError]: "A database error occurred. Please try again later.",
     [ApiErrorCode.EmailServiceError]: "Failed to send email. Please ensure your email is correct and try again.",
-    [ApiErrorCode.CacheError]: "A caching service error occurred. Please try again later.",
+    [ApiErrorCode.CacheError]: "A caching service error occurred. Please try again later."
 };
 
 export const getErrorMessage = (errorCode: ApiErrorCode): string => {

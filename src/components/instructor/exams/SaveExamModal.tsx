@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { Modal, Form, Spinner, Row, Col, FloatingLabel } from "react-bootstrap";
-import { Settings, FileText } from "lucide-react";
-import ExamService from "../../../services/examService";
-import CourseService from "../../../services/courseService";
+import { FileText, Settings } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Col, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { CourseDto } from "../../../api/responses/courses/CourseDto";
 import { ExamDto } from "../../../api/responses/exams/ExamDto";
 import { ExamType } from "../../../enums";
+import CourseService from "../../../services/courseService";
+import ExamService from "../../../services/examService";
 import ErrorDialog from "../../common/ErrorDialog";
 
 import toast from "react-hot-toast";
@@ -77,7 +77,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                 if (fullExam.deadlineDate) {
                     const d = new Date(fullExam.deadlineDate);
                     const tzOffset = d.getTimezoneOffset() * 60000;
-                    const localISOTime = (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 16);
+                    const localISOTime = new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
                     setDeadlineDate(localISOTime);
                 } else {
                     setDeadlineDate("");
@@ -105,12 +105,30 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
     };
 
     const validate = () => {
-        if (!courseId) { toast.error("Please select a course."); return false; }
-        if (!title.trim()) { toast.error("Title is required."); return false; }
-        if (!examType) { toast.error("Exam type is required."); return false; }
-        if (Number(maxDuration) <= 0) { toast.error("Duration must be greater than 0."); return false; }
-        if (Number(totalGrade) <= 0) { toast.error("Total grade must be greater than 0."); return false; }
-        if (!deadlineDate) { toast.error("Deadline date is required."); return false; }
+        if (!courseId) {
+            toast.error("Please select a course.");
+            return false;
+        }
+        if (!title.trim()) {
+            toast.error("Title is required.");
+            return false;
+        }
+        if (!examType) {
+            toast.error("Exam type is required.");
+            return false;
+        }
+        if (Number(maxDuration) <= 0) {
+            toast.error("Duration must be greater than 0.");
+            return false;
+        }
+        if (Number(totalGrade) <= 0) {
+            toast.error("Total grade must be greater than 0.");
+            return false;
+        }
+        if (!deadlineDate) {
+            toast.error("Deadline date is required.");
+            return false;
+        }
         return true;
     };
 
@@ -128,7 +146,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                 passingScore: Number(passingScore) || 0,
                 maxAttempts: Number(maxAttempts) || 1,
                 shuffleQuestions,
-                deadlineDate: deadlineDate ? new Date(deadlineDate).toISOString() : null,
+                deadlineDate: deadlineDate ? new Date(deadlineDate).toISOString() : null
             };
 
             if (isEditMode && examToEdit) {
@@ -156,11 +174,19 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                             className="d-flex align-items-center justify-content-center rounded-3"
                             style={{ width: 44, height: 44, backgroundColor: "var(--color-primary-50)" }}
                         >
-                            {isEditMode ? <Settings size={22} className="text-primary" /> : <FileText size={22} className="text-primary" />}
+                            {isEditMode ? (
+                                <Settings size={22} className="text-primary" />
+                            ) : (
+                                <FileText size={22} className="text-primary" />
+                            )}
                         </div>
                         <div>
-                            <Modal.Title className="fw-bold fs-5 mb-0">{isEditMode ? "Edit Exam" : "Create New Exam"}</Modal.Title>
-                            <p className="text-muted small mb-0">{isEditMode ? "Update your exam settings" : "Configure a new examination"}</p>
+                            <Modal.Title className="fw-bold fs-5 mb-0">
+                                {isEditMode ? "Edit Exam" : "Create New Exam"}
+                            </Modal.Title>
+                            <p className="text-muted small mb-0">
+                                {isEditMode ? "Update your exam settings" : "Configure a new examination"}
+                            </p>
                         </div>
                     </div>
                 </Modal.Header>
@@ -184,9 +210,13 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                                 required
                                                 disabled={isEditMode} // Usually you can't reassign an exam to another course safely
                                             >
-                                                <option value="" disabled>{isLoadingCourses ? "Loading courses..." : "Select a Course"}</option>
+                                                <option value="" disabled>
+                                                    {isLoadingCourses ? "Loading courses..." : "Select a Course"}
+                                                </option>
                                                 {courses.map((c, idx) => (
-                                                    <option key={`course-opt-${c.id || idx}`} value={c.id}>{c.title}</option>
+                                                    <option key={`course-opt-${c.id || idx}`} value={c.id}>
+                                                        {c.title}
+                                                    </option>
                                                 ))}
                                             </Form.Select>
                                         </FloatingLabel>
@@ -216,7 +246,9 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                                 onChange={(e) => setExamType(e.target.value as ExamType)}
                                                 required
                                             >
-                                                <option value="" disabled>Select Type</option>
+                                                <option value="" disabled>
+                                                    Select Type
+                                                </option>
                                                 <option value={ExamType.Quiz}>Quiz</option>
                                                 <option value={ExamType.Final}>Final Exam</option>
                                             </Form.Select>
@@ -226,42 +258,87 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                             </Row>
 
                             <hr className="my-4 border-light-subtle" />
-                            <h6 className="fw-bold mb-3 text-secondary" style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px" }}>Grading & Duration</h6>
+                            <h6
+                                className="fw-bold mb-3 text-secondary"
+                                style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px" }}
+                            >
+                                Grading & Duration
+                            </h6>
 
                             <Row className="g-3 mb-3">
                                 <Col md={4}>
                                     <Form.Group>
                                         <FloatingLabel controlId="max-duration" label="Duration (mins) *">
-                                            <Form.Control type="number" min="1" className="bg-light border-light-subtle" placeholder="Duration" value={maxDuration} onChange={e => setMaxDuration(e.target.value)} required />
+                                            <Form.Control
+                                                type="number"
+                                                min="1"
+                                                className="bg-light border-light-subtle"
+                                                placeholder="Duration"
+                                                value={maxDuration}
+                                                onChange={(e) => setMaxDuration(e.target.value)}
+                                                required
+                                            />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
                                 <Col md={4}>
                                     <Form.Group>
                                         <FloatingLabel controlId="total-grade" label="Total Grade *">
-                                            <Form.Control type="number" min="1" className="bg-light border-light-subtle" placeholder="Total Grade" value={totalGrade} onChange={e => setTotalGrade(e.target.value)} required />
+                                            <Form.Control
+                                                type="number"
+                                                min="1"
+                                                className="bg-light border-light-subtle"
+                                                placeholder="Total Grade"
+                                                value={totalGrade}
+                                                onChange={(e) => setTotalGrade(e.target.value)}
+                                                required
+                                            />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
                                 <Col md={4}>
                                     <Form.Group>
                                         <FloatingLabel controlId="passing-score" label="Passing Score *">
-                                            <Form.Control type="number" min="0" className="bg-light border-light-subtle" placeholder="Passing Score" value={passingScore} onChange={e => setPassingScore(e.target.value)} required />
+                                            <Form.Control
+                                                type="number"
+                                                min="0"
+                                                className="bg-light border-light-subtle"
+                                                placeholder="Passing Score"
+                                                value={passingScore}
+                                                onChange={(e) => setPassingScore(e.target.value)}
+                                                required
+                                            />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
                                 <Col md={4}>
                                     <Form.Group>
                                         <FloatingLabel controlId="max-attempts" label="Max Attempts">
-                                            <Form.Control type="number" min="1" className="bg-light border-light-subtle" placeholder="Max Attempts" value={maxAttempts} onChange={e => setMaxAttempts(e.target.value)} />
+                                            <Form.Control
+                                                type="number"
+                                                min="1"
+                                                className="bg-light border-light-subtle"
+                                                placeholder="Max Attempts"
+                                                value={maxAttempts}
+                                                onChange={(e) => setMaxAttempts(e.target.value)}
+                                            />
                                         </FloatingLabel>
-                                        <Form.Text className="text-muted" style={{ fontSize: "0.7rem" }}>Set to 1 for finals.</Form.Text>
+                                        <Form.Text className="text-muted" style={{ fontSize: "0.7rem" }}>
+                                            Set to 1 for finals.
+                                        </Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col md={8}>
                                     <Form.Group>
                                         <FloatingLabel controlId="deadline" label="Deadline Date *">
-                                            <Form.Control type="datetime-local" className="bg-light border-light-subtle" placeholder="Deadline" value={deadlineDate} onChange={e => setDeadlineDate(e.target.value)} required />
+                                            <Form.Control
+                                                type="datetime-local"
+                                                className="bg-light border-light-subtle"
+                                                placeholder="Deadline"
+                                                value={deadlineDate}
+                                                onChange={(e) => setDeadlineDate(e.target.value)}
+                                                required
+                                            />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
@@ -274,7 +351,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                         id="shuffle-switch"
                                         label={<span className="ms-2">Shuffle Questions</span>}
                                         checked={shuffleQuestions}
-                                        onChange={e => setShuffleQuestions(e.target.checked)}
+                                        onChange={(e) => setShuffleQuestions(e.target.checked)}
                                     />
                                 </Col>
                             </Row>
@@ -283,9 +360,23 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                 </Modal.Body>
 
                 <Modal.Footer className="border-0 px-4 pb-4 pt-0 gap-2">
-                    <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isSubmitting}>Cancel</button>
-                    <button type="submit" form="save-exam-form" className="btn btn-primary px-4" disabled={isSubmitting}>
-                        {isSubmitting ? <><Spinner animation="border" size="sm" className="me-2" />Saving...</> : "Save Exam"}
+                    <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isSubmitting}>
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        form="save-exam-form"
+                        className="btn btn-primary px-4"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <Spinner animation="border" size="sm" className="me-2" />
+                                Saving...
+                            </>
+                        ) : (
+                            "Save Exam"
+                        )}
                     </button>
                 </Modal.Footer>
             </Modal>

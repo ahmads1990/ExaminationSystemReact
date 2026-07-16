@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Button, Alert, Spinner, Form } from "react-bootstrap";
-import UserService from "../../services/userService";
+import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import PasswordInput from "../../components/common/forms/PasswordInput";
+import UserService from "../../services/userService";
 
 const ChangePasswordPage = () => {
     const [currentPassword, setCurrentPassword] = useState("");
@@ -34,12 +34,12 @@ const ChangePasswordPage = () => {
                 newPassword,
                 confirmPassword
             });
-            
+
             if (response.success) {
-                 setSuccessMsg(response.message || "Password updated successfully.");
-                 setCurrentPassword("");
-                 setNewPassword("");
-                 setConfirmPassword("");
+                setSuccessMsg(response.message || "Password updated successfully.");
+                setCurrentPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
             } else {
                 setError(response.message || "Failed to update password. Please try again.");
             }
@@ -57,21 +57,27 @@ const ChangePasswordPage = () => {
                     <div className="card shadow-sm border-0">
                         <div className="card-body p-4 p-md-5">
                             <h3 className="fw-bold mb-1">Change Password</h3>
-                            <p className="text-muted mb-4">Secure your account by updating your password periodically.</p>
-                            
+                            <p className="text-muted mb-4">
+                                Secure your account by updating your password periodically.
+                            </p>
+
                             {error && (
                                 <Alert variant="danger" className="small py-2" onClose={() => setError("")} dismissible>
                                     {error}
                                 </Alert>
                             )}
                             {successMsg && (
-                                <Alert variant="success" className="small py-2" onClose={() => setSuccessMsg("")} dismissible>
+                                <Alert
+                                    variant="success"
+                                    className="small py-2"
+                                    onClose={() => setSuccessMsg("")}
+                                    dismissible
+                                >
                                     {successMsg}
                                 </Alert>
                             )}
 
                             <Form onSubmit={handleChangePasswordSubmit} className="d-flex flex-column gap-3">
-                                
                                 <PasswordInput
                                     id="currentPassword"
                                     name="currentPassword"
@@ -104,14 +110,16 @@ const ChangePasswordPage = () => {
                                     required
                                 />
 
-                                <Button 
-                                    variant="primary" 
+                                <Button
+                                    variant="primary"
                                     type="submit"
                                     className="w-100 py-3 fw-bold shadow-sm mt-3"
                                     disabled={isSubmitting || !currentPassword || !newPassword || !confirmPassword}
                                 >
                                     {isSubmitting ? (
-                                        <><Spinner animation="border" size="sm" /> Updating...</>
+                                        <>
+                                            <Spinner animation="border" size="sm" /> Updating...
+                                        </>
                                     ) : (
                                         "Update Password"
                                     )}

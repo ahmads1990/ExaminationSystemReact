@@ -1,9 +1,9 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { GetCoursesParams, AddCourseRequest, UpdateCourseRequest } from "../api/requests/CourseRequests";
+import { AddCourseRequest, GetCoursesParams, UpdateCourseRequest } from "../api/requests/CourseRequests";
+import { ApiResponse } from "../api/responses/ApiResponse";
 import { CourseDto } from "../api/responses/courses/CourseDto";
 import { PaginatedResponse } from "../api/responses/PaginatedResponse";
-import { ApiResponse } from "../api/responses/ApiResponse";
 
 const serviceEndpoint = ENDPOINTS.COURSES;
 
@@ -12,7 +12,7 @@ const CourseService = {
         const response = await api.get(serviceEndpoint, { params });
         return response.data;
     },
-    
+
     // Future placeholders for implementation
     createCourse: async (request: AddCourseRequest): Promise<ApiResponse<number>> => {
         const response = await api.post(serviceEndpoint, request);

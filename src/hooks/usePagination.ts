@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 
 interface UsePaginationOptions {
     defaultPageSize?: number;
@@ -13,11 +13,14 @@ export const usePagination = (options: UsePaginationOptions = {}) => {
 
     const totalPages = Math.ceil(totalCount / pageSize);
 
-    const handlePageChange = useCallback((newIndex: number) => {
-        if (newIndex >= 0 && newIndex < totalPages) {
-            setPageIndex(newIndex);
-        }
-    }, [totalPages]);
+    const handlePageChange = useCallback(
+        (newIndex: number) => {
+            if (newIndex >= 0 && newIndex < totalPages) {
+                setPageIndex(newIndex);
+            }
+        },
+        [totalPages]
+    );
 
     const resetPage = useCallback(() => {
         setPageIndex(defaultPageIndex);

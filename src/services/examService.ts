@@ -1,10 +1,16 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { GetExamsParams, AddExamRequest, UpdateExamRequest, PublishExamRequest, AssignQuestionsRequest } from "../api/requests/ExamRequests";
-import { ExamDto } from "../api/responses/exams/ExamDto";
-import { PaginatedResponse } from "../api/responses/PaginatedResponse";
+import {
+    AddExamRequest,
+    AssignQuestionsRequest,
+    GetExamsParams,
+    PublishExamRequest,
+    UpdateExamRequest
+} from "../api/requests/ExamRequests";
 import { ApiResponse } from "../api/responses/ApiResponse";
+import { ExamDto } from "../api/responses/exams/ExamDto";
 import { RejectedEntityDto } from "../api/responses/exams/RejectedEntityDto";
+import { PaginatedResponse } from "../api/responses/PaginatedResponse";
 
 const serviceEndpoint = ENDPOINTS.EXAMS;
 
@@ -42,10 +48,12 @@ const ExamService = {
         return response.data;
     },
     unassignQuestions: async (data: AssignQuestionsRequest): Promise<ApiResponse<RejectedEntityDto[]>> => {
-        const response = await api.patch<ApiResponse<RejectedEntityDto[]>>(`${serviceEndpoint}/unassign-questions`, data);
+        const response = await api.patch<ApiResponse<RejectedEntityDto[]>>(
+            `${serviceEndpoint}/unassign-questions`,
+            data
+        );
         return response.data;
-    },
+    }
 };
 
 export default ExamService;
-

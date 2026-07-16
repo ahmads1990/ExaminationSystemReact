@@ -1,7 +1,12 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { AvailableExamDto, ExamQuestionDto, AttemptResultDto, StudentAttemptSummaryDto } from "../api/responses/StudentExamResponses";
 import { ApiResponse } from "../api/responses/ApiResponse";
+import {
+    AttemptResultDto,
+    AvailableExamDto,
+    ExamQuestionDto,
+    StudentAttemptSummaryDto
+} from "../api/responses/StudentExamResponses";
 
 const serviceEndpoint = ENDPOINTS.STUDENT_EXAMS;
 

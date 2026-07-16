@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button, Alert, Spinner, Form } from "react-bootstrap";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { Alert, Button, Form, Spinner } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import AuthService from "../../services/authService";
 import OtpInput from "../../components/common/forms/OtpInput";
 import PasswordInput from "../../components/common/forms/PasswordInput";
+import AuthService from "../../services/authService";
 
 const ResetPasswordPage = () => {
     const navigate = useNavigate();
@@ -47,10 +47,10 @@ const ResetPasswordPage = () => {
                 newPassword,
                 confirmPassword
             });
-            
+
             if (response.success) {
-                 // On success → redirect to /login with "Password changed" toast
-                 navigate('/login', { state: { message: "Password reset successfully! You can now login." } });
+                // On success → redirect to /login with "Password changed" toast
+                navigate("/login", { state: { message: "Password reset successfully! You can now login." } });
             } else {
                 setError(response.message || "Failed to reset password. Please try again.");
             }
@@ -62,7 +62,7 @@ const ResetPasswordPage = () => {
     };
 
     return (
-        <div className="animate-fade-in mx-auto" style={{ maxWidth: '400px' }}>
+        <div className="animate-fade-in mx-auto" style={{ maxWidth: "400px" }}>
             <div className="text-center mb-4">
                 <h2 className="fw-bold mb-2">Reset Password ✨</h2>
                 <p className="text-muted px-2">
@@ -80,15 +80,13 @@ const ResetPasswordPage = () => {
             <Form onSubmit={handleResetSubmit} className="d-flex flex-column gap-3">
                 {/* OTP Input */}
                 <div>
-                    <Form.Label className="text-start mb-2 ms-1 fw-semibold text-secondary" style={{ fontSize: '0.9rem' }}>
+                    <Form.Label
+                        className="text-start mb-2 ms-1 fw-semibold text-secondary"
+                        style={{ fontSize: "0.9rem" }}
+                    >
                         Enter 6-digit code
                     </Form.Label>
-                    <OtpInput 
-                        length={6} 
-                        value={otp} 
-                        onChange={setOtp} 
-                        error={!!error}
-                    />
+                    <OtpInput length={6} value={otp} onChange={setOtp} error={!!error} />
                 </div>
 
                 {/* Password Inputs */}
@@ -112,14 +110,16 @@ const ResetPasswordPage = () => {
                     required
                 />
 
-                <Button 
-                    variant="primary" 
+                <Button
+                    variant="primary"
                     type="submit"
                     className="w-100 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 mt-2"
                     disabled={isSubmitting || otp.length < 6 || !newPassword || !confirmPassword}
                 >
                     {isSubmitting ? (
-                        <><Spinner animation="border" size="sm" /> Resetting...</>
+                        <>
+                            <Spinner animation="border" size="sm" /> Resetting...
+                        </>
                     ) : (
                         "Reset Password"
                     )}
@@ -129,7 +129,7 @@ const ResetPasswordPage = () => {
 
                 <div className="text-center">
                     <p className="text-muted small mb-0">
-                        Remembered your password? {" "}
+                        Remembered your password?{" "}
                         <Link to="/login" className="text-primary fw-bold text-decoration-none">
                             Back to Login
                         </Link>

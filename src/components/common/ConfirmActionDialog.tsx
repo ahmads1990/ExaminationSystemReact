@@ -52,12 +52,7 @@ const ConfirmActionDialog = ({
                 {description && <p className="text-muted small mb-4">{description}</p>}
 
                 <div className="d-flex gap-2 justify-content-center">
-                    <button
-                        type="button"
-                        className="btn btn-secondary px-4"
-                        onClick={onHide}
-                        disabled={isLoading}
-                    >
+                    <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isLoading}>
                         Cancel
                     </button>
                     <button

@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
 
 interface ErrorDialogProps {
     show: boolean;
     onHide: () => void;
-    error?: unknown;       // raw Axios error — parsed automatically
-    message?: string;      // plain message when no Axios error
+    error?: unknown; // raw Axios error — parsed automatically
+    message?: string; // plain message when no Axios error
     details?: string[];
     variant?: "error" | "success";
 }
@@ -38,14 +38,25 @@ const ErrorDialog: React.FC<ErrorDialogProps> = ({ show, onHide, error, message,
                 <p className="mb-3">{parsed.message}</p>
 
                 {parsed.details.length > 0 && (
-                    <div className="text-start bg-light p-3 rounded-3 mb-3 overflow-auto border border-light-subtle" style={{ maxHeight: 180 }}>
+                    <div
+                        className="text-start bg-light p-3 rounded-3 mb-3 overflow-auto border border-light-subtle"
+                        style={{ maxHeight: 180 }}
+                    >
                         <ul className="mb-0 ps-3 small text-secondary">
-                            {parsed.details.map((d, i) => <li key={i} className="mb-1">{d}</li>)}
+                            {parsed.details.map((d, i) => (
+                                <li key={i} className="mb-1">
+                                    {d}
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 )}
 
-                <Button variant={variant === "success" ? "success" : "danger"} className="px-5 rounded-3 fw-medium" onClick={onHide}>
+                <Button
+                    variant={variant === "success" ? "success" : "danger"}
+                    className="px-5 rounded-3 fw-medium"
+                    onClick={onHide}
+                >
                     OK
                 </Button>
             </Modal.Body>

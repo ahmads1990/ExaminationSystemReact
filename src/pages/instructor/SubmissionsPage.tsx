@@ -1,15 +1,15 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Card, Badge, Alert } from "react-bootstrap";
 import { ArrowLeft, Search } from "lucide-react";
-import GenericTable from "../../components/common/Table";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, Badge, Card } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import ActionButton from "../../components/common/ActionButton";
-import InstructorService from "../../services/instructorService";
-import ExamService from "../../services/examService";
-import { usePagination } from "../../hooks/usePagination";
+import GenericTable from "../../components/common/Table";
+import { ExamAttemptStatus, SortingDirection } from "../../enums";
 import { useDebounce } from "../../hooks/useDebounce";
+import { usePagination } from "../../hooks/usePagination";
 import useQuery from "../../hooks/useQuery";
-import { SortingDirection, ExamAttemptStatus } from "../../enums";
+import ExamService from "../../services/examService";
+import InstructorService from "../../services/instructorService";
 import { formatDate } from "../../utils/dateUtils";
 
 const SubmissionsPage = () => {
@@ -18,15 +18,9 @@ const SubmissionsPage = () => {
     const examIdNum = Number(examId);
 
     // Pagination Hook
-    const {
-        pageIndex,
-        pageSize,
-        totalCount,
-        setTotalCount,
-        setPageIndex,
-        setPageSize,
-        resetPage
-    } = usePagination({ defaultPageSize: 10 });
+    const { pageIndex, pageSize, totalCount, setTotalCount, setPageIndex, setPageSize, resetPage } = usePagination({
+        defaultPageSize: 10
+    });
 
     // Search and Filter States
     const [searchTerm, setSearchTerm] = useState("");
@@ -37,19 +31,20 @@ const SubmissionsPage = () => {
     const [orderBy, setOrderBy] = useState<string>("StudentName");
     const [sortDirection, setSortDirection] = useState<SortingDirection>(SortingDirection.Ascending);
 
-    const handleSort = useCallback((field: string) => {
-        if (orderBy === field) {
-            setSortDirection(prev =>
-                prev === SortingDirection.Ascending
-                    ? SortingDirection.Descending
-                    : SortingDirection.Ascending
-            );
-        } else {
-            setOrderBy(field);
-            setSortDirection(SortingDirection.Ascending);
-        }
-        resetPage();
-    }, [orderBy, resetPage]);
+    const handleSort = useCallback(
+        (field: string) => {
+            if (orderBy === field) {
+                setSortDirection((prev) =>
+                    prev === SortingDirection.Ascending ? SortingDirection.Descending : SortingDirection.Ascending
+                );
+            } else {
+                setOrderBy(field);
+                setSortDirection(SortingDirection.Ascending);
+            }
+            resetPage();
+        },
+        [orderBy, resetPage]
+    );
 
     // Fetch Exam Info for Header
     const { data: examResponse, isPending: isLoadingExam } = useQuery(
@@ -59,15 +54,20 @@ const SubmissionsPage = () => {
     const examInfo = examResponse?.data;
 
     // Fetch Submissions Stats
-    const { data: response, isPending: isLoading, error } = useQuery(
-        () => InstructorService.getExamSubmissions(examIdNum, {
-            StudentName: debouncedSearch || undefined,
-            Status: statusFilter || undefined,
-            PageIndex: pageIndex,
-            PageSize: pageSize,
-            OrderBy: orderBy,
-            SortDirection: sortDirection
-        }),
+    const {
+        data: response,
+        isPending: isLoading,
+        error
+    } = useQuery(
+        () =>
+            InstructorService.getExamSubmissions(examIdNum, {
+                StudentName: debouncedSearch || undefined,
+                Status: statusFilter || undefined,
+                PageIndex: pageIndex,
+                PageSize: pageSize,
+                OrderBy: orderBy,
+                SortDirection: sortDirection
+            }),
         [examIdNum, debouncedSearch, statusFilter, pageIndex, pageSize, orderBy, sortDirection]
     );
 
@@ -86,116 +86,145 @@ const SubmissionsPage = () => {
         resetPage();
     }, [debouncedSearch, statusFilter, resetPage]);
 
-    const handleSetPagination = useCallback((updater: any) => {
-        if (typeof updater === 'function') {
-            const newState = updater({ pageIndex, pageSize });
-            setPageIndex(newState.pageIndex);
-            if (newState.pageSize !== pageSize) {
-                setPageSize(newState.pageSize);
+    const handleSetPagination = useCallback(
+        (updater: any) => {
+            if (typeof updater === "function") {
+                const newState = updater({ pageIndex, pageSize });
+                setPageIndex(newState.pageIndex);
+                if (newState.pageSize !== pageSize) {
+                    setPageSize(newState.pageSize);
+                }
             }
-        }
-    }, [pageIndex, pageSize, setPageIndex, setPageSize]);
+        },
+        [pageIndex, pageSize, setPageIndex, setPageSize]
+    );
 
     // Sort Arrows Indicator
-    const renderSortArrow = useCallback((field: string) => {
-        const isSorted = orderBy === field;
-        return (
-            <span className={`ms-1 ${isSorted ? 'text-primary fw-bold' : 'text-muted opacity-50'}`} style={{ fontSize: '0.65rem' }}>
-                {isSorted ? (sortDirection === SortingDirection.Ascending ? "▲" : "▼") : "▲▼"}
-            </span>
-        );
-    }, [orderBy, sortDirection]);
+    const renderSortArrow = useCallback(
+        (field: string) => {
+            const isSorted = orderBy === field;
+            return (
+                <span
+                    className={`ms-1 ${isSorted ? "text-primary fw-bold" : "text-muted opacity-50"}`}
+                    style={{ fontSize: "0.65rem" }}
+                >
+                    {isSorted ? (sortDirection === SortingDirection.Ascending ? "▲" : "▼") : "▲▼"}
+                </span>
+            );
+        },
+        [orderBy, sortDirection]
+    );
 
-    const columns: any[] = useMemo(() => [
-        {
-            id: "studentName",
-            header: () => (
-                <div className="d-flex align-items-center cursor-pointer select-none" onClick={() => handleSort("StudentName")}>
-                    Student Name {renderSortArrow("StudentName")}
-                </div>
-            ),
-            accessorKey: "studentName",
-            size: 250,
-            cell: (info: any) => (
-                <div className="fw-semibold text-secondary-800">{info.getValue() || "N/A"}</div>
-            )
-        },
-        {
-            id: "status",
-            header: () => (
-                <div className="d-flex align-items-center cursor-pointer select-none" onClick={() => handleSort("Status")}>
-                    Status {renderSortArrow("Status")}
-                </div>
-            ),
-            accessorKey: "status",
-            size: 150,
-            cell: (info: any) => {
-                const status = info.getValue() as ExamAttemptStatus;
-                let badgeBg = "secondary";
-                switch (status) {
-                    case ExamAttemptStatus.NotStarted:
-                        badgeBg = "secondary";
-                        break;
-                    case ExamAttemptStatus.InProgress:
-                        badgeBg = "primary";
-                        break;
-                    case ExamAttemptStatus.Completed:
-                        badgeBg = "warning";
-                        break;
-                    case ExamAttemptStatus.TimedOut:
-                        badgeBg = "danger";
-                        break;
-                    case ExamAttemptStatus.Grading:
-                        badgeBg = "info";
-                        break;
-                    case ExamAttemptStatus.Graded:
-                        badgeBg = "success";
-                        break;
+    const columns: any[] = useMemo(
+        () => [
+            {
+                id: "studentName",
+                header: () => (
+                    <div
+                        className="d-flex align-items-center cursor-pointer select-none"
+                        onClick={() => handleSort("StudentName")}
+                    >
+                        Student Name {renderSortArrow("StudentName")}
+                    </div>
+                ),
+                accessorKey: "studentName",
+                size: 250,
+                cell: (info: any) => <div className="fw-semibold text-secondary-800">{info.getValue() || "N/A"}</div>
+            },
+            {
+                id: "status",
+                header: () => (
+                    <div
+                        className="d-flex align-items-center cursor-pointer select-none"
+                        onClick={() => handleSort("Status")}
+                    >
+                        Status {renderSortArrow("Status")}
+                    </div>
+                ),
+                accessorKey: "status",
+                size: 150,
+                cell: (info: any) => {
+                    const status = info.getValue() as ExamAttemptStatus;
+                    let badgeBg = "secondary";
+                    switch (status) {
+                        case ExamAttemptStatus.NotStarted:
+                            badgeBg = "secondary";
+                            break;
+                        case ExamAttemptStatus.InProgress:
+                            badgeBg = "primary";
+                            break;
+                        case ExamAttemptStatus.Completed:
+                            badgeBg = "warning";
+                            break;
+                        case ExamAttemptStatus.TimedOut:
+                            badgeBg = "danger";
+                            break;
+                        case ExamAttemptStatus.Grading:
+                            badgeBg = "info";
+                            break;
+                        case ExamAttemptStatus.Graded:
+                            badgeBg = "success";
+                            break;
+                    }
+                    return <Badge bg={badgeBg}>{status}</Badge>;
                 }
-                return <Badge bg={badgeBg}>{status}</Badge>;
+            },
+            {
+                id: "grade",
+                header: () => (
+                    <div
+                        className="d-flex align-items-center cursor-pointer select-none"
+                        onClick={() => handleSort("Grade")}
+                    >
+                        Grade {renderSortArrow("Grade")}
+                    </div>
+                ),
+                size: 180,
+                cell: ({ row }: any) => {
+                    const attempt = row.original;
+                    if (attempt.status === ExamAttemptStatus.Graded) {
+                        return (
+                            <span className="fw-bold text-success">
+                                {attempt.grade?.toFixed(1)} / {attempt.maxGrade?.toFixed(1)}
+                            </span>
+                        );
+                    }
+                    if (attempt.status === ExamAttemptStatus.Grading) {
+                        return <span className="text-info fw-medium">Grading...</span>;
+                    }
+                    if (
+                        attempt.status === ExamAttemptStatus.Completed ||
+                        attempt.status === ExamAttemptStatus.TimedOut
+                    ) {
+                        return <span className="text-secondary fw-medium">Pending Grade</span>;
+                    }
+                    return <span className="text-muted">-</span>;
+                }
+            },
+            {
+                id: "createDate",
+                header: () => (
+                    <div
+                        className="d-flex align-items-center cursor-pointer select-none"
+                        onClick={() => handleSort("CreateDate")}
+                    >
+                        Started Date {renderSortArrow("CreateDate")}
+                    </div>
+                ),
+                accessorKey: "createDate",
+                size: 200,
+                cell: (info: any) => <span>{formatDate(info.getValue())}</span>
+            },
+            {
+                id: "completionTime",
+                header: "Completion Time",
+                accessorKey: "completionTime",
+                size: 180,
+                cell: (info: any) => <span>{info.getValue() || "-"}</span>
             }
-        },
-        {
-            id: "grade",
-            header: () => (
-                <div className="d-flex align-items-center cursor-pointer select-none" onClick={() => handleSort("Grade")}>
-                    Grade {renderSortArrow("Grade")}
-                </div>
-            ),
-            size: 180,
-            cell: ({ row }: any) => {
-                const attempt = row.original;
-                if (attempt.status === ExamAttemptStatus.Graded) {
-                    return <span className="fw-bold text-success">{attempt.grade?.toFixed(1)} / {attempt.maxGrade?.toFixed(1)}</span>;
-                }
-                if (attempt.status === ExamAttemptStatus.Grading) {
-                    return <span className="text-info fw-medium">Grading...</span>;
-                }
-                if (attempt.status === ExamAttemptStatus.Completed || attempt.status === ExamAttemptStatus.TimedOut) {
-                    return <span className="text-secondary fw-medium">Pending Grade</span>;
-                }
-                return <span className="text-muted">-</span>;
-            }
-        },
-        {
-            id: "createDate",
-            header: () => (
-                <div className="d-flex align-items-center cursor-pointer select-none" onClick={() => handleSort("CreateDate")}>
-                    Started Date {renderSortArrow("CreateDate")}
-                </div>
-            ),
-            accessorKey: "createDate",
-            size: 200,
-            cell: (info: any) => <span>{formatDate(info.getValue())}</span>
-        },
-        {
-            id: "completionTime",
-            header: "Completion Time",
-            accessorKey: "completionTime",
-            size: 180,
-            cell: (info: any) => <span>{info.getValue() || "-"}</span>
-        }
-    ], [orderBy, sortDirection, handleSort, renderSortArrow]);
+        ],
+        [orderBy, sortDirection, handleSort, renderSortArrow]
+    );
 
     if (isNaN(examIdNum)) {
         return <Alert variant="danger">Invalid Exam ID</Alert>;
@@ -206,14 +235,12 @@ const SubmissionsPage = () => {
             {/* Header Panel */}
             <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div className="d-flex align-items-center gap-3">
-                    <ActionButton variant="outline-secondary" onClick={() => navigate('/instructor/exams')}>
+                    <ActionButton variant="outline-secondary" onClick={() => navigate("/instructor/exams")}>
                         <ArrowLeft size={18} />
                     </ActionButton>
                     <div>
                         <h2 className="mb-1 fw-bold">Exam Submissions</h2>
-                        <span className="text-muted">
-                            {isLoadingExam ? "Loading exam info..." : examInfo?.title}
-                        </span>
+                        <span className="text-muted">{isLoadingExam ? "Loading exam info..." : examInfo?.title}</span>
                     </div>
                 </div>
             </div>

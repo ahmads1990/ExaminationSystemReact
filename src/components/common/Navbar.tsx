@@ -1,9 +1,9 @@
+import { Menu, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import UserMenu from "./UserMenu";
 import { useAuth } from "../../contexts/AuthContext";
-import { Menu, Sun, Moon } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
+import UserMenu from "./UserMenu";
 
 interface NavbarProps {
     onToggleSidebar?: () => void;
@@ -52,7 +52,6 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                 <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="mainNavbar">
                     {/* SECTION 2: CENTERED LINKS REMOVED */}
                     <div className="mx-auto" />
-
 
                     {/* SECTION 3: AUTH / USER ACTIONS */}
                     <div className="d-flex align-items-center gap-3">

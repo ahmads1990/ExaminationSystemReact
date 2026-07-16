@@ -44,11 +44,7 @@ const SelectInput = ({
                         </option>
                     ))}
                 </Form.Select>
-                {error && (
-                    <Form.Control.Feedback type="invalid">
-                        {error}
-                    </Form.Control.Feedback>
-                )}
+                {error && <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>}
             </FloatingLabel>
         </div>
     );

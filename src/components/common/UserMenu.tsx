@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../../services/authService";
 import { useAuth } from "../../contexts/AuthContext";
+import AuthService from "../../services/authService";
 
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +23,8 @@ const UserMenu = () => {
     // Use context user, fallback to dummy data if missing
     const displayUser = {
         name: user?.name || "Admin",
-        avatar: "https://ui-avatars.com/api/?name=" + (user?.name || "Admin") + "&background=10B981&color=fff&rounded=true"
+        avatar:
+            "https://ui-avatars.com/api/?name=" + (user?.name || "Admin") + "&background=10B981&color=fff&rounded=true"
     };
 
     return (
@@ -48,7 +49,10 @@ const UserMenu = () => {
                 </div>
             </a>
 
-            <ul className={`dropdown-menu dropdown-menu-end dropdown-menu-custom border-0 shadow-lg ${isOpen ? "show" : ""}`} style={{ marginTop: 0 }}>
+            <ul
+                className={`dropdown-menu dropdown-menu-end dropdown-menu-custom border-0 shadow-lg ${isOpen ? "show" : ""}`}
+                style={{ marginTop: 0 }}
+            >
                 <li>
                     <Link className="dropdown-item dropdown-item-custom" to="/profile">
                         <i className="bi bi-person me-2"></i>Profile
@@ -64,7 +68,9 @@ const UserMenu = () => {
                         <i className="bi bi-shield-lock me-2"></i>Change Password
                     </Link>
                 </li>
-                <li><hr className="dropdown-divider" /></li>
+                <li>
+                    <hr className="dropdown-divider" />
+                </li>
                 <li>
                     <a href="#" className="dropdown-item dropdown-item-custom text-danger" onClick={handleLogout}>
                         <i className="bi bi-box-arrow-right me-2"></i>Log Out

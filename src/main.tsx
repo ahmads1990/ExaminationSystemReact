@@ -1,10 +1,10 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import App from "./App.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ThemeProvider } from "./contexts/ThemeContext.tsx";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import "./styles/components.css";
 

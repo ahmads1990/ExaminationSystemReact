@@ -1,368 +1,410 @@
 /* src/styles/components.css - Brand Components */
 
 /* --- Buttons --- */
-.btn-primary, .btn-auth-primary {
-  background-color: var(--color-primary-500);
-  color: var(--text-on-primary);
-  border: none;
-  font-weight: 500;
-  border-radius: var(--radius-md);
-  transition: var(--transition-fast);
+.btn-primary,
+.btn-auth-primary {
+    background-color: var(--color-primary-500);
+    color: var(--text-on-primary);
+    border: none;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-auth-primary:hover {
-  background-color: var(--color-primary-600);
-  color: var(--text-on-primary);
-  box-shadow: var(--shadow-primary);
-  transform: translateY(-1px);
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-auth-primary:hover {
+    background-color: var(--color-primary-600);
+    color: var(--text-on-primary);
+    box-shadow: var(--shadow-primary);
+    transform: translateY(-1px);
 }
 
-.btn-primary:active, .btn-auth-primary:active {
-  background-color: var(--color-primary-700);
-  transform: translateY(0);
+.btn-primary:active,
+.btn-auth-primary:active {
+    background-color: var(--color-primary-700);
+    transform: translateY(0);
 }
 
 .btn-primary:disabled {
-  background-color: var(--color-primary-400);
-  opacity: 0.7;
+    background-color: var(--color-primary-400);
+    opacity: 0.7;
 }
 
-.btn-secondary, .btn-outline, .btn-auth-outline {
-  background-color: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--color-secondary-950);
-  font-weight: 500;
-  border-radius: var(--radius-md);
-  transition: var(--transition-fast);
+.btn-secondary,
+.btn-outline,
+.btn-auth-outline {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--color-secondary-950);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
 }
 
-.btn-secondary:hover, .btn-outline:hover, .btn-auth-outline:hover {
-  border-color: var(--color-primary-500);
-  color: var(--color-primary-500);
-  background-color: var(--color-primary-50);
+.btn-secondary:hover,
+.btn-outline:hover,
+.btn-auth-outline:hover {
+    border-color: var(--color-primary-500);
+    color: var(--color-primary-500);
+    background-color: var(--color-primary-50);
 }
 
 .btn-danger {
-  background-color: var(--color-error);
-  color: var(--text-on-primary);
-  border: none;
-  font-weight: 500;
-  border-radius: var(--radius-md);
-  transition: var(--transition-fast);
+    background-color: var(--color-error);
+    color: var(--text-on-primary);
+    border: none;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
 }
 
 .btn-danger:hover {
-  background-color: #dc2626; /* darker red */
+    background-color: #dc2626; /* darker red */
 }
 
 /* --- Cards --- */
-.card, .card-custom {
-  background-color: var(--surface-card);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
+.card,
+.card-custom {
+    background-color: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
 }
 
-.card:hover, .card-custom:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+.card:hover,
+.card-custom:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 /* --- Badges --- */
-.badge-published, .badge-success {
-  background-color: var(--color-primary-50);
-  color: var(--color-primary-700);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  display: inline-block;
-  font-size: var(--text-xs);
+.badge-published,
+.badge-success {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-700);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    display: inline-block;
+    font-size: var(--text-xs);
 }
 
-.badge-draft, .badge-neutral {
-  background-color: var(--color-secondary-200);
-  color: var(--color-secondary-800);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  display: inline-block;
-  font-size: var(--text-xs);
+.badge-draft,
+.badge-neutral {
+    background-color: var(--color-secondary-200);
+    color: var(--color-secondary-800);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    display: inline-block;
+    font-size: var(--text-xs);
 }
 
-.badge-expired, .badge-warning {
-  background-color: var(--color-accent-400);
-  color: var(--color-accent-700);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  display: inline-block;
-  font-size: var(--text-xs);
+.badge-expired,
+.badge-warning {
+    background-color: var(--color-accent-400);
+    color: var(--color-accent-700);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    display: inline-block;
+    font-size: var(--text-xs);
 }
 
 /* --- Forms & Inputs --- */
-.form-control, .form-select {
-  border-radius: var(--radius-md);
-  border-color: var(--surface-border);
-  padding: 0.6rem 1rem;
+.form-control,
+.form-select {
+    border-radius: var(--radius-md);
+    border-color: var(--surface-border);
+    padding: 0.6rem 1rem;
 }
 
-.form-control:focus, .form-select:focus {
-  border-color: var(--color-primary-400) !important;
-  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.2) !important;
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary-400) !important;
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.2) !important;
 }
 
 /* --- Helpers --- */
 .text-primary {
-  color: var(--color-primary-600) !important;
+    color: var(--color-primary-600) !important;
 }
 
 .bg-primary {
-  background-color: var(--color-primary-500) !important;
+    background-color: var(--color-primary-500) !important;
 }
 
 .hover-opacity:hover {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+    animation: fadeIn 0.4s ease-out forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Custom Tabs */
 .custom-tabs .nav-link {
-  color: var(--color-secondary-600);
-  font-weight: 500;
-  border: none;
-  border-bottom: 2px solid transparent;
-  padding-bottom: 1rem;
+    color: var(--color-secondary-600);
+    font-weight: 500;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 1rem;
 }
 .custom-tabs .nav-link.active {
-  color: var(--color-primary-600);
-  background: transparent;
-  border-bottom-color: var(--color-primary-600);
-  font-weight: 600;
+    color: var(--color-primary-600);
+    background: transparent;
+    border-bottom-color: var(--color-primary-600);
+    font-weight: 600;
 }
 .custom-tabs .nav-link:hover {
-  color: var(--color-primary-600);
-  border-color: transparent;
+    color: var(--color-primary-600);
+    border-color: transparent;
 }
 
 /* --- Premium Navigation & Navbar --- */
 .navbar-premium {
-  background: rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
-  box-shadow: var(--shadow-sm) !important;
-  padding-top: 0.75rem !important;
-  padding-bottom: 0.75rem !important;
-  transition: all var(--transition-normal);
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+    box-shadow: var(--shadow-sm) !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    transition: all var(--transition-normal);
 }
 
 .navbar-brand-text {
-  font-weight: 800 !important;
-  letter-spacing: -0.03em;
-  color: var(--color-secondary-900) !important;
-  transition: transform var(--transition-fast);
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    color: var(--color-secondary-900) !important;
+    transition: transform var(--transition-fast);
 }
 
 .navbar-brand-text:hover {
-  transform: scale(1.02);
+    transform: scale(1.02);
 }
 
 .nav-link-custom {
-  color: var(--color-secondary-600) !important;
-  font-weight: 500 !important;
-  font-size: var(--text-sm) !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: var(--radius-md) !important;
-  transition: all var(--transition-fast) !important;
-  margin: 0 0.125rem;
+    color: var(--color-secondary-600) !important;
+    font-weight: 500 !important;
+    font-size: var(--text-sm) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--radius-md) !important;
+    transition: all var(--transition-fast) !important;
+    margin: 0 0.125rem;
 }
 
 .nav-link-custom:hover {
-  color: var(--color-primary-600) !important;
-  background-color: var(--color-primary-50) !important;
+    color: var(--color-primary-600) !important;
+    background-color: var(--color-primary-50) !important;
 }
 
 .nav-link-custom.active {
-  color: var(--color-primary-700) !important;
-  background-color: var(--color-primary-100) !important;
-  font-weight: 600 !important;
+    color: var(--color-primary-700) !important;
+    background-color: var(--color-primary-100) !important;
+    font-weight: 600 !important;
 }
 
 .dropdown-menu-custom {
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: var(--shadow-lg) !important;
-  background-color: #ffffff !important;
-  padding: 0.5rem !important;
-  min-width: 180px !important;
-  transform: translateY(10px);
-  transition: all var(--transition-fast);
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-lg) !important;
+    background-color: #ffffff !important;
+    padding: 0.5rem !important;
+    min-width: 180px !important;
+    transform: translateY(10px);
+    transition: all var(--transition-fast);
 }
 
 .dropdown-item-custom {
-  border-radius: var(--radius-md) !important;
-  padding: 0.5rem 1rem !important;
-  font-size: var(--text-sm) !important;
-  color: var(--color-secondary-600) !important;
-  transition: all var(--transition-fast) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0.5rem 1rem !important;
+    font-size: var(--text-sm) !important;
+    color: var(--color-secondary-600) !important;
+    transition: all var(--transition-fast) !important;
 }
 
-.dropdown-item-custom:hover, .dropdown-item-custom:focus {
-  background-color: var(--color-primary-50) !important;
-  color: var(--color-primary-700) !important;
+.dropdown-item-custom:hover,
+.dropdown-item-custom:focus {
+    background-color: var(--color-primary-50) !important;
+    color: var(--color-primary-700) !important;
 }
 
 /* ─── Dropdown Hover Gap Fix ─── */
 .dropdown-menu-custom::before {
-  content: '';
-  position: absolute;
-  top: -15px;
-  left: 0;
-  right: 0;
-  height: 15px;
-  background: transparent;
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 0;
+    right: 0;
+    height: 15px;
+    background: transparent;
 }
 
 /* ─── Font Size Utilities ─── */
-.font-size-10 { font-size: 0.625rem !important; }
-.font-size-11 { font-size: 0.6875rem !important; }
-.font-size-12 { font-size: 0.75rem !important; }
-.font-size-13 { font-size: 0.8125rem !important; }
-.font-size-14 { font-size: 0.875rem !important; }
-.font-size-15 { font-size: 0.9375rem !important; }
+.font-size-10 {
+    font-size: 0.625rem !important;
+}
+.font-size-11 {
+    font-size: 0.6875rem !important;
+}
+.font-size-12 {
+    font-size: 0.75rem !important;
+}
+.font-size-13 {
+    font-size: 0.8125rem !important;
+}
+.font-size-14 {
+    font-size: 0.875rem !important;
+}
+.font-size-15 {
+    font-size: 0.9375rem !important;
+}
 
 /* ─── Spacing Utilities ─── */
-.p-3\.5 { padding: 1.25rem !important; }
-.py-3\.5 { padding-top: 1.25rem !important; padding-bottom: 1.25rem !important; }
-.px-3\.5 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
-.ps-3\.5 { padding-left: 1.25rem !important; }
-.pe-3\.5 { padding-right: 1.25rem !important; }
+.p-3\.5 {
+    padding: 1.25rem !important;
+}
+.py-3\.5 {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+}
+.px-3\.5 {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+}
+.ps-3\.5 {
+    padding-left: 1.25rem !important;
+}
+.pe-3\.5 {
+    padding-right: 1.25rem !important;
+}
 
 /* ─── Bootstrap Semantic Color Overrides ─── */
 .bg-success {
-  background-color: var(--color-success) !important;
+    background-color: var(--color-success) !important;
 }
 .text-success {
-  color: var(--color-success) !important;
+    color: var(--color-success) !important;
 }
 .bg-success-subtle {
-  background-color: var(--color-primary-50) !important;
+    background-color: var(--color-primary-50) !important;
 }
 .text-success-800 {
-  color: var(--color-primary-700) !important;
+    color: var(--color-primary-700) !important;
 }
 .bg-danger {
-  background-color: var(--color-error) !important;
+    background-color: var(--color-error) !important;
 }
 .text-danger {
-  color: var(--color-error) !important;
+    color: var(--color-error) !important;
 }
 .bg-danger-subtle {
-  background-color: #FEF2F2 !important;
+    background-color: #fef2f2 !important;
 }
 .text-danger-800 {
-  color: #991B1B !important;
+    color: #991b1b !important;
 }
 .bg-warning {
-  background-color: var(--color-warning) !important;
+    background-color: var(--color-warning) !important;
 }
 .text-warning {
-  color: var(--color-warning) !important;
+    color: var(--color-warning) !important;
 }
 .bg-warning-subtle {
-  background-color: #FFFBEB !important;
+    background-color: #fffbeb !important;
 }
 .text-warning-800 {
-  color: var(--color-accent-700) !important;
+    color: var(--color-accent-700) !important;
 }
 
 /* ─── Skeleton Animations & Classes ─── */
 @keyframes skeleton-pulse-fade {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
 }
 
 .skeleton-pulse {
-  animation: skeleton-pulse-fade 1.5s ease-in-out infinite;
+    animation: skeleton-pulse-fade 1.5s ease-in-out infinite;
 }
 
 .skeleton-line {
-  height: 1rem;
-  background-color: #E5E7EB;
-  border-radius: 0.25rem;
-  width: 100%;
+    height: 1rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+    width: 100%;
 }
 
 .skeleton-title {
-  height: 1.5rem;
-  background-color: #E5E7EB;
-  border-radius: 0.375rem;
-  width: 75%;
+    height: 1.5rem;
+    background-color: #e5e7eb;
+    border-radius: 0.375rem;
+    width: 75%;
 }
 
 .skeleton-circle {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: #E5E7EB;
-  border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #e5e7eb;
+    border-radius: 50%;
 }
 
 /* ─── Sidebar Resize Handle ─── */
 .sidebar-resize-handle:hover,
 .sidebar-resize-handle:active {
-  background-color: var(--color-primary-500) !important;
-  width: 6px !important;
+    background-color: var(--color-primary-500) !important;
+    width: 6px !important;
 }
 
 /* ─── Premium Dark Footer ─── */
 .footer-premium {
-  background-color: #111827 !important; /* Dark Slate Gray */
-  color: #9CA3AF !important;
-  border-top: 1px solid #374151 !important;
-  padding-top: 2rem !important;
-  padding-bottom: 2rem !important;
+    background-color: #111827 !important; /* Dark Slate Gray */
+    color: #9ca3af !important;
+    border-top: 1px solid #374151 !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
 }
 
 .footer-premium a {
-  color: #9CA3AF !important;
-  transition: color var(--transition-normal);
+    color: #9ca3af !important;
+    transition: color var(--transition-normal);
 }
 
 .footer-premium a:hover {
-  color: #F3F4F6 !important;
+    color: #f3f4f6 !important;
 }
 
 /* ─── Custom Premium Large Switch (Green) ─── */
 .custom-switch-large .form-check-input {
-  width: 2.8rem !important;
-  height: 1.4rem !important;
-  cursor: pointer !important;
+    width: 2.8rem !important;
+    height: 1.4rem !important;
+    cursor: pointer !important;
 }
 
 .custom-switch-large .form-check-input:checked {
-  background-color: var(--color-primary-500) !important; /* Emerald green */
-  border-color: var(--color-primary-500) !important;
+    background-color: var(--color-primary-500) !important; /* Emerald green */
+    border-color: var(--color-primary-500) !important;
 }
 
 .custom-switch-large .form-check-input:focus {
-  border-color: var(--color-primary-500) !important;
-  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+    border-color: var(--color-primary-500) !important;
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
 }
-
-
-
-
-

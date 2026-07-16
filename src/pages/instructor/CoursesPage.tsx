@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { Search, Plus, BookOpen, Clock, CalendarDays, Users } from "lucide-react";
-import CourseService from "../../services/courseService";
+import { BookOpen, CalendarDays, Clock, Plus, Search, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import {} from "react-bootstrap";
+import toast from "react-hot-toast";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
-import { useDebounce } from "../../hooks/useDebounce";
-import { usePagination } from "../../hooks/usePagination";
-import { formatDate } from "../../utils/dateUtils";
 import ActionButton from "../../components/common/ActionButton";
-import { } from "react-bootstrap";
+import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import AppPagination from "../../components/common/Pagination";
 import SkeletonCard from "../../components/common/SkeletonCard";
-import toast from "react-hot-toast";
 import AddCourseModal from "../../components/instructor/AddCourseModal";
 import EditCourseModal from "../../components/instructor/EditCourseModal";
-import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
+import { useDebounce } from "../../hooks/useDebounce";
+import { usePagination } from "../../hooks/usePagination";
+import CourseService from "../../services/courseService";
+import { formatDate } from "../../utils/dateUtils";
 
 const CoursesPage = () => {
     const [courses, setCourses] = useState<CourseDto[]>([]);
@@ -47,8 +47,12 @@ const CoursesPage = () => {
         }
     };
 
-    useEffect(() => { resetPage(); }, [debouncedSearch, resetPage]);
-    useEffect(() => { fetchCourses(); }, [debouncedSearch, pageIndex, pageSize]);
+    useEffect(() => {
+        resetPage();
+    }, [debouncedSearch, resetPage]);
+    useEffect(() => {
+        fetchCourses();
+    }, [debouncedSearch, pageIndex, pageSize]);
 
     // CRUD handlers
     const handleCourseCreated = (course: CourseDto) => {
@@ -158,7 +162,8 @@ const CoursesPage = () => {
                                         >
                                             <span className="d-flex align-items-center gap-1">
                                                 <Clock size={15} />
-                                                {course.creditHours} Credit {course.creditHours === 1 ? "Hour" : "Hours"}
+                                                {course.creditHours} Credit{" "}
+                                                {course.creditHours === 1 ? "Hour" : "Hours"}
                                             </span>
                                             <span className="d-flex align-items-center gap-1">
                                                 <Users size={15} />
@@ -173,16 +178,10 @@ const CoursesPage = () => {
 
                                     {/* Actions */}
                                     <div className="card-footer bg-white border-0 px-4 pb-4 pt-0 d-flex gap-2">
-                                        <ActionButton
-                                            variant="outline-primary"
-                                            onClick={() => setEditCourse(course)}
-                                        >
+                                        <ActionButton variant="outline-primary" onClick={() => setEditCourse(course)}>
                                             Edit
                                         </ActionButton>
-                                        <ActionButton
-                                            variant="outline-danger"
-                                            onClick={() => setDeleteCourse(course)}
-                                        >
+                                        <ActionButton variant="outline-danger" onClick={() => setDeleteCourse(course)}>
                                             Delete
                                         </ActionButton>
                                     </div>
@@ -192,20 +191,12 @@ const CoursesPage = () => {
                     </div>
 
                     {/* Pagination */}
-                    <AppPagination
-                        pageIndex={pageIndex}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+                    <AppPagination pageIndex={pageIndex} totalPages={totalPages} onPageChange={handlePageChange} />
                 </>
             )}
 
             {/* Modals */}
-            <AddCourseModal
-                show={showAddModal}
-                onHide={() => setShowAddModal(false)}
-                onSuccess={handleCourseCreated}
-            />
+            <AddCourseModal show={showAddModal} onHide={() => setShowAddModal(false)} onSuccess={handleCourseCreated} />
             <EditCourseModal
                 show={editCourse !== null}
                 onHide={() => setEditCourse(null)}

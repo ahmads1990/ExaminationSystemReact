@@ -1,4 +1,4 @@
-import { useEffect, useState, DependencyList } from "react";
+import { DependencyList, useEffect, useState } from "react";
 import { UseQueryResult } from "../types/common";
 
 function useQuery<T>(queryFn: () => Promise<T>, deps: DependencyList = []): UseQueryResult<T> {
@@ -7,7 +7,7 @@ function useQuery<T>(queryFn: () => Promise<T>, deps: DependencyList = []): UseQ
     const [error, setError] = useState<string | null>(null);
     const [trigger, setTrigger] = useState(0);
 
-    const refetch = () => setTrigger(prev => prev + 1);
+    const refetch = () => setTrigger((prev) => prev + 1);
 
     useEffect(() => {
         let isMounted = true;

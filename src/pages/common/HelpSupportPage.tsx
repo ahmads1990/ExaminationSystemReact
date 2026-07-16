@@ -1,6 +1,6 @@
+import { AlertCircle, HelpCircle, Mail, MessageSquare, Send } from "lucide-react";
 import { useState } from "react";
-import { Card, Row, Col, Form, Button, Accordion } from "react-bootstrap";
-import { HelpCircle, Mail, MessageSquare, AlertCircle, Send } from "lucide-react";
+import { Accordion, Button, Card, Col, Form, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 
 const HelpSupportPage = () => {
@@ -30,7 +30,9 @@ const HelpSupportPage = () => {
                                 <HelpCircle size={28} />
                             </div>
                             <h5 className="fw-bold text-dark mb-1">FAQ Base</h5>
-                            <p className="text-secondary small mb-0">Browse common inquiries on exam operations and profiles.</p>
+                            <p className="text-secondary small mb-0">
+                                Browse common inquiries on exam operations and profiles.
+                            </p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -41,7 +43,9 @@ const HelpSupportPage = () => {
                                 <Mail size={28} />
                             </div>
                             <h5 className="fw-bold text-dark mb-1">Email Support</h5>
-                            <p className="text-secondary small mb-0">Reach us directly at support@examsys.com for urgent issues.</p>
+                            <p className="text-secondary small mb-0">
+                                Reach us directly at support@examsys.com for urgent issues.
+                            </p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -52,7 +56,9 @@ const HelpSupportPage = () => {
                                 <MessageSquare size={28} />
                             </div>
                             <h5 className="fw-bold text-dark mb-1">Community Forum</h5>
-                            <p className="text-secondary small mb-0">Join discussions with fellow students and academic staff.</p>
+                            <p className="text-secondary small mb-0">
+                                Join discussions with fellow students and academic staff.
+                            </p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -66,27 +72,39 @@ const HelpSupportPage = () => {
                     </h4>
                     <Accordion defaultActiveKey="0" className="border-0 rounded-4 overflow-hidden shadow-sm">
                         <Accordion.Item eventKey="0" className="border-light">
-                            <Accordion.Header className="fw-semibold">How do I start a scheduled exam?</Accordion.Header>
+                            <Accordion.Header className="fw-semibold">
+                                How do I start a scheduled exam?
+                            </Accordion.Header>
                             <Accordion.Body className="text-secondary">
-                                Navigate to your student **Dashboard**, browse under the **Available Exams** list, and select **Start Exam**. Read the rules carefully before starting.
+                                Navigate to your student **Dashboard**, browse under the **Available Exams** list, and
+                                select **Start Exam**. Read the rules carefully before starting.
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey="1" className="border-light">
-                            <Accordion.Header className="fw-semibold">What happens if my connection drops mid-exam?</Accordion.Header>
+                            <Accordion.Header className="fw-semibold">
+                                What happens if my connection drops mid-exam?
+                            </Accordion.Header>
                             <Accordion.Body className="text-secondary">
-                                The system local-caches your responses automatically inside the browser cache. Once your internet connection restores, your progress updates and you can submit successfully.
+                                The system local-caches your responses automatically inside the browser cache. Once your
+                                internet connection restores, your progress updates and you can submit successfully.
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey="2" className="border-light">
-                            <Accordion.Header className="fw-semibold">How are subjective exams graded?</Accordion.Header>
+                            <Accordion.Header className="fw-semibold">
+                                How are subjective exams graded?
+                            </Accordion.Header>
                             <Accordion.Body className="text-secondary">
-                                Subjective exams containing text questions are reviewed and graded manually by your course instructor. Results will display as "Pending" until final grades are entered.
+                                Subjective exams containing text questions are reviewed and graded manually by your
+                                course instructor. Results will display as "Pending" until final grades are entered.
                             </Accordion.Body>
                         </Accordion.Item>
                         <Accordion.Item eventKey="3" className="border-light">
-                            <Accordion.Header className="fw-semibold">How can I change my profile name?</Accordion.Header>
+                            <Accordion.Header className="fw-semibold">
+                                How can I change my profile name?
+                            </Accordion.Header>
                             <Accordion.Body className="text-secondary">
-                                Go to the top-right user profile menu, select **Settings**, edit your name under the profile details tab, and click **Save Changes**.
+                                Go to the top-right user profile menu, select **Settings**, edit your name under the
+                                profile details tab, and click **Save Changes**.
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -101,8 +119,8 @@ const HelpSupportPage = () => {
                         <Form onSubmit={handleSubmitTicket}>
                             <Form.Group className="mb-3">
                                 <Form.Label className="fw-semibold text-secondary">Inquiry Category</Form.Label>
-                                <Form.Select 
-                                    value={category} 
+                                <Form.Select
+                                    value={category}
                                     onChange={(e) => setCategory(e.target.value)}
                                     className="rounded-3 border-light py-2"
                                 >
@@ -115,10 +133,10 @@ const HelpSupportPage = () => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label className="fw-semibold text-secondary">Subject</Form.Label>
-                                <Form.Control 
-                                    type="text" 
-                                    value={subject} 
-                                    onChange={(e) => setSubject(e.target.value)} 
+                                <Form.Control
+                                    type="text"
+                                    value={subject}
+                                    onChange={(e) => setSubject(e.target.value)}
                                     placeholder="Brief summary of your issue"
                                     required
                                     className="rounded-3 border-light py-2"
@@ -127,18 +145,21 @@ const HelpSupportPage = () => {
 
                             <Form.Group className="mb-4">
                                 <Form.Label className="fw-semibold text-secondary">Detailed Message</Form.Label>
-                                <Form.Control 
-                                    as="textarea" 
+                                <Form.Control
+                                    as="textarea"
                                     rows={4}
-                                    value={message} 
-                                    onChange={(e) => setMessage(e.target.value)} 
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
                                     placeholder="Describe your issue with exact steps to replicate"
                                     required
                                     className="rounded-3 border-light py-2"
                                 />
                             </Form.Group>
 
-                            <Button type="submit" className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm w-100 justify-content-center">
+                            <Button
+                                type="submit"
+                                className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm w-100 justify-content-center"
+                            >
                                 <Send size={16} /> Submit Ticket
                             </Button>
                         </Form>

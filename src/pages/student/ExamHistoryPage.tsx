@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { BookOpen, Calendar, ChevronRight, FileText, History } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Alert, Badge, Card, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Card, Table, Badge, Alert } from "react-bootstrap";
-import { History, FileText, Calendar, ChevronRight, BookOpen } from "lucide-react";
-import StudentExamService from "../../services/studentExamService";
 import { StudentAttemptSummaryDto } from "../../api/responses/StudentExamResponses";
-import { formatDate } from "../../utils/dateUtils";
-import SkeletonTable from "../../components/common/SkeletonTable";
 import EmptyState from "../../components/common/EmptyState";
+import SkeletonTable from "../../components/common/SkeletonTable";
+import StudentExamService from "../../services/studentExamService";
+import { formatDate } from "../../utils/dateUtils";
 
 const ExamHistoryPage = () => {
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ const ExamHistoryPage = () => {
                     </Card.Body>
                 </Card>
             ) : attempts.length === 0 ? (
-                <EmptyState 
+                <EmptyState
                     title="No exam attempts yet"
                     message="You have not taken any examinations yet. Check your dashboard for active exams or search for courses."
                     icon={History}
@@ -69,7 +69,10 @@ const ExamHistoryPage = () => {
                     <Card.Body className="p-0">
                         <div className="table-responsive">
                             <Table className="align-middle mb-0" style={{ borderCollapse: "separate" }}>
-                                <thead className="bg-light text-uppercase text-secondary" style={{ fontSize: "0.75rem", letterSpacing: "0.05em" }}>
+                                <thead
+                                    className="bg-light text-uppercase text-secondary"
+                                    style={{ fontSize: "0.75rem", letterSpacing: "0.05em" }}
+                                >
                                     <tr>
                                         <th className="py-3 px-4 border-0">Exam Details</th>
                                         <th className="py-3 px-4 border-0">Course Name</th>
@@ -82,7 +85,10 @@ const ExamHistoryPage = () => {
                                 <tbody>
                                     {attempts.map((attempt) => {
                                         const isGraded = attempt.status === "Graded";
-                                        const scorePercent = (isGraded && attempt.maxGrade > 0) ? Math.round((attempt.grade / attempt.maxGrade) * 100) : 0;
+                                        const scorePercent =
+                                            isGraded && attempt.maxGrade > 0
+                                                ? Math.round((attempt.grade / attempt.maxGrade) * 100)
+                                                : 0;
 
                                         return (
                                             <tr key={attempt.attemptId} className="transition-all">
@@ -116,8 +122,13 @@ const ExamHistoryPage = () => {
                                                     {isGraded ? (
                                                         <>
                                                             <div>
-                                                                <strong className="text-dark font-size-15">{attempt.grade}</strong>
-                                                                <span className="text-muted font-size-12"> / {attempt.maxGrade}</span>
+                                                                <strong className="text-dark font-size-15">
+                                                                    {attempt.grade}
+                                                                </strong>
+                                                                <span className="text-muted font-size-12">
+                                                                    {" "}
+                                                                    / {attempt.maxGrade}
+                                                                </span>
                                                             </div>
                                                             <span className="text-muted font-size-11 d-block mt-0.5">
                                                                 {scorePercent}% Grade
@@ -134,7 +145,9 @@ const ExamHistoryPage = () => {
                                                         <Badge
                                                             bg={attempt.isPassed ? "success-subtle" : "danger-subtle"}
                                                             className={`rounded-pill px-2.5 py-1.5 font-size-11 fw-bold ${
-                                                                attempt.isPassed ? "text-success-800" : "text-danger-800"
+                                                                attempt.isPassed
+                                                                    ? "text-success-800"
+                                                                    : "text-danger-800"
                                                             }`}
                                                         >
                                                             {attempt.isPassed ? "PASSED" : "FAILED"}
@@ -160,11 +173,16 @@ const ExamHistoryPage = () => {
                                                 {/* VIEW ACTION */}
                                                 <td className="py-3.5 px-4 border-bottom border-light text-end">
                                                     <button
-                                                        onClick={() => navigate(`/student/exams/result?attemptId=${attempt.attemptId}`)}
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/student/exams/result?attemptId=${attempt.attemptId}`
+                                                            )
+                                                        }
                                                         className="btn btn-sm btn-outline-primary rounded-3 px-3 py-1.5 d-inline-flex align-items-center gap-1 fw-semibold"
                                                         style={{ fontSize: "0.75rem" }}
                                                     >
-                                                        {isGraded ? "View Result" : "Check Status"} <ChevronRight size={14} />
+                                                        {isGraded ? "View Result" : "Check Status"}{" "}
+                                                        <ChevronRight size={14} />
                                                     </button>
                                                 </td>
                                             </tr>

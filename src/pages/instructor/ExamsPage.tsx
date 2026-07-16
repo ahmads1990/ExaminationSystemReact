@@ -1,24 +1,29 @@
-import { useState, useEffect } from "react";
+import { CalendarDays, Clock, FileText, GraduationCap, Plus, Search, Target } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Modal, Spinner } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { Search, Plus, FileText, Clock, CalendarDays, GraduationCap, Target } from "lucide-react";
-import ExamService from "../../services/examService";
-import { ExamDto } from "../../api/responses/exams/ExamDto";
-import { ExamType, ExamStatus } from "../../enums";
-import { CourseDto } from "../../api/responses/courses/CourseDto";
 import { GetExamsParams } from "../../api/requests/ExamRequests";
-import CourseService from "../../services/courseService";
-import { formatDate } from "../../utils/dateUtils";
-import { useDebounce } from "../../hooks/useDebounce";
-import { usePagination } from "../../hooks/usePagination";
+import { CourseDto } from "../../api/responses/courses/CourseDto";
+import { ExamDto } from "../../api/responses/exams/ExamDto";
 import ActionButton from "../../components/common/ActionButton";
-import { Spinner, Modal } from "react-bootstrap";
+import EmptyState from "../../components/common/EmptyState";
 import AppPagination from "../../components/common/Pagination";
 import SkeletonCard from "../../components/common/SkeletonCard";
-import { EXAM_TYPE_LABELS, EXAM_TYPE_COLORS, EXAM_STATUS_COLORS, EXAM_STATUS_LABELS } from "../../constants/examConstants";
 import SaveExamModal from "../../components/instructor/exams/SaveExamModal";
+import {
+    EXAM_STATUS_COLORS,
+    EXAM_STATUS_LABELS,
+    EXAM_TYPE_COLORS,
+    EXAM_TYPE_LABELS
+} from "../../constants/examConstants";
 import { useAuth } from "../../contexts/AuthContext";
-import toast from "react-hot-toast";
-import EmptyState from "../../components/common/EmptyState";
+import { ExamStatus, ExamType } from "../../enums";
+import { useDebounce } from "../../hooks/useDebounce";
+import { usePagination } from "../../hooks/usePagination";
+import CourseService from "../../services/courseService";
+import ExamService from "../../services/examService";
+import { formatDate } from "../../utils/dateUtils";
 
 const ExamsPage = () => {
     const navigate = useNavigate();
@@ -77,7 +82,7 @@ const ExamsPage = () => {
             setIsPublishing(false);
         }
     };
-    
+
     // Auth context to filter exams
     const authContext = useAuth();
     const user = authContext?.user;
@@ -89,7 +94,7 @@ const ExamsPage = () => {
                 Title: debouncedSearch || undefined,
                 PageIndex: pageIndex,
                 PageSize: pageSize,
-                InstructorId: user?.uid ? parseInt(user.uid.toString()) : undefined,
+                InstructorId: user?.uid ? parseInt(user.uid.toString()) : undefined
             };
             if (typeFilter !== "") params.ExamType = typeFilter;
             if (statusFilter !== "") params.ExamStatus = statusFilter;
@@ -117,9 +122,15 @@ const ExamsPage = () => {
         }
     };
 
-    useEffect(() => { fetchCourses(); }, []);
-    useEffect(() => { resetPage(); }, [debouncedSearch, typeFilter, statusFilter, courseFilter, resetPage]);
-    useEffect(() => { fetchExams(); }, [debouncedSearch, typeFilter, statusFilter, courseFilter, pageIndex, pageSize]);
+    useEffect(() => {
+        fetchCourses();
+    }, []);
+    useEffect(() => {
+        resetPage();
+    }, [debouncedSearch, typeFilter, statusFilter, courseFilter, resetPage]);
+    useEffect(() => {
+        fetchExams();
+    }, [debouncedSearch, typeFilter, statusFilter, courseFilter, pageIndex, pageSize]);
 
     const handleDelete = async (id: number) => {
         if (!confirm("Are you sure you want to delete this exam?")) return;
@@ -166,7 +177,7 @@ const ExamsPage = () => {
             const d = String(tomorrow.getDate()).padStart(2, "0");
             const h = String(tomorrow.getHours()).padStart(2, "0");
             const min = String(tomorrow.getMinutes()).padStart(2, "0");
-            
+
             setPublishDate(`${y}-${m}-${d}T${h}:${min}`);
             setExamIdToPublish(examId);
             setShowPublishModal(true);
@@ -185,7 +196,10 @@ const ExamsPage = () => {
                     className="shadow-sm px-4"
                     fullWidth={false}
                     icon={<Plus size={18} />}
-                    onClick={() => { setExamToEdit(null); setShowSaveModal(true); }}
+                    onClick={() => {
+                        setExamToEdit(null);
+                        setShowSaveModal(true);
+                    }}
                 >
                     New Exam
                 </ActionButton>
@@ -216,8 +230,10 @@ const ExamsPage = () => {
                                 onChange={(e) => setCourseFilter(e.target.value === "" ? "" : parseInt(e.target.value))}
                             >
                                 <option value="">All Courses</option>
-                                {courses.map(course => (
-                                    <option key={course.id} value={course.id}>{course.title}</option>
+                                {courses.map((course) => (
+                                    <option key={course.id} value={course.id}>
+                                        {course.title}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -229,7 +245,9 @@ const ExamsPage = () => {
                             >
                                 <option value="">All Types</option>
                                 {Object.entries(EXAM_TYPE_LABELS).map(([value, label]) => (
-                                    <option key={`exam-type-${value}`} value={value}>{label}</option>
+                                    <option key={`exam-type-${value}`} value={value}>
+                                        {label}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -241,7 +259,9 @@ const ExamsPage = () => {
                             >
                                 <option value="">All Statuses</option>
                                 {Object.entries(EXAM_STATUS_LABELS).map(([value, label]) => (
-                                    <option key={`exam-status-${value}`} value={value}>{label}</option>
+                                    <option key={`exam-status-${value}`} value={value}>
+                                        {label}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -253,18 +273,25 @@ const ExamsPage = () => {
             {loading && exams.length === 0 ? (
                 <SkeletonCard count={6} />
             ) : exams.length === 0 ? (
-                <EmptyState 
+                <EmptyState
                     title="No exams found"
                     message="You haven't created any examinations yet, or nothing matches your active filter query."
                     icon={FileText}
                     ctaText="Create First Exam"
-                    onCtaClick={() => { setExamToEdit(null); setShowSaveModal(true); }}
+                    onCtaClick={() => {
+                        setExamToEdit(null);
+                        setShowSaveModal(true);
+                    }}
                 />
             ) : (
                 <>
                     <div className="row g-4 mb-4">
                         {exams.map((exam, index) => {
-                            const typeColor = EXAM_TYPE_COLORS[exam.examType] ?? { bg: "var(--surface-bg)", border: "var(--color-secondary-200)", text: "var(--text-secondary)" };
+                            const typeColor = EXAM_TYPE_COLORS[exam.examType] ?? {
+                                bg: "var(--surface-bg)",
+                                border: "var(--color-secondary-200)",
+                                text: "var(--text-secondary)"
+                            };
                             const isPublished = exam.examStatus === "Published";
                             const statusColor = isPublished ? EXAM_STATUS_COLORS.published : EXAM_STATUS_COLORS.draft;
                             const examId = exam.id;
@@ -274,8 +301,8 @@ const ExamsPage = () => {
                                         {/* Colored accent top border */}
                                         <div
                                             className="position-absolute top-0 start-0 w-100"
-                                            style={{ 
-                                                height: "4px", 
+                                            style={{
+                                                height: "4px",
                                                 backgroundColor: typeColor.border,
                                                 borderRadius: "8px 8px 0 0"
                                             }}
@@ -284,17 +311,20 @@ const ExamsPage = () => {
                                         <div className="card-body p-4 pt-5 d-flex flex-column gap-3">
                                             {/* Course Title (Small Label) */}
                                             <div className="d-flex align-items-center justify-content-between">
-                                                <span className="text-secondary fw-bold text-uppercase" style={{ fontSize: "0.65rem", letterSpacing: "0.05em" }}>
+                                                <span
+                                                    className="text-secondary fw-bold text-uppercase"
+                                                    style={{ fontSize: "0.65rem", letterSpacing: "0.05em" }}
+                                                >
                                                     {exam.courseName}
                                                 </span>
                                                 <div className="d-flex gap-2">
-                                                     <span
+                                                    <span
                                                         className="badge rounded-pill fw-semibold"
                                                         style={{
                                                             backgroundColor: typeColor.bg,
                                                             color: typeColor.text,
                                                             fontSize: "0.7rem",
-                                                            padding: "0.4em 0.8em",
+                                                            padding: "0.4em 0.8em"
                                                         }}
                                                     >
                                                         {EXAM_TYPE_LABELS[exam.examType] ?? exam.examType}
@@ -315,27 +345,48 @@ const ExamsPage = () => {
                                             </div>
 
                                             {/* Exam Title */}
-                                            <h5 className="fw-bold mb-0 text-dark" style={{ minHeight: "2.8rem", lineHeight: "1.4" }} title={exam.title}>
+                                            <h5
+                                                className="fw-bold mb-0 text-dark"
+                                                style={{ minHeight: "2.8rem", lineHeight: "1.4" }}
+                                                title={exam.title}
+                                            >
                                                 {exam.title}
                                             </h5>
 
-                                            <div className="d-flex align-items-center justify-content-between pt-3 mt-auto border-top-dashed w-100" style={{ fontSize: "var(--text-xs)" }}>
-                                                <div className="d-flex align-items-center gap-1 text-muted" title="Duration">
+                                            <div
+                                                className="d-flex align-items-center justify-content-between pt-3 mt-auto border-top-dashed w-100"
+                                                style={{ fontSize: "var(--text-xs)" }}
+                                            >
+                                                <div
+                                                    className="d-flex align-items-center gap-1 text-muted"
+                                                    title="Duration"
+                                                >
                                                     <Clock size={14} className="text-primary opacity-75" />
                                                     <span className="fw-medium">{exam.maxDurationInMinutes} min</span>
                                                 </div>
-                                                <div className="d-flex align-items-center gap-1 text-muted" title="Total Grade">
+                                                <div
+                                                    className="d-flex align-items-center gap-1 text-muted"
+                                                    title="Total Grade"
+                                                >
                                                     <GraduationCap size={14} className="text-primary opacity-75" />
                                                     <span className="fw-medium">{exam.totalGrade} pts</span>
                                                 </div>
-                                                <div className="d-flex align-items-center gap-1 text-muted" title="Passing Score">
+                                                <div
+                                                    className="d-flex align-items-center gap-1 text-muted"
+                                                    title="Passing Score"
+                                                >
                                                     <Target size={14} className="text-primary opacity-75" />
                                                     <span className="fw-medium">Pass: {exam.passingScore}</span>
                                                 </div>
                                                 {exam.deadlineDate && (
-                                                    <div className="d-flex align-items-center gap-1 text-muted" title="Deadline">
+                                                    <div
+                                                        className="d-flex align-items-center gap-1 text-muted"
+                                                        title="Deadline"
+                                                    >
                                                         <CalendarDays size={14} className="text-primary opacity-75" />
-                                                        <span className="fw-medium">{formatDate(exam.deadlineDate)}</span>
+                                                        <span className="fw-medium">
+                                                            {formatDate(exam.deadlineDate)}
+                                                        </span>
                                                     </div>
                                                 )}
                                             </div>
@@ -348,11 +399,20 @@ const ExamsPage = () => {
                                                 onClick={() => handleStatusChange(exam, isPublished)}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
-                                                {isStatusChanging === examId ? <Spinner animation="border" size="sm" /> : (isPublished ? "Unpublish" : "Publish")}
+                                                {isStatusChanging === examId ? (
+                                                    <Spinner animation="border" size="sm" />
+                                                ) : isPublished ? (
+                                                    "Unpublish"
+                                                ) : (
+                                                    "Publish"
+                                                )}
                                             </ActionButton>
                                             <ActionButton
                                                 variant="primary"
-                                                onClick={() => { setExamToEdit(exam); setShowSaveModal(true); }}
+                                                onClick={() => {
+                                                    setExamToEdit(exam);
+                                                    setShowSaveModal(true);
+                                                }}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
                                                 Edit
@@ -386,11 +446,7 @@ const ExamsPage = () => {
                     </div>
 
                     {/* Pagination */}
-                    <AppPagination
-                        pageIndex={pageIndex}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+                    <AppPagination pageIndex={pageIndex} totalPages={totalPages} onPageChange={handlePageChange} />
                 </>
             )}
             {/* Save Exam Modal */}
@@ -411,10 +467,13 @@ const ExamsPage = () => {
                 </Modal.Header>
                 <Modal.Body className="py-3">
                     <p className="text-muted small mb-3">
-                        Please select a future date and time to publish this exam. Students will not be able to attempt it before this date.
+                        Please select a future date and time to publish this exam. Students will not be able to attempt
+                        it before this date.
                     </p>
                     <div className="form-group">
-                        <label className="form-label fw-semibold text-secondary-800" htmlFor="publish-date-input">Publish Date & Time</label>
+                        <label className="form-label fw-semibold text-secondary-800" htmlFor="publish-date-input">
+                            Publish Date & Time
+                        </label>
                         <input
                             id="publish-date-input"
                             type="datetime-local"
@@ -429,8 +488,8 @@ const ExamsPage = () => {
                     <ActionButton variant="outline-secondary" onClick={() => setShowPublishModal(false)}>
                         Cancel
                     </ActionButton>
-                    <ActionButton 
-                        variant="success" 
+                    <ActionButton
+                        variant="success"
                         onClick={executePublish}
                         disabled={isPublishing || !publishDate}
                         fullWidth={false}

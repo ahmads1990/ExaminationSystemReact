@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Form, Button, Tabs, Tab, Row, Col, Alert, Spinner } from "react-bootstrap";
+import { Alert, Button, Col, Form, Row, Spinner, Tab, Tabs } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../../services/authService";
-import TextInput from "../../components/common/forms/TextInput";
 import PasswordInput from "../../components/common/forms/PasswordInput";
 import SelectInput from "../../components/common/forms/SelectInput";
 import TextAreaInput from "../../components/common/forms/TextAreaInput";
-import { 
-    validateRegisterStudentRequest, 
+import TextInput from "../../components/common/forms/TextInput";
+import AuthService from "../../services/authService";
+import {
     validateRegisterInstructorRequest,
-    ValidationErrors 
+    validateRegisterStudentRequest,
+    ValidationErrors
 } from "../../utils/validation";
 
 enum UserType {
@@ -77,7 +77,7 @@ const RegisterPage = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        
+
         if (key === UserType.Student) {
             // Validate using request validator
             const errors = validateRegisterStudentRequest(
@@ -96,7 +96,7 @@ const RegisterPage = () => {
                 setStudentErrors(errors);
                 return;
             }
-            
+
             setLoading(true);
             try {
                 const response = await AuthService.registerStudent({
@@ -107,9 +107,12 @@ const RegisterPage = () => {
                     level: studentForm.level,
                     group: studentForm.group
                 });
-                
+
                 if (response.success) {
-                    setTimeout(() => navigate("/verify-email", { state: { email: studentForm.email, userId: response.data } }), 1500);
+                    setTimeout(
+                        () => navigate("/verify-email", { state: { email: studentForm.email, userId: response.data } }),
+                        1500
+                    );
                 } else {
                     setError(response.message || "Registration failed. Please try again.");
                 }
@@ -132,12 +135,12 @@ const RegisterPage = () => {
                 },
                 instructorForm.confirmPassword
             );
-            
+
             if (Object.keys(errors).length > 0) {
                 setInstructorErrors(errors);
                 return;
             }
-            
+
             setLoading(true);
             try {
                 const response = await AuthService.registerInstructor({
@@ -148,9 +151,15 @@ const RegisterPage = () => {
                     bio: instructorForm.bio,
                     specialization: instructorForm.specialization
                 });
-                
+
                 if (response.success) {
-                    setTimeout(() => navigate("/verify-email", { state: { email: instructorForm.email, userId: response.data } }), 1500);
+                    setTimeout(
+                        () =>
+                            navigate("/verify-email", {
+                                state: { email: instructorForm.email, userId: response.data }
+                            }),
+                        1500
+                    );
                 } else {
                     setError(response.message || "Registration failed. Please try again.");
                 }
@@ -247,7 +256,9 @@ const RegisterPage = () => {
                                     label="Confirm Password"
                                     placeholder="Confirm Password"
                                     value={studentForm.confirmPassword}
-                                    onChange={(value: string) => setStudentForm({ ...studentForm, confirmPassword: value })}
+                                    onChange={(value: string) =>
+                                        setStudentForm({ ...studentForm, confirmPassword: value })
+                                    }
                                     error={studentErrors.confirmPassword}
                                     required
                                 />
@@ -282,7 +293,12 @@ const RegisterPage = () => {
                             </Col>
                         </Row>
 
-                        <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4 mb-2" disabled={loading}>
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4 mb-2"
+                            disabled={loading}
+                        >
                             {loading ? (
                                 <>
                                     <Spinner animation="border" size="sm" /> Creating Account...
@@ -318,7 +334,9 @@ const RegisterPage = () => {
                                     label="Username"
                                     placeholder="janesmith"
                                     value={instructorForm.username}
-                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, username: value })}
+                                    onChange={(value: string) =>
+                                        setInstructorForm({ ...instructorForm, username: value })
+                                    }
                                     error={instructorErrors.username}
                                     required
                                     minLength={3}
@@ -346,7 +364,9 @@ const RegisterPage = () => {
                                     label="Password"
                                     placeholder="Password"
                                     value={instructorForm.password}
-                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, password: value })}
+                                    onChange={(value: string) =>
+                                        setInstructorForm({ ...instructorForm, password: value })
+                                    }
                                     error={instructorErrors.password}
                                     required
                                     minLength={8}
@@ -359,7 +379,9 @@ const RegisterPage = () => {
                                     label="Confirm Password"
                                     placeholder="Confirm Password"
                                     value={instructorForm.confirmPassword}
-                                    onChange={(value: string) => setInstructorForm({ ...instructorForm, confirmPassword: value })}
+                                    onChange={(value: string) =>
+                                        setInstructorForm({ ...instructorForm, confirmPassword: value })
+                                    }
                                     error={instructorErrors.confirmPassword}
                                     required
                                 />
@@ -384,12 +406,19 @@ const RegisterPage = () => {
                             label="Specialization (Optional)"
                             placeholder="e.g., Computer Science"
                             value={instructorForm.specialization}
-                            onChange={(value: string) => setInstructorForm({ ...instructorForm, specialization: value })}
+                            onChange={(value: string) =>
+                                setInstructorForm({ ...instructorForm, specialization: value })
+                            }
                             error={instructorErrors.specialization}
                             maxLength={200}
                         />
 
-                        <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4 mb-2" disabled={loading}>
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4 mb-2"
+                            disabled={loading}
+                        >
                             {loading ? (
                                 <>
                                     <Spinner animation="border" size="sm" /> Creating Account...
@@ -408,7 +437,6 @@ const RegisterPage = () => {
                     Sign In
                 </Link>
             </div>
-
         </div>
     );
 };

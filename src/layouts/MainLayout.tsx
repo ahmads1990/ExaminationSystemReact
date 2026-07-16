@@ -1,20 +1,20 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-import { Nav, Offcanvas } from "react-bootstrap";
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { 
-    BookOpen, 
-    LayoutDashboard, 
-    FileText, 
-    History, 
-    Search, 
-    Calendar, 
-    HelpCircle, 
-    BarChart2, 
+import {
+    BarChart2,
+    BookOpen,
+    Calendar,
     CheckSquare,
+    FileText,
+    HelpCircle,
+    History,
+    LayoutDashboard,
+    Search,
     X
 } from "lucide-react";
-import Navbar from "../components/common/Navbar";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Nav, Offcanvas } from "react-bootstrap";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Footer from "../components/common/Footer";
+import Navbar from "../components/common/Navbar";
 import { useAuth } from "../contexts/AuthContext";
 import { UserRole } from "../types/auth";
 
@@ -26,11 +26,23 @@ interface NavItem {
     label: string;
 }
 
-const SidebarLink = ({ to, icon: Icon, label, onClick }: { to: string; icon: LucideIcon; label: string; onClick?: () => void }) => (
-    <NavLink 
-        to={to} 
+const SidebarLink = ({
+    to,
+    icon: Icon,
+    label,
+    onClick
+}: {
+    to: string;
+    icon: LucideIcon;
+    label: string;
+    onClick?: () => void;
+}) => (
+    <NavLink
+        to={to}
         onClick={onClick}
-        className={({ isActive }) => `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? 'bg-primary text-white shadow-sm' : 'text-secondary hover-bg-light'}`}
+        className={({ isActive }) =>
+            `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary hover-bg-light"}`
+        }
     >
         <Icon size={18} style={{ flexShrink: 0 }} />
         <span className="text-truncate">{label}</span>
@@ -52,14 +64,14 @@ const MainLayout = () => {
     const startResizing = useCallback((mouseDownEvent: React.MouseEvent) => {
         mouseDownEvent.preventDefault();
         isResizing.current = true;
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
+        document.body.style.cursor = "col-resize";
+        document.body.style.userSelect = "none";
     }, []);
 
     const stopResizing = useCallback(() => {
         isResizing.current = false;
-        document.body.style.cursor = 'default';
-        document.body.style.userSelect = 'auto';
+        document.body.style.cursor = "default";
+        document.body.style.userSelect = "auto";
     }, []);
 
     const resize = useCallback((mouseMoveEvent: MouseEvent) => {
@@ -111,18 +123,22 @@ const MainLayout = () => {
     const currentItems = user?.role === UserRole.Instructor ? instructorItems : studentItems;
 
     // Filter items based on search input query
-    const filteredItems = currentItems.filter(item => 
-        item.label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredItems = currentItems.filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const renderSidebarContent = (isMobile = false) => (
         <div className="p-3 h-100 d-flex flex-column gap-2">
             {/* Premium Styled Section Header */}
             <div className="px-1 mb-1 d-flex align-items-center justify-content-between">
-                <span className="text-uppercase text-secondary fw-bold tracking-wider" style={{ fontSize: '0.68rem', letterSpacing: '0.08em' }}>
+                <span
+                    className="text-uppercase text-secondary fw-bold tracking-wider"
+                    style={{ fontSize: "0.68rem", letterSpacing: "0.08em" }}
+                >
                     Navigation
                 </span>
-                <span className="badge bg-light text-secondary border px-2 py-1" style={{ fontSize: '0.62rem', fontWeight: 600 }}>
+                <span
+                    className="badge bg-light text-secondary border px-2 py-1"
+                    style={{ fontSize: "0.62rem", fontWeight: 600 }}
+                >
                     {user?.role === UserRole.Instructor ? "Instructor" : "Student"}
                 </span>
             </div>
@@ -130,10 +146,10 @@ const MainLayout = () => {
             {/* Search Bar inside Sidebar */}
             <div className="mb-2">
                 <div className="position-relative">
-                    <Search 
-                        className="position-absolute top-50 start-0 translate-middle-y text-muted opacity-50" 
-                        size={14} 
-                        style={{ marginLeft: '10px' }}
+                    <Search
+                        className="position-absolute top-50 start-0 translate-middle-y text-muted opacity-50"
+                        size={14}
+                        style={{ marginLeft: "10px" }}
                     />
                     <input
                         type="text"
@@ -142,13 +158,13 @@ const MainLayout = () => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
-                            fontSize: '0.8rem',
-                            paddingLeft: '2.1rem',
-                            paddingRight: searchQuery ? '1.8rem' : '0.5rem',
-                            paddingTop: '0.45rem',
-                            paddingBottom: '0.45rem',
-                            outline: 'none',
-                            boxShadow: 'none'
+                            fontSize: "0.8rem",
+                            paddingLeft: "2.1rem",
+                            paddingRight: searchQuery ? "1.8rem" : "0.5rem",
+                            paddingTop: "0.45rem",
+                            paddingBottom: "0.45rem",
+                            outline: "none",
+                            boxShadow: "none"
                         }}
                     />
                     {searchQuery && (
@@ -156,10 +172,10 @@ const MainLayout = () => {
                             type="button"
                             className="btn btn-link position-absolute top-50 end-0 translate-middle-y text-secondary p-0 border-0 shadow-none d-flex align-items-center justify-content-center"
                             onClick={() => setSearchQuery("")}
-                            style={{ 
-                                marginRight: '8px', 
-                                width: '18px', 
-                                height: '18px',
+                            style={{
+                                marginRight: "8px",
+                                width: "18px",
+                                height: "18px",
                                 lineHeight: 1
                             }}
                         >
@@ -173,16 +189,16 @@ const MainLayout = () => {
             <Nav className="flex-column gap-1 overflow-auto flex-grow-1">
                 {filteredItems.length > 0 ? (
                     filteredItems.map((item, index) => (
-                        <SidebarLink 
+                        <SidebarLink
                             key={index}
-                            to={item.to} 
-                            icon={item.icon} 
-                            label={item.label} 
+                            to={item.to}
+                            icon={item.icon}
+                            label={item.label}
                             onClick={isMobile ? () => setShowMobileSidebar(false) : undefined}
                         />
                     ))
                 ) : (
-                    <div className="text-center py-4 text-muted" style={{ fontSize: '0.8rem' }}>
+                    <div className="text-center py-4 text-muted" style={{ fontSize: "0.8rem" }}>
                         No matches found
                     </div>
                 )}
@@ -196,8 +212,8 @@ const MainLayout = () => {
             <Navbar onToggleSidebar={() => setShowMobileSidebar(true)} />
 
             {/* MOBILE SIDEBAR DRAWERS */}
-            <Offcanvas 
-                show={showMobileSidebar} 
+            <Offcanvas
+                show={showMobileSidebar}
                 onHide={() => setShowMobileSidebar(false)}
                 className="d-lg-none"
                 style={{ width: "280px" }}
@@ -207,21 +223,19 @@ const MainLayout = () => {
                         Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                     </Offcanvas.Title>
                 </Offcanvas.Header>
-                <Offcanvas.Body className="p-0 bg-white">
-                    {renderSidebarContent(true)}
-                </Offcanvas.Body>
+                <Offcanvas.Body className="p-0 bg-white">{renderSidebarContent(true)}</Offcanvas.Body>
             </Offcanvas>
 
             {/* MAIN CONTAINER */}
             <div className="d-flex flex-grow-1">
                 {/* SIDEBAR (Desktop) */}
-                <aside 
-                    className="bg-white border-end d-none d-lg-block position-relative" 
-                    style={{ 
-                        width: `${sidebarWidth}px`, 
-                        minWidth: `${sidebarWidth}px`, 
+                <aside
+                    className="bg-white border-end d-none d-lg-block position-relative"
+                    style={{
+                        width: `${sidebarWidth}px`,
+                        minWidth: `${sidebarWidth}px`,
                         minHeight: "calc(100vh - 60px)",
-                        transition: isResizing.current ? 'none' : 'width 0.1s ease'
+                        transition: isResizing.current ? "none" : "width 0.1s ease"
                     }}
                 >
                     {renderSidebarContent(false)}
@@ -230,14 +244,14 @@ const MainLayout = () => {
                     <div
                         onMouseDown={startResizing}
                         style={{
-                            position: 'absolute',
+                            position: "absolute",
                             top: 0,
                             right: 0,
-                            width: '4px',
-                            height: '100%',
-                            cursor: 'col-resize',
-                            backgroundColor: 'transparent',
-                            transition: 'background-color 0.2s ease',
+                            width: "4px",
+                            height: "100%",
+                            cursor: "col-resize",
+                            backgroundColor: "transparent",
+                            transition: "background-color 0.2s ease",
                             zIndex: 10
                         }}
                         className="sidebar-resize-handle"

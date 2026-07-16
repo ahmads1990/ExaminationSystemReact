@@ -1,4 +1,4 @@
-import { ExamType, ExamStatus, SortingDirection } from "../../enums";
+import { ExamStatus, ExamType, SortingDirection } from "../../enums";
 
 export interface GetExamsParams {
     Title?: string;
@@ -39,4 +39,3 @@ export interface AssignQuestionsRequest {
     examId: number;
     questionIds: number[];
 }
-

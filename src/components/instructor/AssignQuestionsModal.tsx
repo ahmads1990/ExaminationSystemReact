@@ -1,14 +1,22 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { Modal as BModal, Form as BForm, Button as BButton, Spinner as BSpinner, Alert as BAlert, Badge as BBadge, InputGroup as BInputGroup } from "react-bootstrap";
 import { Search, X } from "lucide-react";
-import Table from "../common/Table";
-import QuestionService from "../../services/questionService";
-import ExamService from "../../services/examService";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+    Alert as BAlert,
+    Badge as BBadge,
+    Button as BButton,
+    Form as BForm,
+    InputGroup as BInputGroup,
+    Modal as BModal,
+    Spinner as BSpinner
+} from "react-bootstrap";
+import toast from "react-hot-toast";
+import { RejectedEntityDto } from "../../api/responses/exams/RejectedEntityDto";
+import { QuestionLevelInfo, RejectionReason } from "../../enums";
 import { usePagination } from "../../hooks/usePagination";
 import useQuery from "../../hooks/useQuery";
-import { QuestionLevelInfo, RejectionReason } from "../../enums";
-import { RejectedEntityDto } from "../../api/responses/exams/RejectedEntityDto";
-import toast from "react-hot-toast";
+import ExamService from "../../services/examService";
+import QuestionService from "../../services/questionService";
+import Table from "../common/Table";
 
 interface AssignQuestionsModalProps {
     show: boolean;
@@ -18,13 +26,7 @@ interface AssignQuestionsModalProps {
     alreadyAssignedIds: number[];
 }
 
-const AssignQuestionsModal = ({
-    show,
-    onHide,
-    onSuccess,
-    examId,
-    alreadyAssignedIds
-}: AssignQuestionsModalProps) => {
+const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssignedIds }: AssignQuestionsModalProps) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchVal, setSearchVal] = useState("");
 
@@ -44,22 +46,23 @@ const AssignQuestionsModal = ({
     }, [show]);
 
     // Pagination Hook
-    const {
-        pageIndex,
-        pageSize,
-        totalCount,
-        setTotalCount,
-        setPageIndex,
-        setPageSize
-    } = usePagination({ defaultPageSize: 10 });
+    const { pageIndex, pageSize, totalCount, setTotalCount, setPageIndex, setPageSize } = usePagination({
+        defaultPageSize: 10
+    });
 
     // Fetch questions from the pool (ExamID is omitted to get the general pool)
-    const { data: poolData, isPending: isLoading, error, refetch } = useQuery(
-        () => QuestionService.getQuestions({
-            PageIndex: pageIndex,
-            PageSize: pageSize,
-            Body: searchQuery || undefined
-        }),
+    const {
+        data: poolData,
+        isPending: isLoading,
+        error,
+        refetch
+    } = useQuery(
+        () =>
+            QuestionService.getQuestions({
+                PageIndex: pageIndex,
+                PageSize: pageSize,
+                Body: searchQuery || undefined
+            }),
         [pageIndex, pageSize, searchQuery, show]
     );
 
@@ -70,15 +73,18 @@ const AssignQuestionsModal = ({
         }
     }, [poolData, setTotalCount]);
 
-    const handleSetPagination = useCallback((updater: any) => {
-        if (typeof updater === 'function') {
-            const newState = updater({ pageIndex, pageSize });
-            setPageIndex(newState.pageIndex);
-            if (newState.pageSize !== pageSize) {
-                setPageSize(newState.pageSize);
+    const handleSetPagination = useCallback(
+        (updater: any) => {
+            if (typeof updater === "function") {
+                const newState = updater({ pageIndex, pageSize });
+                setPageIndex(newState.pageIndex);
+                if (newState.pageSize !== pageSize) {
+                    setPageSize(newState.pageSize);
+                }
             }
-        }
-    }, [pageIndex, pageSize, setPageIndex, setPageSize]);
+        },
+        [pageIndex, pageSize, setPageIndex, setPageSize]
+    );
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -107,7 +113,7 @@ const AssignQuestionsModal = ({
 
     const handleAssign = async () => {
         const questionIdsToAssign = Object.keys(rowSelection)
-            .filter(idStr => rowSelection[idStr])
+            .filter((idStr) => rowSelection[idStr])
             .map(Number);
 
         if (questionIdsToAssign.length === 0) {
@@ -149,117 +155,128 @@ const AssignQuestionsModal = ({
         }
     };
 
-    const columns = useMemo(() => [
-        {
-            id: 'select',
-            header: ({ table }: any) => {
-                // Only select rows that are not already assigned
-                const selectableRows = table.getRowModel().rows.filter(
-                    (r: any) => !alreadyAssignedIds.includes(r.original.id)
-                );
-                const isAllSelected = selectableRows.length > 0 && selectableRows.every((r: any) => r.getIsSelected());
-                const isSomeSelected = selectableRows.some((r: any) => r.getIsSelected());
+    const columns = useMemo(
+        () => [
+            {
+                id: "select",
+                header: ({ table }: any) => {
+                    // Only select rows that are not already assigned
+                    const selectableRows = table
+                        .getRowModel()
+                        .rows.filter((r: any) => !alreadyAssignedIds.includes(r.original.id));
+                    const isAllSelected =
+                        selectableRows.length > 0 && selectableRows.every((r: any) => r.getIsSelected());
+                    const isSomeSelected = selectableRows.some((r: any) => r.getIsSelected());
 
-                const handleToggleAll = () => {
-                    const shouldSelect = !isAllSelected;
-                    const newSelection = { ...rowSelection };
-                    selectableRows.forEach((r: any) => {
-                        if (shouldSelect) {
-                            newSelection[r.id] = true;
-                        } else {
-                            delete newSelection[r.id];
-                        }
-                    });
-                    setRowSelection(newSelection);
-                };
+                    const handleToggleAll = () => {
+                        const shouldSelect = !isAllSelected;
+                        const newSelection = { ...rowSelection };
+                        selectableRows.forEach((r: any) => {
+                            if (shouldSelect) {
+                                newSelection[r.id] = true;
+                            } else {
+                                delete newSelection[r.id];
+                            }
+                        });
+                        setRowSelection(newSelection);
+                    };
 
-                return (
-                    <div className="d-flex align-items-center justify-content-center">
-                        <BForm.Check
-                            type="checkbox"
-                            className="m-0"
-                            checked={isAllSelected}
-                            ref={(el: any) => {
-                                if (el) {
-                                    el.indeterminate = !isAllSelected && isSomeSelected;
-                                }
-                            }}
-                            onChange={handleToggleAll}
-                            disabled={selectableRows.length === 0}
-                        />
-                    </div>
-                );
-            },
-            size: 36,
-            cell: ({ row }: any) => {
-                const isAlreadyAssigned = alreadyAssignedIds.includes(row.original.id);
-                return (
-                    <div className="d-flex align-items-center justify-content-center">
-                        <BForm.Check
-                            type="checkbox"
-                            className="m-0"
-                            checked={isAlreadyAssigned || !!rowSelection[row.original.id]}
-                            disabled={isAlreadyAssigned}
-                            onChange={(e) => {
-                                const checked = e.target.checked;
-                                setRowSelection(prev => {
-                                    const next = { ...prev };
-                                    if (checked) {
-                                        next[row.original.id] = true;
-                                    } else {
-                                        delete next[row.original.id];
+                    return (
+                        <div className="d-flex align-items-center justify-content-center">
+                            <BForm.Check
+                                type="checkbox"
+                                className="m-0"
+                                checked={isAllSelected}
+                                ref={(el: any) => {
+                                    if (el) {
+                                        el.indeterminate = !isAllSelected && isSomeSelected;
                                     }
-                                    return next;
-                                });
-                            }}
-                        />
-                    </div>
-                );
+                                }}
+                                onChange={handleToggleAll}
+                                disabled={selectableRows.length === 0}
+                            />
+                        </div>
+                    );
+                },
+                size: 36,
+                cell: ({ row }: any) => {
+                    const isAlreadyAssigned = alreadyAssignedIds.includes(row.original.id);
+                    return (
+                        <div className="d-flex align-items-center justify-content-center">
+                            <BForm.Check
+                                type="checkbox"
+                                className="m-0"
+                                checked={isAlreadyAssigned || !!rowSelection[row.original.id]}
+                                disabled={isAlreadyAssigned}
+                                onChange={(e) => {
+                                    const checked = e.target.checked;
+                                    setRowSelection((prev) => {
+                                        const next = { ...prev };
+                                        if (checked) {
+                                            next[row.original.id] = true;
+                                        } else {
+                                            delete next[row.original.id];
+                                        }
+                                        return next;
+                                    });
+                                }}
+                            />
+                        </div>
+                    );
+                }
+            },
+            {
+                id: "body",
+                header: "Question Description",
+                accessorKey: "body",
+                size: 500,
+                cell: (info: any) => <div className="text-wrap text-secondary-800 fw-normal">{info.getValue()}</div>
+            },
+            {
+                id: "score",
+                header: "Score",
+                accessorKey: "score",
+                size: 80,
+                cell: (info: any) => <span className="fw-medium text-dark">{info.getValue()} pts</span>
+            },
+            {
+                id: "level",
+                header: "Difficulty",
+                accessorKey: "questionLevel",
+                size: 100,
+                cell: (info: any) => {
+                    const level = info.getValue();
+                    const infoDetails = QuestionLevelInfo[level] || { label: String(level), color: "secondary" };
+                    return (
+                        <BBadge bg={infoDetails.color} className="text-capitalize">
+                            {infoDetails.label}
+                        </BBadge>
+                    );
+                }
+            },
+            {
+                id: "status",
+                header: "Status",
+                size: 100,
+                cell: ({ row }: any) => {
+                    const isAlreadyAssigned = alreadyAssignedIds.includes(row.original.id);
+                    return isAlreadyAssigned ? (
+                        <BBadge
+                            bg="success-subtle"
+                            className="text-success border border-success border-opacity-10 py-1"
+                        >
+                            Assigned
+                        </BBadge>
+                    ) : (
+                        <BBadge bg="light" className="text-muted border border-light-subtle py-1">
+                            Available
+                        </BBadge>
+                    );
+                }
             }
-        },
-        {
-            id: 'body',
-            header: 'Question Description',
-            accessorKey: 'body',
-            size: 500,
-            cell: (info: any) => (
-                <div className="text-wrap text-secondary-800 fw-normal">
-                    {info.getValue()}
-                </div>
-            )
-        },
-        {
-            id: 'score',
-            header: 'Score',
-            accessorKey: 'score',
-            size: 80,
-            cell: (info: any) => <span className="fw-medium text-dark">{info.getValue()} pts</span>
-        },
-        {
-            id: 'level',
-            header: 'Difficulty',
-            accessorKey: 'questionLevel',
-            size: 100,
-            cell: (info: any) => {
-                const level = info.getValue();
-                const infoDetails = QuestionLevelInfo[level] || { label: String(level), color: 'secondary' };
-                return <BBadge bg={infoDetails.color} className="text-capitalize">{infoDetails.label}</BBadge>;
-            }
-        },
-        {
-            id: 'status',
-            header: 'Status',
-            size: 100,
-            cell: ({ row }: any) => {
-                const isAlreadyAssigned = alreadyAssignedIds.includes(row.original.id);
-                return isAlreadyAssigned ? (
-                    <BBadge bg="success-subtle" className="text-success border border-success border-opacity-10 py-1">Assigned</BBadge>
-                ) : (
-                    <BBadge bg="light" className="text-muted border border-light-subtle py-1">Available</BBadge>
-                );
-            }
-        }
-    ], [alreadyAssignedIds, rowSelection]);
+        ],
+        [alreadyAssignedIds, rowSelection]
+    );
 
     const selectedCount = Object.values(rowSelection).filter(Boolean).length;
 
@@ -271,9 +288,14 @@ const AssignQuestionsModal = ({
                 </BModal.Title>
             </BModal.Header>
 
-            <BModal.Body className="py-4 px-4" style={{ minHeight: '400px' }}>
+            <BModal.Body className="py-4 px-4" style={{ minHeight: "400px" }}>
                 {rejectedList.length > 0 && (
-                    <BAlert variant="danger" onClose={() => setRejectedList([])} dismissible className="mb-4 border-danger border-opacity-20 rounded-3 shadow-sm">
+                    <BAlert
+                        variant="danger"
+                        onClose={() => setRejectedList([])}
+                        dismissible
+                        className="mb-4 border-danger border-opacity-20 rounded-3 shadow-sm"
+                    >
                         <h6 className="fw-bold alert-heading mb-2">Some questions were rejected:</h6>
                         <ul className="mb-0 ps-3">
                             {rejectedList.map((item) => (

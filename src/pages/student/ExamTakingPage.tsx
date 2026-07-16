@@ -1,24 +1,24 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { AlertCircle, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Clock, RefreshCw } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Alert, Badge, Card, Col, Container, ProgressBar, Row, Spinner } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card, Alert, Spinner, ProgressBar, Badge } from "react-bootstrap";
-import { CheckCircle2, ChevronLeft, ChevronRight, Clock, AlertTriangle, AlertCircle, RefreshCw } from "lucide-react";
-import StudentExamService from "../../services/studentExamService";
 import { ExamQuestionDto } from "../../api/responses/StudentExamResponses";
-import { getExamToken, removeExamToken } from "../../utils/storage";
 import ActionButton from "../../components/common/ActionButton";
 import ConfirmActionDialog from "../../components/common/ConfirmActionDialog";
-import toast from "react-hot-toast";
+import StudentExamService from "../../services/studentExamService";
+import { getExamToken, removeExamToken } from "../../utils/storage";
 
 const getRemainingSecondsFromJwt = (token: string): number => {
     try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
         const jsonPayload = decodeURIComponent(
             window
                 .atob(base64)
-                .split('')
-                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
+                .split("")
+                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                .join("")
         );
         const payload = JSON.parse(jsonPayload);
         if (payload.exp) {
@@ -84,7 +84,7 @@ const ExamTakingPage = () => {
                             setAnswers(parsed);
                             // Initialize their status as saved since they were saved in a previous session
                             const initialSavingStatus: Record<number, "saved"> = {};
-                            Object.keys(parsed).forEach(qid => {
+                            Object.keys(parsed).forEach((qid) => {
                                 initialSavingStatus[Number(qid)] = "saved";
                             });
                             setSavingStatus(initialSavingStatus);
@@ -99,14 +99,14 @@ const ExamTakingPage = () => {
 
                     // Fetch exam meta from list of available exams
                     try {
-                        const base64Url = token.split('.')[1];
-                        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                        const base64Url = token.split(".")[1];
+                        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
                         const jsonPayload = decodeURIComponent(
                             window
                                 .atob(base64)
-                                .split('')
-                                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                                .join('')
+                                .split("")
+                                .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+                                .join("")
                         );
                         const payload = JSON.parse(jsonPayload);
                         const examId = payload?.ExamId || payload?.examId;
@@ -114,7 +114,7 @@ const ExamTakingPage = () => {
                         if (examId) {
                             const examsResp = await StudentExamService.getAvailableExams();
                             if (examsResp.success && examsResp.data) {
-                                const matched = examsResp.data.find(e => e.examId === Number(examId));
+                                const matched = examsResp.data.find((e) => e.examId === Number(examId));
                                 if (matched) {
                                     setExamMeta({
                                         title: matched.title,
@@ -165,7 +165,7 @@ const ExamTakingPage = () => {
         if (timeLeft === null || timeLeft <= 0 || isAutoSubmitting) return;
 
         timerRef.current = setInterval(() => {
-            setTimeLeft(prev => {
+            setTimeLeft((prev) => {
                 if (prev === null) return null;
                 if (prev <= 1) {
                     if (timerRef.current) clearInterval(timerRef.current);
@@ -205,14 +205,14 @@ const ExamTakingPage = () => {
         localStorage.setItem("exam_answers_active", JSON.stringify(newAnswers));
 
         // Update saving status to saving
-        setSavingStatus(prev => ({ ...prev, [questionId]: "saving" }));
+        setSavingStatus((prev) => ({ ...prev, [questionId]: "saving" }));
 
         try {
             await StudentExamService.submitAnswer(questionId, choiceId);
-            setSavingStatus(prev => ({ ...prev, [questionId]: "saved" }));
+            setSavingStatus((prev) => ({ ...prev, [questionId]: "saved" }));
         } catch (err) {
             console.error(`Failed to auto-save answer for question ${questionId}:`, err);
-            setSavingStatus(prev => ({ ...prev, [questionId]: "error" }));
+            setSavingStatus((prev) => ({ ...prev, [questionId]: "error" }));
             toast.error("Connection error. Failed to save answer to server.");
         }
     };
@@ -286,7 +286,9 @@ const ExamTakingPage = () => {
                             <span className="text-white-50 fw-semibold text-uppercase font-size-11">
                                 {examMeta?.courseName || "Active Course"}
                             </span>
-                            <span className="badge bg-danger rounded-pill fw-semibold font-size-10">DO NOT REFRESH</span>
+                            <span className="badge bg-danger rounded-pill fw-semibold font-size-10">
+                                DO NOT REFRESH
+                            </span>
                         </div>
                         <h4 className="fw-bold mb-0 text-white mt-0.5">{examMeta?.title || "Exam Attempt"}</h4>
                     </div>
@@ -295,10 +297,16 @@ const ExamTakingPage = () => {
                     <div className="d-flex align-items-center gap-4">
                         <div className="d-flex align-items-center gap-3 bg-secondary-900 border border-secondary-800 rounded-3 px-3 py-2">
                             <div className="d-flex flex-column text-end">
-                                <span className="text-white-50 font-size-10 text-uppercase fw-semibold tracking-wider">Remaining Time</span>
+                                <span className="text-white-50 font-size-10 text-uppercase fw-semibold tracking-wider">
+                                    Remaining Time
+                                </span>
                                 <span
                                     className={`fs-5 fw-bold leading-none mt-0.5 d-flex align-items-center gap-1.5 ${
-                                        isTimerCritical ? "text-danger animate-pulse" : isTimerLow ? "text-warning" : "text-white"
+                                        isTimerCritical
+                                            ? "text-danger animate-pulse"
+                                            : isTimerLow
+                                              ? "text-warning"
+                                              : "text-white"
                                     }`}
                                 >
                                     <Clock size={16} />
@@ -323,7 +331,12 @@ const ExamTakingPage = () => {
                     <span className="font-size-11 text-white-50 text-nowrap fw-semibold">
                         Progress: {answeredCount} of {totalQuestions} answered
                     </span>
-                    <ProgressBar now={progressPercent} variant="success" className="flex-grow-1" style={{ height: "6px" }} />
+                    <ProgressBar
+                        now={progressPercent}
+                        variant="success"
+                        className="flex-grow-1"
+                        style={{ height: "6px" }}
+                    />
                 </div>
             </header>
 
@@ -335,20 +348,28 @@ const ExamTakingPage = () => {
                         <Card className="border-0 shadow-sm rounded-4 bg-white sticky-top" style={{ top: "140px" }}>
                             <Card.Body className="p-3.5">
                                 <h6 className="fw-bold text-secondary-800 mb-3">Question Navigator</h6>
-                                <div className="d-grid grid-cols-5 gap-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(40px, 1fr))" }}>
+                                <div
+                                    className="d-grid grid-cols-5 gap-2"
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "repeat(auto-fill, minmax(40px, 1fr))"
+                                    }}
+                                >
                                     {questions.map((q, idx) => {
                                         const isCurrent = idx === currentIndex;
                                         const isAnswered = answers[q.questionId] !== undefined;
                                         const isSavingError = savingStatus[q.questionId] === "error";
                                         const isSaving = savingStatus[q.questionId] === "saving";
 
-                                        let btnClass = "btn btn-sm d-flex align-items-center justify-content-center fw-semibold rounded-3 ";
+                                        let btnClass =
+                                            "btn btn-sm d-flex align-items-center justify-content-center fw-semibold rounded-3 ";
                                         if (isCurrent) {
                                             btnClass += "btn-primary shadow-sm border-2 border-primary-700";
                                         } else if (isSavingError) {
                                             btnClass += "btn-danger text-white";
                                         } else if (isAnswered) {
-                                            btnClass += "btn-success text-white bg-success-subtle border-success text-success-800";
+                                            btnClass +=
+                                                "btn-success text-white bg-success-subtle border-success text-success-800";
                                         } else {
                                             btnClass += "btn-outline-secondary text-secondary-600";
                                         }
@@ -363,7 +384,15 @@ const ExamTakingPage = () => {
                                                 {idx + 1}
                                                 {isSaving && (
                                                     <span className="position-absolute bottom-0 start-50 translate-middle-x mb-1">
-                                                        <Spinner animation="border" size="sm" style={{ width: "8px", height: "8px", borderWidth: "1.5px" }} />
+                                                        <Spinner
+                                                            animation="border"
+                                                            size="sm"
+                                                            style={{
+                                                                width: "8px",
+                                                                height: "8px",
+                                                                borderWidth: "1.5px"
+                                                            }}
+                                                        />
                                                     </span>
                                                 )}
                                             </button>
@@ -371,21 +400,36 @@ const ExamTakingPage = () => {
                                     })}
                                 </div>
 
-                                <div className="border-top mt-4 pt-3 d-flex flex-column gap-2" style={{ fontSize: "0.75rem" }}>
+                                <div
+                                    className="border-top mt-4 pt-3 d-flex flex-column gap-2"
+                                    style={{ fontSize: "0.75rem" }}
+                                >
                                     <div className="d-flex align-items-center gap-2 text-muted">
-                                        <span className="bg-primary rounded-circle" style={{ width: "12px", height: "12px", display: "inline-block" }}></span>
+                                        <span
+                                            className="bg-primary rounded-circle"
+                                            style={{ width: "12px", height: "12px", display: "inline-block" }}
+                                        ></span>
                                         <span>Current Question</span>
                                     </div>
                                     <div className="d-flex align-items-center gap-2 text-muted">
-                                        <span className="bg-success rounded-circle" style={{ width: "12px", height: "12px", display: "inline-block" }}></span>
+                                        <span
+                                            className="bg-success rounded-circle"
+                                            style={{ width: "12px", height: "12px", display: "inline-block" }}
+                                        ></span>
                                         <span>Answered & Saved</span>
                                     </div>
                                     <div className="d-flex align-items-center gap-2 text-muted">
-                                        <span className="border border-secondary rounded-circle" style={{ width: "12px", height: "12px", display: "inline-block" }}></span>
+                                        <span
+                                            className="border border-secondary rounded-circle"
+                                            style={{ width: "12px", height: "12px", display: "inline-block" }}
+                                        ></span>
                                         <span>Unanswered</span>
                                     </div>
                                     <div className="d-flex align-items-center gap-2 text-muted">
-                                        <span className="bg-danger rounded-circle" style={{ width: "12px", height: "12px", display: "inline-block" }}></span>
+                                        <span
+                                            className="bg-danger rounded-circle"
+                                            style={{ width: "12px", height: "12px", display: "inline-block" }}
+                                        ></span>
                                         <span>Save Error (Unsaved)</span>
                                     </div>
                                 </div>
@@ -399,7 +443,10 @@ const ExamTakingPage = () => {
                             <Card.Body className="p-4">
                                 <div className="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
                                     <div className="d-flex align-items-center gap-2">
-                                        <Badge bg="secondary" className="px-2.5 py-1.5 bg-secondary-subtle text-secondary-800 rounded-pill">
+                                        <Badge
+                                            bg="secondary"
+                                            className="px-2.5 py-1.5 bg-secondary-subtle text-secondary-800 rounded-pill"
+                                        >
                                             Question {currentIndex + 1} of {totalQuestions}
                                         </Badge>
                                     </div>
@@ -407,17 +454,26 @@ const ExamTakingPage = () => {
                                     {/* SAVE STATUS INDICATOR */}
                                     <div>
                                         {savingStatus[currentQuestion.questionId] === "saving" && (
-                                            <span className="text-muted d-flex align-items-center gap-1.5" style={{ fontSize: "var(--text-xs)" }}>
+                                            <span
+                                                className="text-muted d-flex align-items-center gap-1.5"
+                                                style={{ fontSize: "var(--text-xs)" }}
+                                            >
                                                 <RefreshCw size={12} className="spin text-primary" /> Saving answer...
                                             </span>
                                         )}
                                         {savingStatus[currentQuestion.questionId] === "saved" && (
-                                            <span className="text-success d-flex align-items-center gap-1.5" style={{ fontSize: "var(--text-xs)" }}>
+                                            <span
+                                                className="text-success d-flex align-items-center gap-1.5"
+                                                style={{ fontSize: "var(--text-xs)" }}
+                                            >
                                                 <CheckCircle2 size={12} /> Progress auto-saved
                                             </span>
                                         )}
                                         {savingStatus[currentQuestion.questionId] === "error" && (
-                                            <span className="text-danger d-flex align-items-center gap-1.5" style={{ fontSize: "var(--text-xs)" }}>
+                                            <span
+                                                className="text-danger d-flex align-items-center gap-1.5"
+                                                style={{ fontSize: "var(--text-xs)" }}
+                                            >
                                                 <AlertTriangle size={12} /> Auto-save failed! Click again to retry.
                                             </span>
                                         )}
@@ -425,7 +481,10 @@ const ExamTakingPage = () => {
                                 </div>
 
                                 <div className="mb-4">
-                                    <h4 className="fw-bold mb-0 text-dark leading-snug" style={{ fontSize: "var(--text-lg)" }}>
+                                    <h4
+                                        className="fw-bold mb-0 text-dark leading-snug"
+                                        style={{ fontSize: "var(--text-lg)" }}
+                                    >
                                         {currentQuestion.body}
                                     </h4>
                                 </div>
@@ -438,7 +497,9 @@ const ExamTakingPage = () => {
                                         return (
                                             <div
                                                 key={choice.choiceId}
-                                                onClick={() => handleSelectChoice(currentQuestion.questionId, choice.choiceId)}
+                                                onClick={() =>
+                                                    handleSelectChoice(currentQuestion.questionId, choice.choiceId)
+                                                }
                                                 className={`p-3.5 border rounded-3 transition-all cursor-pointer d-flex align-items-start gap-3 hover-bg-light ${
                                                     isSelected
                                                         ? "border-success bg-success-subtle bg-opacity-10 text-success-900 shadow-sm"
@@ -456,9 +517,7 @@ const ExamTakingPage = () => {
                                                         style={{ transform: "scale(1.15)" }}
                                                     />
                                                 </div>
-                                                <div className="fw-medium font-size-14 flex-grow-1">
-                                                    {choice.body}
-                                                </div>
+                                                <div className="fw-medium font-size-14 flex-grow-1">{choice.body}</div>
                                             </div>
                                         );
                                     })}
@@ -467,7 +526,7 @@ const ExamTakingPage = () => {
                                 {/* BOTTOM NAVIGATION CONTROLS */}
                                 <div className="d-flex justify-content-between border-top pt-4">
                                     <button
-                                        onClick={() => setCurrentIndex(prev => prev - 1)}
+                                        onClick={() => setCurrentIndex((prev) => prev - 1)}
                                         disabled={currentIndex === 0}
                                         className="btn btn-outline-secondary d-flex align-items-center gap-1.5 px-3 py-2 rounded-3"
                                     >
@@ -476,7 +535,7 @@ const ExamTakingPage = () => {
 
                                     {currentIndex < totalQuestions - 1 ? (
                                         <button
-                                            onClick={() => setCurrentIndex(prev => prev + 1)}
+                                            onClick={() => setCurrentIndex((prev) => prev + 1)}
                                             className="btn btn-primary d-flex align-items-center gap-1.5 px-4 py-2 rounded-3"
                                         >
                                             Next <ChevronRight size={16} />

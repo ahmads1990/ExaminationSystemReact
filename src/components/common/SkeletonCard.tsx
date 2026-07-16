@@ -1,4 +1,4 @@
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 
 interface SkeletonCardProps {
     count?: number;
@@ -18,7 +18,7 @@ export const SkeletonCard = ({ count = 3 }: SkeletonCardProps) => {
                         <Card.Body className="p-4 pt-5 d-flex flex-column gap-3">
                             {/* Title line */}
                             <div className="skeleton-title mb-2" />
-                            
+
                             {/* Description lines */}
                             <div className="d-flex flex-column gap-2 mb-3">
                                 <div className="skeleton-line" style={{ width: "100%" }} />
@@ -34,8 +34,14 @@ export const SkeletonCard = ({ count = 3 }: SkeletonCardProps) => {
                             </div>
                         </Card.Body>
                         <Card.Footer className="bg-white border-0 px-4 pb-4 pt-0 d-flex gap-2">
-                            <div className="skeleton-line" style={{ width: "70px", height: "36px", borderRadius: "8px" }} />
-                            <div className="skeleton-line" style={{ width: "70px", height: "36px", borderRadius: "8px" }} />
+                            <div
+                                className="skeleton-line"
+                                style={{ width: "70px", height: "36px", borderRadius: "8px" }}
+                            />
+                            <div
+                                className="skeleton-line"
+                                style={{ width: "70px", height: "36px", borderRadius: "8px" }}
+                            />
                         </Card.Footer>
                     </Card>
                 </Col>

@@ -40,11 +40,7 @@ const PasswordInput = ({
                     minLength={minLength}
                     className="bg-light border-light-subtle focus-ring"
                 />
-                {error && (
-                    <Form.Control.Feedback type="invalid">
-                        {error}
-                    </Form.Control.Feedback>
-                )}
+                {error && <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>}
             </FloatingLabel>
         </div>
     );

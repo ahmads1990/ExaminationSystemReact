@@ -1,16 +1,21 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
 import { StudentEnrollInCourseRequest } from "../api/requests/StudentCourseRequests";
-import { StudentEnrollmentDto } from "../api/responses/StudentCourseResponses";
+import { ApiResponse } from "../api/responses/ApiResponse";
 import { CourseDto } from "../api/responses/courses/CourseDto";
 import { PaginatedResponse } from "../api/responses/PaginatedResponse";
-import { ApiResponse } from "../api/responses/ApiResponse";
+import { StudentEnrollmentDto } from "../api/responses/StudentCourseResponses";
 
 const serviceEndpoint = ENDPOINTS.STUDENT_COURSES;
 
 const StudentCourseService = {
-    getMyEnrollments: async (params?: { CourseTitle?: string; OnlyEnrolled?: boolean }): Promise<PaginatedResponse<StudentEnrollmentDto>> => {
-        const response = await api.get<PaginatedResponse<StudentEnrollmentDto>>(`${serviceEndpoint}/me/enrollments`, { params });
+    getMyEnrollments: async (params?: {
+        CourseTitle?: string;
+        OnlyEnrolled?: boolean;
+    }): Promise<PaginatedResponse<StudentEnrollmentDto>> => {
+        const response = await api.get<PaginatedResponse<StudentEnrollmentDto>>(`${serviceEndpoint}/me/enrollments`, {
+            params
+        });
         return response.data;
     },
 
@@ -19,11 +24,14 @@ const StudentCourseService = {
         return response.data;
     },
 
-    getCourses: async (params?: { Title?: string; PageIndex?: number; PageSize?: number }): Promise<PaginatedResponse<CourseDto>> => {
+    getCourses: async (params?: {
+        Title?: string;
+        PageIndex?: number;
+        PageSize?: number;
+    }): Promise<PaginatedResponse<CourseDto>> => {
         const response = await api.get<PaginatedResponse<CourseDto>>(`${serviceEndpoint}`, { params });
         return response.data;
     }
 };
 
 export default StudentCourseService;
-

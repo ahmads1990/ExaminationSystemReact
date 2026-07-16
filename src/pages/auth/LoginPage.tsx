@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Form, Button, Spinner, Alert } from "react-bootstrap";
+import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import PasswordInput from "../../components/common/forms/PasswordInput";
+import TextInput from "../../components/common/forms/TextInput";
 import { useAuth } from "../../contexts/AuthContext";
 import AuthService from "../../services/authService";
-import TextInput from "../../components/common/forms/TextInput";
-import PasswordInput from "../../components/common/forms/PasswordInput";
 import { validateLoginRequest, ValidationErrors } from "../../utils/validation";
 
 const LoginPage = () => {
@@ -12,7 +12,7 @@ const LoginPage = () => {
     const { login } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
-    
+
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -33,7 +33,7 @@ const LoginPage = () => {
         setLoading(true);
         try {
             const response = await AuthService.login(formData);
-            
+
             if (response.success && response.data) {
                 // Login successful, save token and redirect
                 const { jwtToken, refreshToken } = response.data;
@@ -44,7 +44,7 @@ const LoginPage = () => {
             }
         } catch (err: any) {
             console.error("Login error:", err);
-            
+
             // Check for EmailNotVerified
             if (err.response?.data?.errorCode === 1002) {
                 const userId = err.response.data.data; // Assumption: backend returns userId in data
@@ -53,7 +53,7 @@ const LoginPage = () => {
                     return; // Stop execution
                 }
             }
-            
+
             setError(err.response?.data?.message || "An error occurred. Please try again.");
         } finally {
             setLoading(false);
@@ -73,27 +73,30 @@ const LoginPage = () => {
                 </Alert>
             )}
 
-            <div className="demo-credentials-card border rounded-3 p-3 mb-4 shadow-sm" style={{ backgroundColor: '#fffdf0', borderColor: '#ffe69c' }}>
+            <div
+                className="demo-credentials-card border rounded-3 p-3 mb-4 shadow-sm"
+                style={{ backgroundColor: "#fffdf0", borderColor: "#ffe69c" }}
+            >
                 <div className="d-flex justify-content-between align-items-center mb-2">
                     <h6 className="mb-0 text-warning-emphasis fw-bold">🚀 Quick Demo Access</h6>
                     <span className="badge bg-success rounded-pill px-2">Good with it! ✨</span>
                 </div>
                 <div className="row g-2">
                     <div className="col-6">
-                        <div 
-                            className="p-2 border rounded bg-white cursor-pointer hover-shadow transition-all" 
-                            style={{ fontSize: '0.8rem', cursor: 'pointer' }}
-                            onClick={() => setFormData({ email: 'admin@exam.com', password: 'Password123!' })}
+                        <div
+                            className="p-2 border rounded bg-white cursor-pointer hover-shadow transition-all"
+                            style={{ fontSize: "0.8rem", cursor: "pointer" }}
+                            onClick={() => setFormData({ email: "admin@exam.com", password: "Password123!" })}
                         >
                             <div className="fw-bold text-primary">Instructor</div>
                             <code>admin@exam.com</code>
                         </div>
                     </div>
                     <div className="col-6">
-                        <div 
-                            className="p-2 border rounded bg-white cursor-pointer hover-shadow transition-all" 
-                            style={{ fontSize: '0.8rem', cursor: 'pointer' }}
-                            onClick={() => setFormData({ email: 'student@exam.com', password: 'Password123!' })}
+                        <div
+                            className="p-2 border rounded bg-white cursor-pointer hover-shadow transition-all"
+                            style={{ fontSize: "0.8rem", cursor: "pointer" }}
+                            onClick={() => setFormData({ email: "student@exam.com", password: "Password123!" })}
                         >
                             <div className="fw-bold text-info">Student</div>
                             <code>student@exam.com</code>
@@ -101,7 +104,7 @@ const LoginPage = () => {
                     </div>
                 </div>
                 <div className="mt-2 text-center">
-                    <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+                    <small className="text-muted" style={{ fontSize: "0.75rem" }}>
                         Click a user above to auto-fill the form!
                     </small>
                 </div>
@@ -132,10 +135,20 @@ const LoginPage = () => {
 
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <Form.Check type="checkbox" label="Remember me" id="rememberMe" className="small text-muted" />
-                    <Link to="/forgot-password" className="text-decoration-none small fw-semibold text-primary hover-opacity">Forgot password?</Link>
+                    <Link
+                        to="/forgot-password"
+                        className="text-decoration-none small fw-semibold text-primary hover-opacity"
+                    >
+                        Forgot password?
+                    </Link>
                 </div>
 
-                <Button variant="primary" type="submit" className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-4" disabled={loading}>
+                <Button
+                    variant="primary"
+                    type="submit"
+                    className="w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-4"
+                    disabled={loading}
+                >
                     {loading ? (
                         <>
                             <Spinner animation="border" size="sm" /> Signing In...
@@ -152,7 +165,6 @@ const LoginPage = () => {
                     </Link>
                 </div>
             </Form>
-
         </div>
     );
 };

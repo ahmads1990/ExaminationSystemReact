@@ -1,6 +1,6 @@
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
-import { Card, Container, Form, Button, Row, Col } from "react-bootstrap";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 
 const ContactPage = () => {
@@ -24,8 +24,11 @@ const ContactPage = () => {
                     <Card className="border-0 shadow-sm rounded-4 bg-primary text-white p-4 h-100 d-flex flex-column justify-content-between">
                         <div>
                             <h4 className="fw-bold mb-3">Contact Info</h4>
-                            <p className="text-white-50 small mb-4">Have questions about class permissions or test configurations? Reach out to support directly.</p>
-                            
+                            <p className="text-white-50 small mb-4">
+                                Have questions about class permissions or test configurations? Reach out to support
+                                directly.
+                            </p>
+
                             <div className="d-flex flex-column gap-3">
                                 <div className="d-flex align-items-center gap-3">
                                     <Mail size={18} className="text-white-50" />
@@ -54,10 +57,10 @@ const ContactPage = () => {
                         <Form onSubmit={handleSubmitContact}>
                             <Form.Group className="mb-3">
                                 <Form.Label className="fw-semibold text-secondary">Your Name</Form.Label>
-                                <Form.Control 
-                                    type="text" 
-                                    value={name} 
-                                    onChange={(e) => setName(e.target.value)} 
+                                <Form.Control
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     placeholder="Enter your name"
                                     required
                                     className="rounded-3 border-light py-2"
@@ -66,10 +69,10 @@ const ContactPage = () => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label className="fw-semibold text-secondary">Email Address</Form.Label>
-                                <Form.Control 
-                                    type="email" 
-                                    value={email} 
-                                    onChange={(e) => setEmail(e.target.value)} 
+                                <Form.Control
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email"
                                     required
                                     className="rounded-3 border-light py-2"
@@ -78,18 +81,21 @@ const ContactPage = () => {
 
                             <Form.Group className="mb-4">
                                 <Form.Label className="fw-semibold text-secondary">Message</Form.Label>
-                                <Form.Control 
+                                <Form.Control
                                     as="textarea"
                                     rows={4}
-                                    value={message} 
-                                    onChange={(e) => setMessage(e.target.value)} 
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
                                     placeholder="How can we assist you?"
                                     required
                                     className="rounded-3 border-light py-2"
                                 />
                             </Form.Group>
 
-                            <Button type="submit" className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm w-100 justify-content-center">
+                            <Button
+                                type="submit"
+                                className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm w-100 justify-content-center"
+                            >
                                 <Send size={16} /> Send Message
                             </Button>
                         </Form>

@@ -1,7 +1,7 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
-import { ApiResponse } from "../api/responses/ApiResponse";
 import { ChangePasswordRequest } from "../api/requests/AuthRequests";
+import { ApiResponse } from "../api/responses/ApiResponse";
 
 const serviceEndpoint = ENDPOINTS.USERS;
 

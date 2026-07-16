@@ -1,7 +1,6 @@
-import { ExamType, ExamStatus } from "../../../enums"; // ensure ExamStatus is imported
+import { ExamStatus, ExamType } from "../../../enums"; // ensure ExamStatus is imported
 
-export interface ExamDto
-{
+export interface ExamDto {
     id: number;
     title: string;
     courseName: string;

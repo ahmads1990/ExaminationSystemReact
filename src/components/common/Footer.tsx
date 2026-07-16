@@ -11,12 +11,15 @@ const Footer = () => {
                         <Link to="/" className="text-decoration-none fw-bold fs-5 text-white">
                             Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                         </Link>
-                        <span className="ms-3" style={{ fontSize: '0.85rem' }}>
+                        <span className="ms-3" style={{ fontSize: "0.85rem" }}>
                             &copy; {currentYear} All rights reserved.
                         </span>
                     </div>
                     <div className="col-12 col-md-auto">
-                        <div className="d-flex flex-wrap justify-content-center justify-content-md-end gap-3 gap-md-4" style={{ fontSize: '0.85rem' }}>
+                        <div
+                            className="d-flex flex-wrap justify-content-center justify-content-md-end gap-3 gap-md-4"
+                            style={{ fontSize: "0.85rem" }}
+                        >
                             <Link to="/about" className="text-decoration-none">
                                 About Us
                             </Link>
@@ -41,4 +44,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

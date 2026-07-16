@@ -1,38 +1,33 @@
-export interface RegisterInstructorRequest
-{
+export interface RegisterInstructorRequest {
     name: string;
     username: string;
     email: string;
     password: string;
     bio: string;
-    specialization: string
+    specialization: string;
 }
 
-export interface RegisterStudentRequest
-{
+export interface RegisterStudentRequest {
     name: string;
     username: string;
     email: string;
     password: string;
     level: string;
-    group: string
+    group: string;
 }
 
-export interface LoginRequest
-{
+export interface LoginRequest {
     email: string;
     password: string;
 }
 
-export interface VerifyEmailRequest
-{
-    userId: number,
-    token: string
+export interface VerifyEmailRequest {
+    userId: number;
+    token: string;
 }
 
-export interface ResendVerificationEmailRequest
-{
-    userId: number
+export interface ResendVerificationEmailRequest {
+    userId: number;
 }
 
 export interface ResetPasswordRequest {

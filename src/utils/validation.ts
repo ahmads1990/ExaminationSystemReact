@@ -1,76 +1,56 @@
-import
-{
-    RegisterStudentRequest,
-    RegisterInstructorRequest,
-    LoginRequest
-} from "../api/requests/AuthRequests";
+import { LoginRequest, RegisterInstructorRequest, RegisterStudentRequest } from "../api/requests/AuthRequests";
 
-export interface ValidationErrors
-{
-    [ key: string ]: string;
+export interface ValidationErrors {
+    [key: string]: string;
 }
 
 // ============================================================================
 // Field Validators (reusable)
 // ============================================================================
 
-const validateRequiredField = (value: string, fieldName: string): string | undefined =>
-{
-    if (!value || value.trim() === "")
-    {
+const validateRequiredField = (value: string, fieldName: string): string | undefined => {
+    if (!value || value.trim() === "") {
         return `${fieldName} is required.`;
     }
     return undefined;
 };
 
-const validateMinLength = (value: string, minLength: number, fieldName: string): string | undefined =>
-{
-    if (value && value.length < minLength)
-    {
+const validateMinLength = (value: string, minLength: number, fieldName: string): string | undefined => {
+    if (value && value.length < minLength) {
         return `${fieldName} must be at least ${minLength} characters long.`;
     }
     return undefined;
 };
 
-const validateMaxLength = (value: string, maxLength: number, fieldName: string): string | undefined =>
-{
-    if (value && value.length > maxLength)
-    {
+const validateMaxLength = (value: string, maxLength: number, fieldName: string): string | undefined => {
+    if (value && value.length > maxLength) {
         return `${fieldName} must not exceed ${maxLength} characters.`;
     }
     return undefined;
 };
 
-const validateEmailFormat = (email: string): string | undefined =>
-{
+const validateEmailFormat = (email: string): string | undefined => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email))
-    {
+    if (!emailRegex.test(email)) {
         return "Invalid email format.";
     }
     return undefined;
 };
 
-const validatePasswordStrength = (password: string): string | undefined =>
-{
-    if (password.length < 8)
-    {
+const validatePasswordStrength = (password: string): string | undefined => {
+    if (password.length < 8) {
         return "Password must be at least 8 characters long.";
     }
-    if (!/[A-Z]/.test(password))
-    {
+    if (!/[A-Z]/.test(password)) {
         return "Password must contain at least one uppercase letter.";
     }
-    if (!/[a-z]/.test(password))
-    {
+    if (!/[a-z]/.test(password)) {
         return "Password must contain at least one lowercase letter.";
     }
-    if (!/[0-9]/.test(password))
-    {
+    if (!/[0-9]/.test(password)) {
         return "Password must contain at least one digit.";
     }
-    if (!/[^a-zA-Z0-9]/.test(password))
-    {
+    if (!/[^a-zA-Z0-9]/.test(password)) {
         return "Password must contain at least one special character.";
     }
     return undefined;
@@ -141,24 +121,20 @@ export const validateSharedRegistration = (
 export const validateRegisterStudentRequest = (
     request: RegisterStudentRequest,
     confirmPassword?: string
-): ValidationErrors =>
-{
+): ValidationErrors => {
     const errors = validateSharedRegistration(request, confirmPassword);
 
     // Level validation
     const levelRequired = validateRequiredField(request.level, "Level");
-    if (levelRequired)
-    {
+    if (levelRequired) {
         errors.level = levelRequired;
-    } else
-    {
+    } else {
         const levelMax = validateMaxLength(request.level, 50, "Level");
         if (levelMax) errors.level = levelMax;
     }
 
     // Group validation (optional)
-    if (request.group)
-    {
+    if (request.group) {
         const groupMax = validateMaxLength(request.group, 50, "Group");
         if (groupMax) errors.group = groupMax;
     }
@@ -169,20 +145,17 @@ export const validateRegisterStudentRequest = (
 export const validateRegisterInstructorRequest = (
     request: RegisterInstructorRequest,
     confirmPassword?: string
-): ValidationErrors =>
-{
+): ValidationErrors => {
     const errors = validateSharedRegistration(request, confirmPassword);
 
     // Bio validation (optional)
-    if (request.bio)
-    {
+    if (request.bio) {
         const bioMax = validateMaxLength(request.bio, 500, "Bio");
         if (bioMax) errors.bio = bioMax;
     }
 
     // Specialization validation (optional)
-    if (request.specialization)
-    {
+    if (request.specialization) {
         const specMax = validateMaxLength(request.specialization, 200, "Specialization");
         if (specMax) errors.specialization = specMax;
     }
@@ -190,25 +163,21 @@ export const validateRegisterInstructorRequest = (
     return errors;
 };
 
-export const validateLoginRequest = (request: LoginRequest): ValidationErrors =>
-{
+export const validateLoginRequest = (request: LoginRequest): ValidationErrors => {
     const errors: ValidationErrors = {};
 
     // Email validation
     const emailRequired = validateRequiredField(request.email, "Email");
-    if (emailRequired)
-    {
+    if (emailRequired) {
         errors.email = emailRequired;
-    } else
-    {
+    } else {
         const emailFormat = validateEmailFormat(request.email);
         if (emailFormat) errors.email = emailFormat;
     }
 
     // Password validation
     const passwordRequired = validateRequiredField(request.password, "Password");
-    if (passwordRequired)
-    {
+    if (passwordRequired) {
         errors.password = passwordRequired;
     }
 

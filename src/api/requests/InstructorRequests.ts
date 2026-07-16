@@ -1,4 +1,4 @@
-import { SortingDirection, ExamAttemptStatus } from "../../enums";
+import { ExamAttemptStatus, SortingDirection } from "../../enums";
 
 export interface GetInstructorCourseStatsParams {
     CourseName?: string;

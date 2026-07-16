@@ -1,7 +1,7 @@
-import { createContext, useState, useEffect, ReactNode, useContext } from 'react';
-import { User, AuthState, AuthContextType } from '../types/auth';
-import { saveToken, getToken, saveUser, getUser, clearAuth, saveRefreshToken } from '../utils/storage';
-import { extractUserFromToken, isTokenExpired } from '../utils/jwt';
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { AuthContextType, AuthState, User } from "../types/auth";
+import { extractUserFromToken, isTokenExpired } from "../utils/jwt";
+import { clearAuth, getToken, getUser, saveRefreshToken, saveToken, saveUser } from "../utils/storage";
 
 // Create and export the context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     });
                 }
             } else {
-                setState(prev => ({ ...prev, isLoading: false }));
+                setState((prev) => ({ ...prev, isLoading: false }));
             }
         };
 
@@ -52,9 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = (accessToken: string, refreshToken: string) => {
         // Extract user from token
         const user = extractUserFromToken(accessToken);
-        
+
         if (!user) {
-            console.error('Failed to extract user from token');
+            console.error("Failed to extract user from token");
             return;
         }
 
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const updateUser = (user: User) => {
         saveUser(user);
-        setState(prev => ({ ...prev, user }));
+        setState((prev) => ({ ...prev, user }));
     };
 
     const value: AuthContextType = {
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error("useAuth must be used within an AuthProvider");
     }
     return context;
 };

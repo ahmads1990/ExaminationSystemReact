@@ -1,5 +1,5 @@
-import { Card, Row, Col, Badge, ListGroup } from "react-bootstrap";
-import { Calendar, Clock, AlertCircle, CheckCircle, MapPin } from "lucide-react";
+import { AlertCircle, Calendar, CheckCircle, Clock, MapPin } from "lucide-react";
+import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { formatDate } from "../../utils/dateUtils";
 
 const CalendarPage = () => {
@@ -50,11 +50,23 @@ const CalendarPage = () => {
     const getStatusBadge = (status: string) => {
         switch (status) {
             case "urgent":
-                return <Badge bg="danger" className="px-2 py-1">Urgent</Badge>;
+                return (
+                    <Badge bg="danger" className="px-2 py-1">
+                        Urgent
+                    </Badge>
+                );
             case "upcoming":
-                return <Badge bg="warning" className="px-2 py-1 text-dark">Upcoming</Badge>;
+                return (
+                    <Badge bg="warning" className="px-2 py-1 text-dark">
+                        Upcoming
+                    </Badge>
+                );
             default:
-                return <Badge bg="primary" className="px-2 py-1">Scheduled</Badge>;
+                return (
+                    <Badge bg="primary" className="px-2 py-1">
+                        Scheduled
+                    </Badge>
+                );
         }
     };
 
@@ -62,7 +74,9 @@ const CalendarPage = () => {
         <div className="container-fluid py-2" style={{ maxWidth: "1000px" }}>
             <div className="mb-4">
                 <h1 className="h3 fw-bold text-dark mb-1">Calendar & Deadlines</h1>
-                <p className="text-secondary">Keep track of your upcoming exam schedules, quizzes, and submission deadlines</p>
+                <p className="text-secondary">
+                    Keep track of your upcoming exam schedules, quizzes, and submission deadlines
+                </p>
             </div>
 
             <Row className="g-4">
@@ -77,7 +91,9 @@ const CalendarPage = () => {
                                 <Card.Body className="p-4">
                                     <div className="d-flex justify-content-between align-items-start gap-3 mb-2 flex-wrap">
                                         <div>
-                                            <span className="text-muted small fw-semibold text-uppercase tracking-wider">{event.course}</span>
+                                            <span className="text-muted small fw-semibold text-uppercase tracking-wider">
+                                                {event.course}
+                                            </span>
                                             <h5 className="fw-bold text-dark mt-1 mb-0">{event.title}</h5>
                                         </div>
                                         {getStatusBadge(event.status)}
@@ -115,8 +131,13 @@ const CalendarPage = () => {
                                     <AlertCircle size={16} />
                                 </div>
                                 <div>
-                                    <div className="fw-bold text-dark" style={{ fontSize: '0.9rem' }}>Physics Exam Starting Soon</div>
-                                    <div className="text-secondary small">Physics I Midterm is scheduled for July 20th at 10:00 AM. Study guide is available.</div>
+                                    <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>
+                                        Physics Exam Starting Soon
+                                    </div>
+                                    <div className="text-secondary small">
+                                        Physics I Midterm is scheduled for July 20th at 10:00 AM. Study guide is
+                                        available.
+                                    </div>
                                 </div>
                             </ListGroup.Item>
 
@@ -125,8 +146,12 @@ const CalendarPage = () => {
                                     <CheckCircle size={16} />
                                 </div>
                                 <div>
-                                    <div className="fw-bold text-dark" style={{ fontSize: '0.9rem' }}>All Grades Up to Date</div>
-                                    <div className="text-secondary small">Your exam history reports show all current graded quiz scores.</div>
+                                    <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>
+                                        All Grades Up to Date
+                                    </div>
+                                    <div className="text-secondary small">
+                                        Your exam history reports show all current graded quiz scores.
+                                    </div>
                                 </div>
                             </ListGroup.Item>
                         </ListGroup>

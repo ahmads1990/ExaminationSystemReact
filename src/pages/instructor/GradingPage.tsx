@@ -1,6 +1,6 @@
+import { BookOpen, Calendar, CheckCircle, PenTool, User } from "lucide-react";
 import { useState } from "react";
-import { Table, Badge, Button, Modal, Form } from "react-bootstrap";
-import { User, Calendar, BookOpen, PenTool, CheckCircle } from "lucide-react";
+import { Badge, Button, Form, Modal, Table } from "react-bootstrap";
 import toast from "react-hot-toast";
 
 interface Submission {
@@ -82,7 +82,7 @@ const GradingPage = () => {
     };
 
     const handleScoreChange = (qIndex: number, val: number) => {
-        setScores(prev => ({
+        setScores((prev) => ({
             ...prev,
             [qIndex]: val
         }));
@@ -101,9 +101,9 @@ const GradingPage = () => {
         });
 
         // Update local state
-        setSubmissions(prev => 
-            prev.map(sub => 
-                sub.id === selectedSubmission.id 
+        setSubmissions((prev) =>
+            prev.map((sub) =>
+                sub.id === selectedSubmission.id
                     ? { ...sub, status: "Graded" as const, score: `${earned}/${max}` }
                     : sub
             )
@@ -117,12 +117,14 @@ const GradingPage = () => {
         <div className="container-fluid py-2" style={{ maxWidth: "1000px" }}>
             <div className="mb-4">
                 <h1 className="h3 fw-bold text-dark mb-1">Grade Submissions</h1>
-                <p className="text-secondary">Review student answers for subjective questions, assign point scores, and provide written feedback</p>
+                <p className="text-secondary">
+                    Review student answers for subjective questions, assign point scores, and provide written feedback
+                </p>
             </div>
 
             <div className="card border-0 shadow-sm rounded-4 bg-white overflow-hidden p-0">
                 <Table responsive hover className="mb-0 align-middle">
-                    <thead className="bg-light text-secondary" style={{ fontSize: '0.85rem' }}>
+                    <thead className="bg-light text-secondary" style={{ fontSize: "0.85rem" }}>
                         <tr>
                             <th className="py-3 px-4 border-0">Student</th>
                             <th className="py-3 px-4 border-0">Course</th>
@@ -132,7 +134,7 @@ const GradingPage = () => {
                             <th className="py-3 px-4 border-0 text-end">Action</th>
                         </tr>
                     </thead>
-                    <tbody style={{ fontSize: '0.9rem' }}>
+                    <tbody style={{ fontSize: "0.9rem" }}>
                         {submissions.map((sub) => (
                             <tr key={sub.id} className="border-bottom border-light">
                                 <td className="py-3.5 px-4 border-0">
@@ -148,25 +150,29 @@ const GradingPage = () => {
                                 <td className="py-3.5 px-4 border-0 text-secondary">{sub.submitDate}</td>
                                 <td className="py-3.5 px-4 border-0">
                                     {sub.status === "Pending" ? (
-                                        <Badge bg="warning" className="text-dark px-2 py-1">Pending Review</Badge>
+                                        <Badge bg="warning" className="text-dark px-2 py-1">
+                                            Pending Review
+                                        </Badge>
                                     ) : (
-                                        <Badge bg="success" className="px-2 py-1">Graded ({sub.score})</Badge>
+                                        <Badge bg="success" className="px-2 py-1">
+                                            Graded ({sub.score})
+                                        </Badge>
                                     )}
                                 </td>
                                 <td className="py-3.5 px-4 border-0 text-end">
                                     {sub.status === "Pending" ? (
-                                        <Button 
-                                            variant="primary" 
-                                            size="sm" 
+                                        <Button
+                                            variant="primary"
+                                            size="sm"
                                             className="rounded-2 px-3 fw-semibold border-0"
                                             onClick={() => handleOpenGrading(sub)}
                                         >
                                             Grade
                                         </Button>
                                     ) : (
-                                        <Button 
-                                            variant="outline-secondary" 
-                                            size="sm" 
+                                        <Button
+                                            variant="outline-secondary"
+                                            size="sm"
                                             disabled
                                             className="rounded-2 px-3 border-light bg-light"
                                         >
@@ -208,15 +214,22 @@ const GradingPage = () => {
                             <div className="d-flex flex-column gap-4">
                                 {selectedSubmission.studentAnswers.map((item, idx) => (
                                     <div key={idx} className="p-3 border rounded-3 bg-white">
-                                        <div className="fw-bold text-dark mb-2">Question {idx + 1}: {item.question}</div>
+                                        <div className="fw-bold text-dark mb-2">
+                                            Question {idx + 1}: {item.question}
+                                        </div>
                                         <div className="p-3 bg-light rounded-3 text-secondary mb-3 italic">
                                             "{item.answer}"
                                         </div>
-                                        
-                                        <Form.Group className="d-flex align-items-center gap-3" style={{ maxWidth: "250px" }}>
-                                            <Form.Label className="fw-semibold text-secondary mb-0 flex-shrink-0">Score:</Form.Label>
-                                            <Form.Control 
-                                                type="number" 
+
+                                        <Form.Group
+                                            className="d-flex align-items-center gap-3"
+                                            style={{ maxWidth: "250px" }}
+                                        >
+                                            <Form.Label className="fw-semibold text-secondary mb-0 flex-shrink-0">
+                                                Score:
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="number"
                                                 min={0}
                                                 max={item.maxPoints}
                                                 value={scores[idx] || 0}
@@ -231,8 +244,10 @@ const GradingPage = () => {
                             </div>
 
                             <Form.Group className="mt-4">
-                                <Form.Label className="fw-semibold text-secondary">Written Feedback (Optional)</Form.Label>
-                                <Form.Control 
+                                <Form.Label className="fw-semibold text-secondary">
+                                    Written Feedback (Optional)
+                                </Form.Label>
+                                <Form.Control
                                     as="textarea"
                                     rows={3}
                                     value={feedback}
@@ -243,10 +258,17 @@ const GradingPage = () => {
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer className="border-light p-4">
-                            <Button variant="outline-secondary" className="rounded-3 px-4 py-2 border-light" onClick={() => setShowModal(false)}>
+                            <Button
+                                variant="outline-secondary"
+                                className="rounded-3 px-4 py-2 border-light"
+                                onClick={() => setShowModal(false)}
+                            >
                                 Cancel
                             </Button>
-                            <Button type="submit" className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm">
+                            <Button
+                                type="submit"
+                                className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm"
+                            >
                                 <CheckCircle size={16} /> Submit Grade
                             </Button>
                         </Modal.Footer>
