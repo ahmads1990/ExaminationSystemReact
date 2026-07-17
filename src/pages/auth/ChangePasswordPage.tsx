@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import PasswordInput from "../../components/common/forms/PasswordInput";
 import UserService from "../../services/userService";
 
 const ChangePasswordPage = () => {
+    const { t } = useTranslation();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,12 +17,12 @@ const ChangePasswordPage = () => {
         e.preventDefault();
 
         if (!currentPassword) {
-            setError("Please enter your current password.");
+            setError(t("auth.enter_current_pass_error", "Please enter your current password."));
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            setError("New passwords do not match.");
+            setError(t("auth.new_passwords_mismatch_error", "New passwords do not match."));
             return;
         }
 
@@ -36,15 +38,15 @@ const ChangePasswordPage = () => {
             });
 
             if (response.success) {
-                setSuccessMsg(response.message || "Password updated successfully.");
+                setSuccessMsg(response.message || t("auth.password_updated_success", "Password updated successfully."));
                 setCurrentPassword("");
                 setNewPassword("");
                 setConfirmPassword("");
             } else {
-                setError(response.message || "Failed to update password. Please try again.");
+                setError(response.message || t("auth.failed_update_error", "Failed to update password. Please try again."));
             }
         } catch (err: any) {
-            setError("Current password is incorrect or an error occurred.");
+            setError(t("auth.incorrect_password_error", "Current password is incorrect or an error occurred."));
         } finally {
             setIsSubmitting(false);
         }
@@ -56,9 +58,9 @@ const ChangePasswordPage = () => {
                 <div className="col-12 col-md-8 col-lg-6">
                     <div className="card shadow-sm border-0">
                         <div className="card-body p-4 p-md-5">
-                            <h3 className="fw-bold mb-1">Change Password</h3>
+                            <h3 className="fw-bold mb-1">{t("auth.change_pass_title")}</h3>
                             <p className="text-muted mb-4">
-                                Secure your account by updating your password periodically.
+                                {t("auth.change_pass_desc")}
                             </p>
 
                             {error && (
@@ -81,8 +83,8 @@ const ChangePasswordPage = () => {
                                 <PasswordInput
                                     id="currentPassword"
                                     name="currentPassword"
-                                    label="Current Password"
-                                    placeholder="Enter current password"
+                                    label={t("auth.current_password")}
+                                    placeholder={t("auth.current_password")}
                                     value={currentPassword}
                                     onChange={(value: string) => setCurrentPassword(value)}
                                     required
@@ -93,8 +95,8 @@ const ChangePasswordPage = () => {
                                 <PasswordInput
                                     id="newPassword"
                                     name="newPassword"
-                                    label="New Password"
-                                    placeholder="Enter new password"
+                                    label={t("auth.enter_new_pass")}
+                                    placeholder={t("auth.enter_new_pass")}
                                     value={newPassword}
                                     onChange={(value: string) => setNewPassword(value)}
                                     required
@@ -103,8 +105,8 @@ const ChangePasswordPage = () => {
                                 <PasswordInput
                                     id="confirmPassword"
                                     name="confirmPassword"
-                                    label="Confirm New Password"
-                                    placeholder="Confirm new password"
+                                    label={t("auth.confirm_new_pass")}
+                                    placeholder={t("auth.confirm_new_pass")}
                                     value={confirmPassword}
                                     onChange={(value: string) => setConfirmPassword(value)}
                                     required
@@ -118,10 +120,10 @@ const ChangePasswordPage = () => {
                                 >
                                     {isSubmitting ? (
                                         <>
-                                            <Spinner animation="border" size="sm" /> Updating...
+                                            <Spinner animation="border" size="sm" /> {t("auth.updating")}
                                         </>
                                     ) : (
-                                        "Update Password"
+                                        t("auth.btn_update_pass")
                                     )}
                                 </Button>
                             </Form>

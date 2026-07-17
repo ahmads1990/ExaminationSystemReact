@@ -1,5 +1,6 @@
 import { AlertTriangle, Award, CheckCircle2, Clock, LayoutDashboard, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Card, Spinner } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
@@ -10,6 +11,7 @@ import StudentExamService from "../../services/studentExamService";
 const ExamResultPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const attemptId = searchParams.get("attemptId");
 
     const [result, setResult] = useState<AttemptResultDto | null>(null);
@@ -20,7 +22,7 @@ const ExamResultPage = () => {
     useEffect(() => {
         const fetchResult = async () => {
             if (!attemptId) {
-                setError("No attempt ID was specified.");
+                setError(t("student.exam_result.no_attempt_id", "No attempt ID was specified."));
                 setLoading(false);
                 return;
             }
@@ -34,7 +36,7 @@ const ExamResultPage = () => {
                 if (res.success && res.data) {
                     setResult(res.data);
                 } else {
-                    setError(res.message || "Failed to retrieve exam results.");
+                    setError(res.message || t("student.exam_result.failed_retrieve", "Failed to retrieve exam results."));
                 }
             } catch (err: any) {
                 console.error("Error fetching exam result:", err);
@@ -43,9 +45,9 @@ const ExamResultPage = () => {
                 if (errorCode === ApiErrorCode.GradingInProgress) {
                     setIsGrading(true);
                 } else if (errorCode === ApiErrorCode.AttemptNotCompleted) {
-                    setError("This exam attempt has not been completed or submitted yet.");
+                    setError(t("student.exam_result.not_completed_error", "This exam attempt has not been completed or submitted yet."));
                 } else {
-                    setError(err.response?.data?.message || "Failed to fetch attempt details.");
+                    setError(err.response?.data?.message || t("student.exam_result.failed_fetch_details", "Failed to fetch attempt details."));
                 }
             } finally {
                 setLoading(false);
@@ -53,13 +55,13 @@ const ExamResultPage = () => {
         };
 
         fetchResult();
-    }, [attemptId]);
+    }, [attemptId, t]);
 
     if (loading) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center min-vh-50 py-5">
                 <Spinner animation="border" variant="primary" className="mb-3" />
-                <p className="text-muted">Loading exam results...</p>
+                <p className="text-muted">{t("student.exam_result.loading_results")}</p>
             </div>
         );
     }
@@ -72,14 +74,13 @@ const ExamResultPage = () => {
                         <div className="bg-warning-subtle text-warning rounded-circle p-3.5 d-inline-flex mb-4">
                             <Clock size={36} className="animate-spin" style={{ animationDuration: "3s" }} />
                         </div>
-                        <h4 className="fw-bold mb-2">Grading in Progress</h4>
+                        <h4 className="fw-bold mb-2">{t("student.exam_result.grading_title")}</h4>
                         <p className="text-muted small mb-4">
-                            Your submission is currently being processed and graded by the system. Please check back in
-                            a few minutes.
+                            {t("student.exam_result.grading_desc")}
                         </p>
                         <div className="d-flex gap-2 flex-column">
                             <ActionButton variant="primary" onClick={() => navigate("/student/dashboard")} fullWidth>
-                                <LayoutDashboard size={16} className="me-2" /> Go to Dashboard
+                                <LayoutDashboard size={16} className="me-2" /> {t("student.exam_start.back_dashboard")}
                             </ActionButton>
                             <ActionButton
                                 variant="outline-secondary"
@@ -89,7 +90,7 @@ const ExamResultPage = () => {
                                 }}
                                 fullWidth
                             >
-                                Refresh Status
+                                {t("student.exam_result.btn_refresh")}
                             </ActionButton>
                         </div>
                     </Card.Body>
@@ -104,12 +105,12 @@ const ExamResultPage = () => {
                 <Card className="border-0 shadow-sm rounded-4 text-center">
                     <Card.Body className="p-4">
                         <AlertTriangle size={36} className="text-danger mb-3 mx-auto" />
-                        <h4 className="fw-bold mb-3">Result Error</h4>
+                        <h4 className="fw-bold mb-3">{t("student.exam_result.error_title")}</h4>
                         <Alert variant="danger" className="py-2.5 px-3 mb-4">
-                            {error || "Unable to display results for this attempt."}
+                            {error || t("student.exam_result.unable_display")}
                         </Alert>
                         <ActionButton variant="primary" onClick={() => navigate("/student/dashboard")} fullWidth>
-                            Back to Dashboard
+                            {t("student.exam_start.back_dashboard")}
                         </ActionButton>
                     </Card.Body>
                 </Card>
@@ -131,11 +132,11 @@ const ExamResultPage = () => {
                             <XCircle size={56} className="text-white" />
                         )}
                     </div>
-                    <h3 className="fw-bold mb-1">{result.isPassed ? "Congratulations!" : "Attempt Completed"}</h3>
+                    <h3 className="fw-bold mb-1">{result.isPassed ? t("student.exam_result.passed_title") : t("student.exam_result.completed_title")}</h3>
                     <p className="mb-0 text-white-50 font-size-14">
                         {result.isPassed
-                            ? "You passed the examination successfully."
-                            : "You did not achieve the required passing score."}
+                            ? t("student.exam_result.passed_desc")
+                            : t("student.exam_result.failed_desc")}
                     </p>
                 </div>
 
@@ -143,7 +144,7 @@ const ExamResultPage = () => {
                     {/* Score display circle */}
                     <div className="text-center py-4 my-2 border-bottom">
                         <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider mb-1">
-                            Your Score
+                            {t("student.exam_result.score_label")}
                         </span>
                         <div className="d-flex align-items-baseline justify-content-center">
                             <span className="display-4 fw-extrabold text-dark leading-none">{result.currentGrade}</span>
@@ -152,7 +153,7 @@ const ExamResultPage = () => {
                         <span
                             className={`badge rounded-pill mt-3 px-3 py-1.5 fw-bold ${result.isPassed ? "bg-success-subtle text-success-800" : "bg-danger-subtle text-danger-800"}`}
                         >
-                            {percentage}% Grade — {result.isPassed ? "PASSED" : "FAILED"}
+                            {percentage}% {t("student.history.grade_label")} — {result.isPassed ? t("student.history.pass") : t("student.history.fail")}
                         </span>
                     </div>
 
@@ -160,17 +161,17 @@ const ExamResultPage = () => {
                     <div className="d-flex flex-column gap-3 py-3 border-bottom mb-4">
                         <div className="d-flex justify-content-between align-items-center">
                             <span className="text-muted d-flex align-items-center gap-1.5 font-size-13">
-                                <Award size={16} className="text-primary" /> Grade Status
+                                <Award size={16} className="text-primary" /> {t("student.exam_result.grade_status")}
                             </span>
                             <strong
                                 className={result.isPassed ? "text-success font-size-14" : "text-danger font-size-14"}
                             >
-                                {result.isPassed ? "Passed" : "Needs Review"}
+                                {result.isPassed ? t("student.exam_result.status_passed") : t("student.exam_result.status_review")}
                             </strong>
                         </div>
                         <div className="d-flex justify-content-between align-items-center">
                             <span className="text-muted d-flex align-items-center gap-1.5 font-size-13">
-                                <Clock size={16} className="text-primary" /> Completion Time
+                                <Clock size={16} className="text-primary" /> {t("student.exam_result.completion_time")}
                             </span>
                             <strong className="text-dark font-size-14">{result.completionTime || "N/A"}</strong>
                         </div>
@@ -183,7 +184,7 @@ const ExamResultPage = () => {
                             fullWidth
                             className="py-2.5"
                         >
-                            <LayoutDashboard size={16} className="me-2" /> Go to Dashboard
+                            <LayoutDashboard size={16} className="me-2" /> {t("student.exam_start.back_dashboard")}
                         </ActionButton>
                     </div>
                 </Card.Body>

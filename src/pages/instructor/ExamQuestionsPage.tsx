@@ -1,5 +1,6 @@
 import { ArrowLeft, Edit2, Plus, Trash2, Unlink } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Badge, Card } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +19,7 @@ import QuestionService from "../../services/questionService";
 const ExamQuestionsPage = () => {
     const { examId } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const examIdNum = Number(examId);
 
@@ -98,7 +100,7 @@ const ExamQuestionsPage = () => {
         setIsDeleting(true);
         try {
             await QuestionService.deleteQuestions(idsToDelete);
-            toast.success("Questions deleted successfully");
+            toast.success(t("instructor.exam_questions.toast_delete_success", "Questions deleted successfully"));
             setRowSelection({});
             setShowDeleteDialog(false);
             refreshData();
@@ -121,15 +123,15 @@ const ExamQuestionsPage = () => {
             if (res.success) {
                 const rejected = res.data || [];
                 if (rejected.length > 0) {
-                    toast.error(`Could not unassign question: ${rejected[0].reason}`);
+                    toast.error(t("instructor.exam_questions.toast_unassign_single_failed", { reason: rejected[0].reason }));
                 } else {
-                    toast.success("Question unassigned successfully.");
+                    toast.success(t("instructor.exam_questions.toast_unassign_single_success", "Question unassigned successfully."));
                     refreshData();
                 }
             }
         } catch (err: any) {
             console.error(err);
-            const errorMsg = err.response?.data?.message || "Failed to unassign question.";
+            const errorMsg = err.response?.data?.message || t("instructor.exam_questions.toast_unassign_single_error", "Failed to unassign question.");
             toast.error(errorMsg);
         } finally {
             setIsUnassigning(false);
@@ -153,16 +155,16 @@ const ExamQuestionsPage = () => {
             if (res.success) {
                 const rejected = res.data || [];
                 if (rejected.length > 0) {
-                    toast.error(`Failed to unassign ${rejected.length} question(s).`);
+                    toast.error(t("instructor.exam_questions.toast_unassign_bulk_failed", { count: rejected.length }));
                 } else {
-                    toast.success("Questions unassigned successfully.");
+                    toast.success(t("instructor.exam_questions.toast_unassign_bulk_success", "Questions unassigned successfully."));
                     setRowSelection({});
                     refreshData();
                 }
             }
         } catch (err: any) {
             console.error(err);
-            const errorMsg = err.response?.data?.message || "Failed to unassign questions.";
+            const errorMsg = err.response?.data?.message || t("instructor.exam_questions.toast_unassign_bulk_error", "Failed to unassign questions.");
             toast.error(errorMsg);
         } finally {
             setIsUnassigning(false);
@@ -209,21 +211,21 @@ const ExamQuestionsPage = () => {
             },
             {
                 id: "body",
-                header: "Question",
+                header: t("instructor.exam_questions.table_col_question"),
                 accessorKey: "body",
                 size: 550,
                 cell: (info: any) => <div className="text-wrap">{info.getValue()}</div>
             },
             {
                 id: "score",
-                header: "Score",
+                header: t("instructor.exam_questions.table_col_score"),
                 accessorKey: "score",
                 size: 50,
-                cell: (info: any) => <span className="fw-medium">{info.getValue()} pts</span>
+                cell: (info: any) => <span className="fw-medium">{info.getValue()} {t("instructor.exams.total_grade_pts", { count: "" }).trim()}</span>
             },
             {
                 id: "level",
-                header: "Level",
+                header: t("instructor.exam_questions.table_col_level"),
                 accessorKey: "questionLevel",
                 size: 25,
                 cell: (info: any) => {
@@ -234,14 +236,14 @@ const ExamQuestionsPage = () => {
             },
             {
                 id: "actions",
-                header: "Actions",
+                header: t("instructor.exam_questions.table_col_actions"),
                 size: 70,
                 cell: (info: any) => (
                     <div className="d-flex justify-content-center gap-2">
                         <ActionButton
                             variant="primary"
                             onClick={() => handleEditQuestion(info.row.original)}
-                            title="Edit Question"
+                            title={t("instructor.exam_questions.edit_tooltip")}
                             fullWidth={false}
                             style={{ width: "32px", height: "32px", padding: 0 }}
                             className="d-inline-flex align-items-center justify-content-center"
@@ -257,8 +259,8 @@ const ExamQuestionsPage = () => {
                             disabled={isExamPublished}
                             title={
                                 isExamPublished
-                                    ? "Cannot unassign questions from a published exam"
-                                    : "Unassign Question"
+                                    ? t("instructor.exam_questions.unassign_disabled_tooltip")
+                                    : t("instructor.exam_questions.unassign_tooltip")
                             }
                             fullWidth={false}
                             style={{ width: "32px", height: "32px", padding: 0 }}
@@ -270,13 +272,13 @@ const ExamQuestionsPage = () => {
                 )
             }
         ],
-        [rowSelection, isExamPublished]
+        [rowSelection, isExamPublished, t]
     );
 
     const selectedCount = Object.values(rowSelection).filter(Boolean).length;
 
     if (isNaN(examIdNum)) {
-        return <Alert variant="danger">Invalid Exam ID</Alert>;
+        return <Alert variant="danger">{t("instructor.exam_questions.invalid_exam_id")}</Alert>;
     }
 
     return (
@@ -287,9 +289,9 @@ const ExamQuestionsPage = () => {
                         <ArrowLeft size={18} />
                     </ActionButton>
                     <div>
-                        <h2 className="mb-1 fw-bold">Question Bank</h2>
+                        <h2 className="mb-1 fw-bold">{t("instructor.exam_questions.title")}</h2>
                         <span className="text-muted">
-                            {isLoadingExam ? "Loading exam info..." : examInfo?.data?.title}
+                            {isLoadingExam ? t("instructor.exam_questions.loading_exam_info") : examInfo?.data?.title}
                         </span>
                     </div>
                 </div>
@@ -301,14 +303,14 @@ const ExamQuestionsPage = () => {
                                 onClick={() => setShowBulkUnassignDialog(true)}
                                 disabled={isUnassigning || isExamPublished}
                             >
-                                <Unlink size={18} className="me-2" /> Unassign Selected ({selectedCount})
+                                <Unlink size={18} className="me-2" /> {t("instructor.exam_questions.btn_unassign_selected", { count: selectedCount })}
                             </ActionButton>
                             <ActionButton
                                 variant="danger"
                                 onClick={() => setShowDeleteDialog(true)}
                                 disabled={isDeleting}
                             >
-                                <Trash2 size={18} className="me-2" /> Delete Selected ({selectedCount})
+                                <Trash2 size={18} className="me-2" /> {t("instructor.exam_questions.btn_delete_selected", { count: selectedCount })}
                             </ActionButton>
                         </>
                     )}
@@ -316,20 +318,19 @@ const ExamQuestionsPage = () => {
                         variant="outline-primary"
                         onClick={() => setShowAssignModal(true)}
                         disabled={isExamPublished}
-                        title={isExamPublished ? "Cannot assign questions to a published exam" : "Assign Questions"}
+                        title={isExamPublished ? t("instructor.exam_questions.assign_disabled_tooltip") : t("instructor.exam_questions.btn_assign")}
                     >
-                        <Plus size={18} className="me-2" /> Assign Questions
+                        <Plus size={18} className="me-2" /> {t("instructor.exam_questions.btn_assign")}
                     </ActionButton>
                     <ActionButton variant="primary" onClick={handleAddQuestion}>
-                        <Plus size={18} className="me-2" /> New Question
+                        <Plus size={18} className="me-2" /> {t("instructor.exam_questions.btn_new")}
                     </ActionButton>
                 </div>
             </div>
 
             {isExamPublished && (
                 <Alert variant="warning" className="mb-4 py-2 border-warning">
-                    <strong>Note:</strong> This exam has been published. Modifying existing questions might be locked if
-                    students have already attempted them.
+                    <strong>Note:</strong> {t("instructor.exam_questions.published_alert")}
                 </Alert>
             )}
 
@@ -368,8 +369,8 @@ const ExamQuestionsPage = () => {
                 show={showDeleteDialog}
                 onHide={() => setShowDeleteDialog(false)}
                 onConfirm={handleDeleteSelected}
-                title="Delete Questions"
-                description={`Are you sure you want to delete ${selectedCount} selected question(s)? This action cannot be undone.`}
+                title={t("instructor.exam_questions.delete_modal_title")}
+                description={t("instructor.exam_questions.delete_modal_desc", { count: selectedCount })}
             />
 
             <ConfirmActionDialog
@@ -379,9 +380,9 @@ const ExamQuestionsPage = () => {
                     setQuestionIdToUnassign(null);
                 }}
                 onConfirm={handleUnassignSingle}
-                title="Unassign Question"
-                description="Are you sure you want to unassign this question? It will be removed from this exam but will remain in the general question pool."
-                confirmLabel="Unassign"
+                title={t("instructor.exam_questions.unassign_single_title")}
+                description={t("instructor.exam_questions.unassign_single_desc")}
+                confirmLabel={t("instructor.exam_questions.unassign_action_label")}
                 confirmVariant="warning"
                 icon={<Unlink size={24} style={{ color: "#d97706" }} />}
                 iconBgColor="#fef3c7"
@@ -391,9 +392,9 @@ const ExamQuestionsPage = () => {
                 show={showBulkUnassignDialog}
                 onHide={() => setShowBulkUnassignDialog(false)}
                 onConfirm={handleUnassignSelected}
-                title="Unassign Questions"
-                description={`Are you sure you want to unassign ${selectedCount} selected question(s)? They will be removed from this exam but will remain in the general question pool.`}
-                confirmLabel="Unassign"
+                title={t("instructor.exam_questions.unassign_bulk_title")}
+                description={t("instructor.exam_questions.unassign_bulk_desc", { count: selectedCount })}
+                confirmLabel={t("instructor.exam_questions.unassign_action_label")}
                 confirmVariant="warning"
                 icon={<Unlink size={24} style={{ color: "#d97706" }} />}
                 iconBgColor="#fef3c7"

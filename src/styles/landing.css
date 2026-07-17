@@ -1,0 +1,311 @@
+﻿/* ExamSys Landing Page CSS Stylesheet */
+
+.landing-body {
+  font-family: var(--font-sans);
+  background-color: var(--surface-bg);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Light / Dark Mode Gradient Definitions */
+.landing-hero-bg {
+  position: relative;
+  background: linear-gradient(180deg, var(--color-primary-50) 0%, var(--surface-bg) 100%);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .landing-hero-bg {
+  background: linear-gradient(180deg, #0F172A 0%, #0b0f19 100%);
+}
+
+.landing-section-alt {
+  background-color: var(--color-secondary-50);
+}
+
+[data-theme="dark"] .landing-section-alt {
+  background-color: #111827; /* slate-900 */
+}
+
+/* Navbar Scrolled State */
+.landing-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  z-index: 1000;
+  transition: all var(--transition-normal);
+}
+
+.landing-nav-scrolled {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-sm);
+  height: 64px;
+}
+
+[data-theme="dark"] .landing-nav-scrolled {
+  background: rgba(11, 15, 25, 0.85);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+/* Glassmorphic Nav Buttons */
+.landing-btn-ghost {
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.landing-btn-ghost:hover {
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+}
+
+[data-theme="dark"] .landing-btn-ghost:hover {
+  background: var(--color-primary-100);
+  color: var(--color-primary-400);
+}
+
+/* Floating Mockup Animation */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.landing-floating-visual {
+  animation: float 5s ease-in-out infinite;
+  filter: drop-shadow(0 20px 30px rgba(16, 185, 129, 0.15));
+}
+
+[data-theme="dark"] .landing-floating-visual {
+  filter: drop-shadow(0 20px 40px rgba(16, 185, 129, 0.25));
+}
+
+/* Animations: fadeInUp */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Feature Ticker / Marquee */
+.landing-ticker-container {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 1.5rem 0;
+  background-color: var(--surface-card);
+  border-top: 1px solid var(--surface-border);
+  border-bottom: 1px solid var(--surface-border);
+  position: relative;
+}
+
+.landing-ticker-strip {
+  display: inline-flex;
+  gap: 2rem;
+  animation: scroll-x 30s linear infinite;
+}
+
+.landing-ticker-container:hover .landing-ticker-strip {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.landing-ticker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-700);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-primary-100);
+}
+
+[data-theme="dark"] .landing-ticker-chip {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-primary-400);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Service Card Styles */
+.landing-service-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.landing-service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(16, 185, 129, 0.1);
+  border-color: var(--color-primary-400);
+}
+
+[data-theme="dark"] .landing-service-card:hover {
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(16, 185, 129, 0.2);
+}
+
+.landing-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="dark"] .landing-icon-badge {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-primary-400);
+}
+
+/* Accordion FAQ Styles */
+.landing-faq-item {
+  border-bottom: 1px solid var(--surface-border);
+  padding: 1.25rem 0;
+}
+
+.landing-faq-trigger {
+  width: 100%;
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  padding: 0.5rem 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.landing-faq-trigger:hover {
+  color: var(--color-primary-500);
+}
+
+[data-theme="dark"] .landing-faq-trigger:hover {
+  color: var(--color-primary-400);
+}
+
+.landing-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-normal) ease-out;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.landing-faq-answer.open {
+  max-height: 200px;
+}
+
+/* Pricing Card Highlights */
+.landing-price-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.landing-price-card.popular {
+  border-color: var(--color-primary-500);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme="dark"] .landing-price-card.popular {
+  border-color: var(--color-primary-400);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(16, 185, 129, 0.25);
+}
+
+/* Stats Counter Badge */
+.landing-stats-bg {
+  background-color: var(--color-primary-50);
+}
+
+[data-theme="dark"] .landing-stats-bg {
+  background-color: rgba(16, 185, 129, 0.05);
+}
+
+/* Testimonial Quote Bubble */
+.landing-testimonial-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.landing-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--color-primary-100);
+}
+
+[data-theme="dark"] .landing-avatar {
+  border-color: var(--color-primary-500);
+}
+
+/* CTA Banner Custom Gradient */
+.landing-cta-banner {
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-500) 100%);
+  color: white;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* Utility Layout Margins */
+.landing-section-py {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (max-width: 768px) {
+  .landing-section-py {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+}

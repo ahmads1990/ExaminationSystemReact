@@ -1,5 +1,6 @@
 import { ArrowRight, BookOpen, FileText, Plus, Search, Users } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, Col, Row, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import ActionButton from "../../components/common/ActionButton";
@@ -12,6 +13,7 @@ import InstructorService from "../../services/instructorService";
 
 const DashboardPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     // Pagination Hook
     const { pageIndex, pageSize, totalCount, setTotalCount, setPageIndex, setPageSize, resetPage } = usePagination({
@@ -124,7 +126,7 @@ const DashboardPage = () => {
                         className="d-flex align-items-center cursor-pointer select-none"
                         onClick={() => handleSort("CourseName")}
                     >
-                        Course Name {renderSortArrow("CourseName")}
+                        {t("dashboard.col_course_name")} {renderSortArrow("CourseName")}
                     </div>
                 ),
                 accessorKey: "courseName",
@@ -147,7 +149,7 @@ const DashboardPage = () => {
                         className="d-flex align-items-center cursor-pointer select-none"
                         onClick={() => handleSort("StudentCount")}
                     >
-                        Enrolled / Max Limit {renderSortArrow("StudentCount")}
+                        {t("dashboard.col_enrolled_limit")} {renderSortArrow("StudentCount")}
                     </div>
                 ),
                 size: 220,
@@ -175,7 +177,7 @@ const DashboardPage = () => {
                                     className={`fw-semibold ${isOverLimit ? "text-danger" : "text-secondary-500"}`}
                                     style={{ fontSize: "0.75rem" }}
                                 >
-                                    {isOverLimit ? "Over Limit" : `${Math.round(percentage)}%`}
+                                    {isOverLimit ? t("dashboard.status_over_limit") : `${Math.round(percentage)}%`}
                                 </span>
                             </div>
                             <div
@@ -202,7 +204,7 @@ const DashboardPage = () => {
                         className="d-flex align-items-center justify-content-center cursor-pointer select-none"
                         onClick={() => handleSort("ExamsCount")}
                     >
-                        Exams {renderSortArrow("ExamsCount")}
+                        {t("dashboard.col_exams")} {renderSortArrow("ExamsCount")}
                     </div>
                 ),
                 accessorKey: "examsCount",
@@ -217,7 +219,7 @@ const DashboardPage = () => {
             },
             {
                 id: "actions",
-                header: "Actions",
+                header: t("dashboard.col_actions"),
                 size: 150,
                 cell: () => (
                     <div className="text-end">
@@ -225,7 +227,7 @@ const DashboardPage = () => {
                             to="/instructor/exams"
                             className="btn btn-link btn-sm p-0 d-inline-flex align-items-center text-primary text-decoration-none fw-semibold gap-1 hover-gap"
                         >
-                            View Exams
+                            {t("dashboard.action_view_exams")}
                             <ArrowRight size={14} className="transition-all" />
                         </Link>
                     </div>
@@ -239,7 +241,7 @@ const DashboardPage = () => {
             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
                 <div className="text-center">
                     <Spinner animation="border" variant="primary" className="mb-2" />
-                    <p className="text-muted">Loading dashboard...</p>
+                    <p className="text-muted">{t("dashboard.loading")}</p>
                 </div>
             </div>
         );
@@ -249,7 +251,7 @@ const DashboardPage = () => {
         return (
             <div className="container-fluid py-4">
                 <div className="alert alert-danger" role="alert">
-                    <h5 className="alert-heading fw-bold">Failed to Load Dashboard</h5>
+                    <h5 className="alert-heading fw-bold">{t("dashboard.failed_loading")}</h5>
                     <p className="mb-0">{error}</p>
                 </div>
             </div>
@@ -266,18 +268,17 @@ const DashboardPage = () => {
             <div className="container-fluid animate-fade-in py-4">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h2 className="fw-bold mb-1">Instructor Dashboard</h2>
-                        <p className="text-muted mb-0">Overview of your courses, exams, and enrolled students</p>
+                        <h2 className="fw-bold mb-1">{t("dashboard.instructor_title")}</h2>
+                        <p className="text-muted mb-0">{t("dashboard.instructor_desc")}</p>
                     </div>
                 </div>
 
                 <Card className="border-0 shadow-sm text-center p-5 mt-4">
                     <Card.Body className="py-5">
                         <BookOpen size={64} className="text-primary mb-3 opacity-75" />
-                        <h4 className="fw-bold text-dark mb-2">Welcome to Your Dashboard!</h4>
+                        <h4 className="fw-bold text-dark mb-2">{t("dashboard.welcome_title")}</h4>
                         <p className="text-muted mx-auto mb-4" style={{ maxWidth: "480px" }}>
-                            It looks like you haven't created any courses yet. Create your first course to begin
-                            managing exams, questions, and reviewing student submissions.
+                            {t("dashboard.welcome_desc")}
                         </p>
                         <ActionButton
                             variant="primary"
@@ -285,7 +286,7 @@ const DashboardPage = () => {
                             className="px-4"
                             onClick={() => navigate("/instructor/courses")}
                         >
-                            Create First Course
+                            {t("dashboard.btn_create_first_course")}
                         </ActionButton>
                     </Card.Body>
                 </Card>
@@ -298,8 +299,8 @@ const DashboardPage = () => {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 className="fw-bold mb-1">Instructor Dashboard</h2>
-                    <p className="text-muted mb-0">Overview of your courses, exams, and enrolled students</p>
+                    <h2 className="fw-bold mb-1">{t("dashboard.instructor_title")}</h2>
+                    <p className="text-muted mb-0">{t("dashboard.instructor_desc")}</p>
                 </div>
             </div>
 
@@ -327,7 +328,7 @@ const DashboardPage = () => {
                                     className="text-uppercase fw-bold tracking-wider"
                                     style={{ fontSize: "0.75rem", color: "var(--dashboard-card-label)" }}
                                 >
-                                    Total Courses
+                                    {t("dashboard.stat_total_courses")}
                                 </span>
                                 <h1
                                     className="fw-extrabold mt-2 mb-0"
@@ -378,7 +379,7 @@ const DashboardPage = () => {
                                     className="text-uppercase fw-bold tracking-wider"
                                     style={{ fontSize: "0.75rem", color: "var(--dashboard-card-label)" }}
                                 >
-                                    Enrolled Students
+                                    {t("dashboard.stat_enrolled_students")}
                                 </span>
                                 <h1
                                     className="fw-extrabold mt-2 mb-0"
@@ -429,7 +430,7 @@ const DashboardPage = () => {
                                     className="text-uppercase fw-bold tracking-wider"
                                     style={{ fontSize: "0.75rem", color: "var(--dashboard-card-label)" }}
                                 >
-                                    Total Exams
+                                    {t("dashboard.stat_total_exams")}
                                 </span>
                                 <h1
                                     className="fw-extrabold mt-2 mb-0"
@@ -463,9 +464,9 @@ const DashboardPage = () => {
             <Card className="border-0 shadow-sm mb-4">
                 <Card.Header className="bg-white border-0 py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
-                        <h5 className="fw-bold text-dark mb-0">Courses Stats Breakdown</h5>
+                        <h5 className="fw-bold text-dark mb-0">{t("dashboard.courses_breakdown")}</h5>
                         <p className="text-muted mb-0" style={{ fontSize: "0.85rem" }}>
-                            Detailed metrics per course
+                            {t("dashboard.detailed_metrics")}
                         </p>
                     </div>
                     <div style={{ minWidth: "260px" }}>
@@ -476,7 +477,7 @@ const DashboardPage = () => {
                             <input
                                 type="text"
                                 className="form-control border-start-0 border-0 bg-light py-1.5"
-                                placeholder="Search courses..."
+                                placeholder={t("dashboard.search_courses")}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 style={{ fontSize: "0.875rem" }}

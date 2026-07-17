@@ -1,6 +1,7 @@
 import { FileText, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Col, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { CourseDto } from "../../../api/responses/courses/CourseDto";
 import { ExamDto } from "../../../api/responses/exams/ExamDto";
 import { ExamType } from "../../../enums";
@@ -18,6 +19,7 @@ interface SaveExamModalProps {
 }
 
 export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamModalProps) => {
+    const { t } = useTranslation();
     const isEditMode = !!examToEdit;
 
     const [courses, setCourses] = useState<CourseDto[]>([]);
@@ -85,7 +87,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
             }
         } catch (error) {
             console.error("Failed to load exam details", error);
-            toast.error("Could not load exam settings.");
+            toast.error(t("instructor.exams.toast_load_err"));
             onHide();
         } finally {
             setIsFetchingExam(false);
@@ -106,27 +108,27 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
 
     const validate = () => {
         if (!courseId) {
-            toast.error("Please select a course.");
+            toast.error(t("instructor.exams.toast_select_course"));
             return false;
         }
         if (!title.trim()) {
-            toast.error("Title is required.");
+            toast.error(t("instructor.exams.toast_title_req"));
             return false;
         }
         if (!examType) {
-            toast.error("Exam type is required.");
+            toast.error(t("instructor.exams.toast_type_req"));
             return false;
         }
         if (Number(maxDuration) <= 0) {
-            toast.error("Duration must be greater than 0.");
+            toast.error(t("instructor.exams.toast_duration_val"));
             return false;
         }
         if (Number(totalGrade) <= 0) {
-            toast.error("Total grade must be greater than 0.");
+            toast.error(t("instructor.exams.toast_grade_val"));
             return false;
         }
         if (!deadlineDate) {
-            toast.error("Deadline date is required.");
+            toast.error(t("instructor.exams.toast_deadline_req"));
             return false;
         }
         return true;
@@ -151,10 +153,10 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
 
             if (isEditMode && examToEdit) {
                 await ExamService.updateExam({ id: examToEdit.id, ...payload }, { _skipGlobalError: true });
-                toast.success("Exam updated successfully!");
+                toast.success(t("instructor.exams.toast_update_success"));
             } else {
                 await ExamService.createExam(payload, { _skipGlobalError: true });
-                toast.success("Exam created successfully!");
+                toast.success(t("instructor.exams.toast_create_success"));
             }
             onSuccess();
             onHide();
@@ -182,10 +184,10 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                         </div>
                         <div>
                             <Modal.Title className="fw-bold fs-5 mb-0">
-                                {isEditMode ? "Edit Exam" : "Create New Exam"}
+                                {isEditMode ? t("instructor.exams.modal_edit_title") : t("instructor.exams.modal_create_title")}
                             </Modal.Title>
                             <p className="text-muted small mb-0">
-                                {isEditMode ? "Update your exam settings" : "Configure a new examination"}
+                                {isEditMode ? t("instructor.exams.modal_edit_subtitle") : t("instructor.exams.modal_create_subtitle")}
                             </p>
                         </div>
                     </div>
@@ -195,14 +197,14 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                     {isFetchingExam ? (
                         <div className="py-5 text-center">
                             <Spinner animation="border" variant="primary" />
-                            <p className="text-muted mt-3">Loading exam settings...</p>
+                            <p className="text-muted mt-3">{t("instructor.exams.modal_loading_desc")}</p>
                         </div>
                     ) : (
                         <Form id="save-exam-form" onSubmit={handleSubmit}>
                             <Row className="g-3 mb-3">
                                 <Col md={12}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="related-course" label="Related Course *">
+                                        <FloatingLabel controlId="related-course" label={`${t("instructor.exams.field_related_course")} *`}>
                                             <Form.Select
                                                 className="bg-light border-light-subtle"
                                                 value={courseId}
@@ -211,7 +213,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                                 disabled={isEditMode} // Usually you can't reassign an exam to another course safely
                                             >
                                                 <option value="" disabled>
-                                                    {isLoadingCourses ? "Loading courses..." : "Select a Course"}
+                                                    {isLoadingCourses ? t("instructor.exams.field_loading_courses") : t("instructor.exams.field_select_course")}
                                                 </option>
                                                 {courses.map((c, idx) => (
                                                     <option key={`course-opt-${c.id || idx}`} value={c.id}>
@@ -225,11 +227,11 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
 
                                 <Col md={6}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="exam-title" label="Exam Title *">
+                                        <FloatingLabel controlId="exam-title" label={`${t("instructor.exams.field_title")} *`}>
                                             <Form.Control
                                                 type="text"
                                                 className="bg-light border-light-subtle"
-                                                placeholder="e.g. Midterm Physics Quiz"
+                                                placeholder={t("instructor.exams.field_title_placeholder") || ""}
                                                 value={title}
                                                 onChange={(e) => setTitle(e.target.value)}
                                                 required
@@ -239,7 +241,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                 </Col>
                                 <Col md={6}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="exam-type" label="Exam Type *">
+                                        <FloatingLabel controlId="exam-type" label={`${t("instructor.exams.field_type")} *`}>
                                             <Form.Select
                                                 className="bg-light border-light-subtle"
                                                 value={examType}
@@ -247,10 +249,10 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                                 required
                                             >
                                                 <option value="" disabled>
-                                                    Select Type
+                                                    {t("instructor.exams.field_select_type")}
                                                 </option>
-                                                <option value={ExamType.Quiz}>Quiz</option>
-                                                <option value={ExamType.Final}>Final Exam</option>
+                                                <option value={ExamType.Quiz}>{t("instructor.exams.field_type_quiz")}</option>
+                                                <option value={ExamType.Final}>{t("instructor.exams.field_type_final")}</option>
                                             </Form.Select>
                                         </FloatingLabel>
                                     </Form.Group>
@@ -262,13 +264,13 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                 className="fw-bold mb-3 text-secondary"
                                 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px" }}
                             >
-                                Grading & Duration
+                                {t("instructor.exams.section_grading_duration")}
                             </h6>
 
                             <Row className="g-3 mb-3">
                                 <Col md={4}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="max-duration" label="Duration (mins) *">
+                                        <FloatingLabel controlId="max-duration" label={`${t("instructor.exams.field_duration")} *`}>
                                             <Form.Control
                                                 type="number"
                                                 min="1"
@@ -283,7 +285,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                 </Col>
                                 <Col md={4}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="total-grade" label="Total Grade *">
+                                        <FloatingLabel controlId="total-grade" label={`${t("instructor.exams.field_total_grade")} *`}>
                                             <Form.Control
                                                 type="number"
                                                 min="1"
@@ -298,7 +300,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                 </Col>
                                 <Col md={4}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="passing-score" label="Passing Score *">
+                                        <FloatingLabel controlId="passing-score" label={`${t("instructor.exams.field_passing_score")} *`}>
                                             <Form.Control
                                                 type="number"
                                                 min="0"
@@ -313,7 +315,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                 </Col>
                                 <Col md={4}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="max-attempts" label="Max Attempts">
+                                        <FloatingLabel controlId="max-attempts" label={t("instructor.exams.field_max_attempts")}>
                                             <Form.Control
                                                 type="number"
                                                 min="1"
@@ -324,13 +326,13 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                             />
                                         </FloatingLabel>
                                         <Form.Text className="text-muted" style={{ fontSize: "0.7rem" }}>
-                                            Set to 1 for finals.
+                                            {t("instructor.exams.field_attempts_help")}
                                         </Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col md={8}>
                                     <Form.Group>
-                                        <FloatingLabel controlId="deadline" label="Deadline Date *">
+                                        <FloatingLabel controlId="deadline" label={`${t("instructor.exams.field_deadline")} *`}>
                                             <Form.Control
                                                 type="datetime-local"
                                                 className="bg-light border-light-subtle"
@@ -349,7 +351,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                                     <Form.Check
                                         type="switch"
                                         id="shuffle-switch"
-                                        label={<span className="ms-2">Shuffle Questions</span>}
+                                        label={<span className="ms-2">{t("instructor.exams.field_shuffle")}</span>}
                                         checked={shuffleQuestions}
                                         onChange={(e) => setShuffleQuestions(e.target.checked)}
                                     />
@@ -361,7 +363,7 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
 
                 <Modal.Footer className="border-0 px-4 pb-4 pt-0 gap-2">
                     <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isSubmitting}>
-                        Cancel
+                        {t("common.cancel")}
                     </button>
                     <button
                         type="submit"
@@ -372,10 +374,10 @@ export const SaveExamModal = ({ show, onHide, onSuccess, examToEdit }: SaveExamM
                         {isSubmitting ? (
                             <>
                                 <Spinner animation="border" size="sm" className="me-2" />
-                                Saving...
+                                {t("instructor.exams.btn_saving")}
                             </>
                         ) : (
-                            "Save Exam"
+                            t("instructor.exams.btn_save")
                         )}
                     </button>
                 </Modal.Footer>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import AuthService from "../../services/authService";
@@ -6,6 +7,7 @@ import AuthService from "../../services/authService";
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const handleLogout = async (e: React.MouseEvent) => {
@@ -31,6 +33,10 @@ const UserMenu = () => {
         <div className="dropdown" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
             <a
                 href="#"
+                onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpen(!isOpen);
+                }}
                 className={`d-flex align-items-center text-decoration-none dropdown-toggle no-arrow gap-2 ${isOpen ? "show" : ""}`}
                 role="button"
                 aria-expanded={isOpen}
@@ -55,17 +61,17 @@ const UserMenu = () => {
             >
                 <li>
                     <Link className="dropdown-item dropdown-item-custom" to="/profile">
-                        <i className="bi bi-person me-2"></i>Profile
+                        <i className="bi bi-person me-2"></i>{t("common.profile")}
                     </Link>
                 </li>
                 <li>
                     <Link className="dropdown-item dropdown-item-custom" to="/settings">
-                        <i className="bi bi-gear me-2"></i>Settings
+                        <i className="bi bi-gear me-2"></i>{t("common.settings_title")}
                     </Link>
                 </li>
                 <li>
                     <Link className="dropdown-item dropdown-item-custom" to="/change-password">
-                        <i className="bi bi-shield-lock me-2"></i>Change Password
+                        <i className="bi bi-shield-lock me-2"></i>{t("common.settings_change_pwd_btn")}
                     </Link>
                 </li>
                 <li>
@@ -73,7 +79,7 @@ const UserMenu = () => {
                 </li>
                 <li>
                     <a href="#" className="dropdown-item dropdown-item-custom text-danger" onClick={handleLogout}>
-                        <i className="bi bi-box-arrow-right me-2"></i>Log Out
+                        <i className="bi bi-box-arrow-right me-2"></i>{t("common.logout")}
                     </a>
                 </li>
             </ul>

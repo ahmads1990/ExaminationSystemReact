@@ -1,5 +1,6 @@
 import { BookOpen, Clock, GraduationCap, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Badge, Card, Col, Row, Spinner } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
@@ -11,6 +12,7 @@ import { usePagination } from "../../hooks/usePagination";
 import StudentCourseService from "../../services/studentCourseService";
 
 const StudentCoursesPage = () => {
+    const { t } = useTranslation();
     const [courses, setCourses] = useState<CourseDto[]>([]);
     const [enrolledIds, setEnrolledIds] = useState<Set<number>>(new Set());
     const [loading, setLoading] = useState(true);
@@ -67,17 +69,17 @@ const StudentCoursesPage = () => {
         try {
             const resp = await StudentCourseService.enrollInCourse({ courseID: courseId });
             if (resp.success) {
-                toast.success("Successfully enrolled in the course!");
+                toast.success(t("student.courses.success_enroll", "Successfully enrolled in the course!"));
                 setEnrolledIds((prev) => {
                     const next = new Set(prev);
                     next.add(courseId);
                     return next;
                 });
             } else {
-                toast.error(resp.message || "Failed to enroll in course.");
+                toast.error(resp.message || t("student.courses.failed_enroll", "Failed to enroll in course."));
             }
         } catch (err: any) {
-            const errorMsg = err.response?.data?.message || "An error occurred while enrolling.";
+            const errorMsg = err.response?.data?.message || t("student.courses.generic_enroll_error", "An error occurred while enrolling.");
             toast.error(errorMsg);
         } finally {
             setEnrollingId(null);
@@ -89,8 +91,8 @@ const StudentCoursesPage = () => {
             {/* Header */}
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
                 <div>
-                    <h2 className="fw-bold mb-1">Browse Courses</h2>
-                    <span className="text-muted">Explore and enroll in available courses</span>
+                    <h2 className="fw-bold mb-1">{t("student.courses.title")}</h2>
+                    <span className="text-muted">{t("student.courses.subtitle")}</span>
                 </div>
             </div>
 
@@ -106,7 +108,7 @@ const StudentCoursesPage = () => {
                                 <input
                                     type="text"
                                     className="form-control border-0 border-start-0 bg-light py-2"
-                                    placeholder="Search by course title..."
+                                    placeholder={t("student.courses.search_placeholder")}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -122,8 +124,8 @@ const StudentCoursesPage = () => {
             ) : courses.length === 0 ? (
                 <div className="text-center py-5 bg-white rounded-4 shadow-sm border border-0">
                     <BookOpen size={56} className="text-muted opacity-25 mb-3" />
-                    <h5 className="fw-bold">No courses found</h5>
-                    <p className="text-muted">There are no courses matching your search term at the moment.</p>
+                    <h5 className="fw-bold">{t("student.courses.no_courses")}</h5>
+                    <p className="text-muted">{t("student.courses.no_courses_desc")}</p>
                 </div>
             ) : (
                 <>
@@ -155,7 +157,7 @@ const StudentCoursesPage = () => {
                                                     bg="light"
                                                     className="text-primary border border-primary-subtle py-1.5 px-2.5 rounded-pill fw-semibold"
                                                 >
-                                                    {course.creditHours} Credits
+                                                    {t("student.courses.credits", { count: course.creditHours })}
                                                 </Badge>
                                             </div>
 
@@ -169,7 +171,7 @@ const StudentCoursesPage = () => {
                                                     overflow: "hidden"
                                                 }}
                                             >
-                                                {course.description || "No course description available."}
+                                                {course.description || t("student.courses.no_desc")}
                                             </p>
 
                                             <div
@@ -182,7 +184,7 @@ const StudentCoursesPage = () => {
                                                 >
                                                     <GraduationCap size={15} className="text-primary opacity-75" />
                                                     <span className="fw-medium">
-                                                        Instructor: {course.instructorName || "N/A"}
+                                                        {t("student.courses.instructor_label")}{course.instructorName || "N/A"}
                                                     </span>
                                                 </div>
                                             </div>
@@ -194,7 +196,7 @@ const StudentCoursesPage = () => {
                                                     className="d-flex align-items-center justify-content-center bg-success-subtle text-success py-2 px-3 rounded-3 fw-bold w-100"
                                                     style={{ fontSize: "0.9rem" }}
                                                 >
-                                                    <Clock size={16} className="me-2" />✓ Enrolled
+                                                    <Clock size={16} className="me-2" />✓ {t("student.courses.status_enrolled")}
                                                 </div>
                                             ) : (
                                                 <ActionButton
@@ -206,7 +208,7 @@ const StudentCoursesPage = () => {
                                                     {enrollingId === course.id ? (
                                                         <Spinner animation="border" size="sm" />
                                                     ) : (
-                                                        "Enroll in Course"
+                                                        t("student.courses.btn_enroll")
                                                     )}
                                                 </ActionButton>
                                             )}

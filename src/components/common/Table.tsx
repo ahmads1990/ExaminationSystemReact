@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Table } from "react-bootstrap";
+import { useTranslation, Trans } from "react-i18next";
 import SkeletonTable from "./SkeletonTable";
 
 interface TableProps<T> {
@@ -41,6 +42,7 @@ const GenericTable = <T,>({
     setRowSelection,
     getRowId
 }: TableProps<T>) => {
+    const { t } = useTranslation();
     const table = useReactTable({
         data: data ?? [],
         columns,
@@ -135,17 +137,35 @@ const GenericTable = <T,>({
             <div className="d-flex align-items-center justify-content-between flex-wrap gap-3 px-4 py-3 border-top bg-light-subtle rounded-bottom-4">
                 <div className="d-flex align-items-center gap-3 text-muted" style={{ fontSize: "0.875rem" }}>
                     <span>
-                        Showing <strong>{table.getRowModel().rows.length}</strong> of{" "}
-                        <strong>{totalCount.toLocaleString()}</strong> results
+                        <Trans
+                            i18nKey="common.table_showing"
+                            values={{
+                                count: table.getRowModel().rows.length,
+                                total: totalCount.toLocaleString()
+                            }}
+                            components={{ strong: <strong /> }}
+                        >
+                            Showing <strong>{table.getRowModel().rows.length}</strong> of{" "}
+                            <strong>{totalCount.toLocaleString()}</strong> results
+                        </Trans>
                     </span>
                     <span className="text-secondary-300">|</span>
                     <span>
-                        Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
-                        <strong>{table.getPageCount().toLocaleString()}</strong>
+                        <Trans
+                            i18nKey="common.table_page_of"
+                            values={{
+                                current: table.getState().pagination.pageIndex + 1,
+                                total: table.getPageCount().toLocaleString()
+                            }}
+                            components={{ strong: <strong /> }}
+                        >
+                            Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
+                            <strong>{table.getPageCount().toLocaleString()}</strong>
+                        </Trans>
                     </span>
                     <span className="text-secondary-300">|</span>
                     <div className="d-flex align-items-center gap-2">
-                        <span>Show</span>
+                        <span>{t("common.table_show_rows")}</span>
                         <select
                             value={table.getState().pagination.pageSize}
                             onChange={(e) => {
@@ -170,7 +190,7 @@ const GenericTable = <T,>({
                             style={{ width: "32px", height: "32px" }}
                             onClick={() => table.firstPage()}
                             disabled={!table.getCanPreviousPage()}
-                            title="First Page"
+                            title={t("common.table_first")}
                         >
                             <ChevronsLeft size={16} />
                         </button>
@@ -179,7 +199,7 @@ const GenericTable = <T,>({
                             style={{ width: "32px", height: "32px" }}
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
-                            title="Previous Page"
+                            title={t("common.table_prev")}
                         >
                             <ChevronLeft size={16} />
                         </button>
@@ -188,7 +208,7 @@ const GenericTable = <T,>({
                             style={{ width: "32px", height: "32px" }}
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
-                            title="Next Page"
+                            title={t("common.table_next")}
                         >
                             <ChevronRight size={16} />
                         </button>
@@ -197,7 +217,7 @@ const GenericTable = <T,>({
                             style={{ width: "32px", height: "32px" }}
                             onClick={() => table.lastPage()}
                             disabled={!table.getCanNextPage()}
-                            title="Last Page"
+                            title={t("common.table_last")}
                         >
                             <ChevronsRight size={16} />
                         </button>
@@ -206,7 +226,7 @@ const GenericTable = <T,>({
                     <span className="text-secondary-300">|</span>
 
                     <div className="d-flex align-items-center gap-2" style={{ fontSize: "0.875rem" }}>
-                        <span className="text-muted">Go to page:</span>
+                        <span className="text-muted">{t("common.table_go_to")}</span>
                         <input
                             type="number"
                             min="1"

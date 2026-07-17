@@ -1,5 +1,6 @@
 import { BookOpen, Calendar, CheckCircle, PenTool, User } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Badge, Button, Form, Modal, Table } from "react-bootstrap";
 import toast from "react-hot-toast";
 
@@ -15,6 +16,7 @@ interface Submission {
 }
 
 const GradingPage = () => {
+    const { t } = useTranslation();
     // Mock list of submissions needing grading
     const [submissions, setSubmissions] = useState<Submission[]>([
         {
@@ -109,16 +111,16 @@ const GradingPage = () => {
             )
         );
 
-        toast.success(`Grade submitted: ${earned}/${max} points!`);
+        toast.success(t("instructor.grading.toast_success", { score: `${earned}/${max}` }));
         setShowModal(false);
     };
 
     return (
         <div className="container-fluid py-2" style={{ maxWidth: "1000px" }}>
             <div className="mb-4">
-                <h1 className="h3 fw-bold text-dark mb-1">Grade Submissions</h1>
+                <h1 className="h3 fw-bold text-dark mb-1">{t("instructor.grading.title")}</h1>
                 <p className="text-secondary">
-                    Review student answers for subjective questions, assign point scores, and provide written feedback
+                    {t("instructor.grading.subtitle")}
                 </p>
             </div>
 
@@ -126,12 +128,12 @@ const GradingPage = () => {
                 <Table responsive hover className="mb-0 align-middle">
                     <thead className="bg-light text-secondary" style={{ fontSize: "0.85rem" }}>
                         <tr>
-                            <th className="py-3 px-4 border-0">Student</th>
-                            <th className="py-3 px-4 border-0">Course</th>
-                            <th className="py-3 px-4 border-0">Exam</th>
-                            <th className="py-3 px-4 border-0">Submit Date</th>
-                            <th className="py-3 px-4 border-0">Status</th>
-                            <th className="py-3 px-4 border-0 text-end">Action</th>
+                            <th className="py-3 px-4 border-0">{t("instructor.grading.table_student")}</th>
+                            <th className="py-3 px-4 border-0">{t("instructor.grading.table_course")}</th>
+                            <th className="py-3 px-4 border-0">{t("instructor.grading.table_exam")}</th>
+                            <th className="py-3 px-4 border-0">{t("instructor.grading.table_submit_date")}</th>
+                            <th className="py-3 px-4 border-0">{t("instructor.grading.table_status")}</th>
+                            <th className="py-3 px-4 border-0 text-end">{t("instructor.grading.table_action")}</th>
                         </tr>
                     </thead>
                     <tbody style={{ fontSize: "0.9rem" }}>
@@ -151,11 +153,11 @@ const GradingPage = () => {
                                 <td className="py-3.5 px-4 border-0">
                                     {sub.status === "Pending" ? (
                                         <Badge bg="warning" className="text-dark px-2 py-1">
-                                            Pending Review
+                                            {t("instructor.grading.status_pending")}
                                         </Badge>
                                     ) : (
                                         <Badge bg="success" className="px-2 py-1">
-                                            Graded ({sub.score})
+                                            {t("instructor.grading.status_graded", { score: sub.score })}
                                         </Badge>
                                     )}
                                 </td>
@@ -167,7 +169,7 @@ const GradingPage = () => {
                                             className="rounded-2 px-3 fw-semibold border-0"
                                             onClick={() => handleOpenGrading(sub)}
                                         >
-                                            Grade
+                                            {t("instructor.grading.btn_grade")}
                                         </Button>
                                     ) : (
                                         <Button
@@ -176,7 +178,7 @@ const GradingPage = () => {
                                             disabled
                                             className="rounded-2 px-3 border-light bg-light"
                                         >
-                                            Completed
+                                            {t("instructor.grading.btn_completed")}
                                         </Button>
                                     )}
                                 </td>
@@ -192,22 +194,22 @@ const GradingPage = () => {
                     <Form onSubmit={handleSubmitGrade}>
                         <Modal.Header closeButton className="border-light p-4">
                             <Modal.Title className="fw-bold text-dark d-flex align-items-center gap-2">
-                                <PenTool size={20} className="text-primary" /> Grade Submission
+                                <PenTool size={20} className="text-primary" /> {t("instructor.grading.modal_title")}
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body className="p-4" style={{ maxHeight: "70vh", overflowY: "auto" }}>
                             <div className="d-flex flex-wrap gap-4 mb-4 p-3 bg-light rounded-3 small text-secondary">
                                 <div className="d-flex align-items-center gap-2">
                                     <User size={14} className="text-primary" />
-                                    <strong className="text-dark">Student:</strong> {selectedSubmission.studentName}
+                                    <strong className="text-dark">{t("instructor.grading.modal_student")}</strong> {selectedSubmission.studentName}
                                 </div>
                                 <div className="d-flex align-items-center gap-2">
                                     <BookOpen size={14} className="text-primary" />
-                                    <strong className="text-dark">Course:</strong> {selectedSubmission.courseName}
+                                    <strong className="text-dark">{t("instructor.grading.modal_course")}</strong> {selectedSubmission.courseName}
                                 </div>
                                 <div className="d-flex align-items-center gap-2">
                                     <Calendar size={14} className="text-primary" />
-                                    <strong className="text-dark">Date:</strong> {selectedSubmission.submitDate}
+                                    <strong className="text-dark">{t("instructor.grading.modal_date")}</strong> {selectedSubmission.submitDate}
                                 </div>
                             </div>
 
@@ -215,7 +217,7 @@ const GradingPage = () => {
                                 {selectedSubmission.studentAnswers.map((item, idx) => (
                                     <div key={idx} className="p-3 border rounded-3 bg-white">
                                         <div className="fw-bold text-dark mb-2">
-                                            Question {idx + 1}: {item.question}
+                                            {t("instructor.grading.question_label", { num: idx + 1 })} {item.question}
                                         </div>
                                         <div className="p-3 bg-light rounded-3 text-secondary mb-3 italic">
                                             "{item.answer}"
@@ -226,7 +228,7 @@ const GradingPage = () => {
                                             style={{ maxWidth: "250px" }}
                                         >
                                             <Form.Label className="fw-semibold text-secondary mb-0 flex-shrink-0">
-                                                Score:
+                                                {t("instructor.grading.score_label")}
                                             </Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -237,7 +239,7 @@ const GradingPage = () => {
                                                 required
                                                 className="rounded-2 text-center"
                                             />
-                                            <span className="text-secondary fw-semibold">/ {item.maxPoints} pts</span>
+                                            <span className="text-secondary fw-semibold">{t("instructor.grading.pts_label", { count: item.maxPoints })}</span>
                                         </Form.Group>
                                     </div>
                                 ))}
@@ -245,14 +247,14 @@ const GradingPage = () => {
 
                             <Form.Group className="mt-4">
                                 <Form.Label className="fw-semibold text-secondary">
-                                    Written Feedback (Optional)
+                                    {t("instructor.grading.feedback_label")}
                                 </Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
                                     value={feedback}
                                     onChange={(e) => setFeedback(e.target.value)}
-                                    placeholder="Provide comments to help the student understand their score"
+                                    placeholder={t("instructor.grading.feedback_placeholder")}
                                     className="rounded-3 border-light py-2"
                                 />
                             </Form.Group>
@@ -263,13 +265,13 @@ const GradingPage = () => {
                                 className="rounded-3 px-4 py-2 border-light"
                                 onClick={() => setShowModal(false)}
                             >
-                                Cancel
+                                {t("instructor.grading.btn_cancel")}
                             </Button>
                             <Button
                                 type="submit"
                                 className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm"
                             >
-                                <CheckCircle size={16} /> Submit Grade
+                                <CheckCircle size={16} /> {t("instructor.grading.btn_submit")}
                             </Button>
                         </Modal.Footer>
                     </Form>

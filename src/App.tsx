@@ -34,19 +34,32 @@ import ExamResultPage from "./pages/student/ExamResultPage";
 import ExamStartPage from "./pages/student/ExamStartPage";
 import ExamTakingPage from "./pages/student/ExamTakingPage";
 import { UserRole } from "./types/auth";
+import LandingPage from "./pages/landing/LandingPage";
 
-const RootRedirect = () => {
-    const { user } = useAuth();
-    if (user?.role === UserRole.Instructor) {
-        return <Navigate to="/instructor/dashboard" replace />;
+const RootRoute = () => {
+    const { isAuthenticated, isLoading, user } = useAuth();
+
+    if (isLoading) {
+        return null;
     }
-    return <Navigate to="/student/dashboard" replace />;
+
+    if (isAuthenticated && user) {
+        if (user.role === UserRole.Instructor) {
+            return <Navigate to="/instructor/dashboard" replace />;
+        }
+        return <Navigate to="/student/dashboard" replace />;
+    }
+
+    return <LandingPage />;
 };
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
+                {/* Public Landing Page */}
+                <Route path="/" element={<RootRoute />} />
+
                 {/* Auth Routes */}
                 <Route element={<AuthLayout />}>
                     <Route path="/login" element={<LoginPage />} />
@@ -63,17 +76,16 @@ function App() {
 
                 {/* Dashboard / Main Routes */}
                 <Route element={<MainLayout />}>
-                    {/* Redirect root to dashboard if auth */}
-                    <Route path="/" element={<RootRedirect />} />
+                    {/* Publicly accessible pages in MainLayout */}
+                    <Route path="support" element={<HelpSupportPage />} />
+                    <Route path="terms" element={<TermsOfServicePage />} />
+                    <Route path="privacy" element={<PrivacyPolicyPage />} />
+                    <Route path="about" element={<AboutPage />} />
+                    <Route path="contact" element={<ContactPage />} />
 
                     <Route element={<ProtectedRoute />}>
                         <Route path="change-password" element={<ChangePasswordPage />} />
                         <Route path="settings" element={<SettingsPage />} />
-                        <Route path="support" element={<HelpSupportPage />} />
-                        <Route path="terms" element={<TermsOfServicePage />} />
-                        <Route path="privacy" element={<PrivacyPolicyPage />} />
-                        <Route path="about" element={<AboutPage />} />
-                        <Route path="contact" element={<ContactPage />} />
                         <Route path="profile" element={<ProfilePage />} />
                     </Route>
 

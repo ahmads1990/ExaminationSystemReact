@@ -1,12 +1,15 @@
 import { Award, BookOpen, TrendingUp, Users } from "lucide-react";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const AnalyticsPage = () => {
-    // Mock general stats
+    const { t } = useTranslation();
+
+    // General stats
     const stats = [
         {
             id: 1,
-            label: "Total Enrolled Students",
+            label: t("instructor.analytics.stat_total_enrolled"),
             value: "348",
             icon: Users,
             color: "text-primary",
@@ -14,7 +17,7 @@ const AnalyticsPage = () => {
         },
         {
             id: 2,
-            label: "Average Test Score",
+            label: t("instructor.analytics.stat_avg_score"),
             value: "82.4%",
             icon: Award,
             color: "text-success",
@@ -22,13 +25,13 @@ const AnalyticsPage = () => {
         },
         {
             id: 3,
-            label: "Average Pass Rate",
+            label: t("instructor.analytics.stat_avg_pass_rate"),
             value: "91.2%",
             icon: TrendingUp,
             color: "text-warning",
             bg: "bg-warning-subtle"
         },
-        { id: 4, label: "Active Courses", value: "12", icon: BookOpen, color: "text-info", bg: "bg-info-subtle" }
+        { id: 4, label: t("instructor.analytics.stat_active_courses"), value: "12", icon: BookOpen, color: "text-info", bg: "bg-info-subtle" }
     ];
 
     // Mock bar chart details (Course Performances)
@@ -43,9 +46,9 @@ const AnalyticsPage = () => {
     return (
         <div className="container-fluid py-2" style={{ maxWidth: "1100px" }}>
             <div className="mb-4">
-                <h1 className="h3 fw-bold text-dark mb-1">Analytics & Reports</h1>
+                <h1 className="h3 fw-bold text-dark mb-1">{t("instructor.analytics.title")}</h1>
                 <p className="text-secondary">
-                    Monitor course enrollment trends, average performance scores, and exam pass rates
+                    {t("instructor.analytics.subtitle")}
                 </p>
             </div>
 
@@ -78,9 +81,9 @@ const AnalyticsPage = () => {
                 <Col xs={12} lg={7}>
                     <div className="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
                         <div className="mb-4">
-                            <h5 className="fw-bold text-dark mb-1">Course Performance Breakdown</h5>
+                            <h5 className="fw-bold text-dark mb-1">{t("instructor.analytics.performance_breakdown")}</h5>
                             <p className="text-secondary small mb-0">
-                                Comparison of average scores and pass rates across active courses
+                                {t("instructor.analytics.performance_breakdown_desc")}
                             </p>
                         </div>
 
@@ -95,7 +98,7 @@ const AnalyticsPage = () => {
                                             {course.name}
                                         </span>
                                         <span className="text-muted fw-bold">
-                                            Avg: {course.avgScore}% | Pass: {course.passRate}%
+                                            {t("instructor.analytics.performance_avg")}: {course.avgScore}% | {t("instructor.analytics.performance_pass")}: {course.passRate}%
                                         </span>
                                     </div>
 
@@ -131,8 +134,8 @@ const AnalyticsPage = () => {
                 <Col xs={12} lg={5}>
                     <div className="card border-0 shadow-sm rounded-4 bg-white p-4 h-100">
                         <div className="mb-4">
-                            <h5 className="fw-bold text-dark mb-1">Performance Highlights</h5>
-                            <p className="text-secondary small mb-0">Summary insights of academic activities</p>
+                            <h5 className="fw-bold text-dark mb-1">{t("instructor.analytics.highlights")}</h5>
+                            <p className="text-secondary small mb-0">{t("instructor.analytics.highlights_desc")}</p>
                         </div>
 
                         <div className="d-flex flex-column gap-3">
@@ -142,10 +145,10 @@ const AnalyticsPage = () => {
                                 </div>
                                 <div>
                                     <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>
-                                        Highest Average Course
+                                        {t("instructor.analytics.highlight_highest_course")}
                                     </div>
                                     <div className="text-secondary small">
-                                        English Technical Writing (ENG 202) holds the highest class average of 92%.
+                                        {t("instructor.analytics.highlight_highest_course_desc")}
                                     </div>
                                 </div>
                             </div>
@@ -156,10 +159,10 @@ const AnalyticsPage = () => {
                                 </div>
                                 <div>
                                     <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>
-                                        Enrollment Growth
+                                        {t("instructor.analytics.highlight_enrollment_growth")}
                                     </div>
                                     <div className="text-secondary small">
-                                        Enrollments grew by 18% overall this semester, leading with Database Systems.
+                                        {t("instructor.analytics.highlight_enrollment_growth_desc")}
                                     </div>
                                 </div>
                             </div>

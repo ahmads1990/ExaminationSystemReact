@@ -1,8 +1,11 @@
 import { ArrowLeft, Compass } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Card, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const NotFoundPage = () => {
+    const { t } = useTranslation();
+
     return (
         <Container className="d-flex align-items-center justify-content-center min-vh-100 py-5">
             <Card className="border-0 shadow-lg rounded-4 bg-white p-5 text-center" style={{ maxWidth: "500px" }}>
@@ -20,10 +23,9 @@ const NotFoundPage = () => {
                 <h1 className="display-4 fw-extrabold text-dark mb-2" style={{ letterSpacing: "-0.03em" }}>
                     404
                 </h1>
-                <h4 className="fw-bold text-dark mb-3">Page Not Found</h4>
+                <h4 className="fw-bold text-dark mb-3">{t("common.not_found_title")}</h4>
                 <p className="text-secondary small mb-4 px-3" style={{ lineHeight: 1.6 }}>
-                    The page you are looking for might have been removed, had its name changed, or is temporarily
-                    unavailable.
+                    {t("common.not_found_desc")}
                 </p>
 
                 <div className="d-flex flex-column gap-2">
@@ -31,7 +33,7 @@ const NotFoundPage = () => {
                         to="/"
                         className="btn btn-primary rounded-3 px-4 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm border-0"
                     >
-                        <ArrowLeft size={16} /> Return to Dashboard
+                        <ArrowLeft size={16} /> {t("common.not_found_btn")}
                     </Link>
                 </div>
             </Card>

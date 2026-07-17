@@ -1,6 +1,7 @@
 import { CheckCircle2, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, Col, FloatingLabel, Form, InputGroup, Modal, Row, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { QuestionDto } from "../../../api/responses/QuestionResponses";
 import { QuestionLevel } from "../../../enums";
@@ -15,6 +16,7 @@ interface SaveQuestionModalProps {
 }
 
 const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: SaveQuestionModalProps) => {
+    const { t } = useTranslation();
     const isEditMode = !!questionToEdit;
 
     // Form state
@@ -74,7 +76,7 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
 
     const handleAddChoice = () => {
         if (choices.length >= 6) {
-            toast.error("Maximum of 6 choices allowed.");
+            toast.error(t("instructor.exam_questions.save_toast_max_choices"));
             return;
         }
         setChoices([...choices, { body: "", isCorrect: false }]);
@@ -82,7 +84,7 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
 
     const handleRemoveChoice = (index: number) => {
         if (choices.length <= 2) {
-            toast.error("Minimum of 2 choices required.");
+            toast.error(t("instructor.exam_questions.save_toast_min_choices"));
             return;
         }
 
@@ -102,25 +104,25 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
 
         // Validations
         if (!body.trim()) {
-            toast.error("Question body is required.");
+            toast.error(t("instructor.exam_questions.save_toast_body_req"));
             return;
         }
 
         if (score <= 0) {
-            toast.error("Question score must be greater than 0.");
+            toast.error(t("instructor.exam_questions.save_toast_score_req"));
             return;
         }
 
         const emptyChoice = choices.find((c) => !c.body.trim());
         if (emptyChoice) {
-            toast.error("All choices must have text.");
+            toast.error(t("instructor.exam_questions.save_toast_choices_empty"));
             return;
         }
 
         const hasCorrectChoice = choices.some((c) => c.isCorrect);
         if (!hasCorrectChoice) {
             // This shouldn't happen due to UI binding, but just in case
-            toast.error("Select one correct choice.");
+            toast.error(t("instructor.exam_questions.save_toast_correct_req"));
             return;
         }
 
@@ -136,10 +138,10 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
 
             if (isEditMode) {
                 await QuestionService.updateQuestion({ id: questionToEdit.id, ...requestData });
-                toast.success("Question updated successfully.");
+                toast.success(t("instructor.exam_questions.save_toast_success_update"));
             } else {
                 await QuestionService.createQuestion(requestData);
-                toast.success("Question created successfully.");
+                toast.success(t("instructor.exam_questions.save_toast_success_create"));
             }
             onSuccess();
             onHide();
@@ -156,16 +158,16 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
             <Form onSubmit={handleSubmit}>
                 <Modal.Header closeButton className="border-bottom-0 pb-0">
                     <Modal.Title className="fs-5 fw-bold">
-                        {isEditMode ? "Edit Question" : "Add New Question"}
+                        {isEditMode ? t("instructor.exam_questions.save_modal_title_edit") : t("instructor.exam_questions.save_modal_title_add")}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="py-4">
                     <Row className="g-3">
                         <Col xs={12}>
-                            <FloatingLabel label="Question Body">
+                            <FloatingLabel label={t("instructor.exam_questions.save_label_body")}>
                                 <Form.Control
                                     as="textarea"
-                                    placeholder="Enter question text here..."
+                                    placeholder={t("instructor.exam_questions.save_placeholder_body")}
                                     style={{ height: "100px" }}
                                     value={body}
                                     onChange={(e) => setBody(e.target.value)}
@@ -175,7 +177,7 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
                         </Col>
 
                         <Col md={6}>
-                            <FloatingLabel label="Score Points">
+                            <FloatingLabel label={t("instructor.exam_questions.save_label_score")}>
                                 <Form.Control
                                     type="number"
                                     min="1"
@@ -188,21 +190,21 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
                         </Col>
 
                         <Col md={6}>
-                            <FloatingLabel label="Difficulty Level">
+                            <FloatingLabel label={t("instructor.exam_questions.save_label_difficulty")}>
                                 <Form.Select
                                     value={questionLevel}
                                     onChange={(e) => setQuestionLevel(Number(e.target.value))}
                                 >
-                                    <option value={QuestionLevel.Easy}>Easy</option>
-                                    <option value={QuestionLevel.Medium}>Medium</option>
-                                    <option value={QuestionLevel.Hard}>Hard</option>
+                                    <option value={QuestionLevel.Easy}>{t("instructor.exam_questions.save_difficulty_easy")}</option>
+                                    <option value={QuestionLevel.Medium}>{t("instructor.exam_questions.save_difficulty_medium")}</option>
+                                    <option value={QuestionLevel.Hard}>{t("instructor.exam_questions.save_difficulty_hard")}</option>
                                 </Form.Select>
                             </FloatingLabel>
                         </Col>
 
                         <Col xs={12} className="mt-4">
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                <h6 className="fw-bold mb-0">Choices</h6>
+                                <h6 className="fw-bold mb-0">{t("instructor.exam_questions.save_label_choices")}</h6>
                                 <Button
                                     variant="outline-primary"
                                     size="sm"
@@ -210,7 +212,7 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
                                     disabled={choices.length >= 6}
                                     className="d-flex align-items-center gap-1"
                                 >
-                                    <Plus size={16} /> Add Choice
+                                    <Plus size={16} /> {t("instructor.exam_questions.save_btn_add_choice")}
                                 </Button>
                             </div>
 
@@ -224,12 +226,12 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
                                             name="correctChoice"
                                             checked={choice.isCorrect}
                                             onChange={() => handleChoiceCorrectChange(index)}
-                                            title="Mark as correct answer"
+                                            title={t("instructor.exam_questions.save_title_correct_choice")}
                                             className="mt-0"
                                             style={{ cursor: "pointer" }}
                                         />
                                         <Form.Control
-                                            placeholder={`Choice ${index + 1}`}
+                                            placeholder={t("instructor.exam_questions.save_placeholder_choice", { num: index + 1 })}
                                             value={choice.body}
                                             onChange={(e) => handleChoiceBodyChange(index, e.target.value)}
                                             required
@@ -244,7 +246,7 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
                                             variant="outline-danger"
                                             onClick={() => handleRemoveChoice(index)}
                                             disabled={choices.length <= 2}
-                                            title={choices.length <= 2 ? "Minimum 2 choices required" : "Remove choice"}
+                                            title={choices.length <= 2 ? t("instructor.exam_questions.save_toast_min_choices") : t("common.delete")}
                                             className="border-start-0"
                                         >
                                             <Trash2 size={18} />
@@ -257,10 +259,10 @@ const SaveQuestionModal = ({ show, onHide, onSuccess, examId, questionToEdit }: 
                 </Modal.Body>
                 <Modal.Footer className="border-top-0 pt-0">
                     <Button variant="secondary" onClick={onHide} disabled={isSubmitting}>
-                        Cancel
+                        {t("common.cancel")}
                     </Button>
                     <Button variant="primary" type="submit" disabled={isSubmitting} className="px-4">
-                        {isSubmitting ? <Spinner animation="border" size="sm" /> : "Save Question"}
+                        {isSubmitting ? <Spinner animation="border" size="sm" /> : t("instructor.exam_questions.save_btn_save")}
                     </Button>
                 </Modal.Footer>
             </Form>
