@@ -11,7 +11,7 @@ const Footer = () => {
                 <div className="row align-items-center justify-content-between g-3">
                     <div className="col-12 col-md-auto text-center text-md-start">
                         <Link to="/" className="text-decoration-none fw-bold fs-5 text-white">
-                            Exam<span style={{ color: "var(--color-primary-50)" }}>Sys</span>
+                            Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                         </Link>
                         <span className="ms-3" style={{ fontSize: "0.85rem" }}>
                             &copy; {currentYear} {t("common.footer_rights")}

@@ -9,6 +9,7 @@ import {
     Modal as BModal,
     Spinner as BSpinner
 } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { RejectedEntityDto } from "../../api/responses/exams/RejectedEntityDto";
 import { QuestionLevelInfo, RejectionReason } from "../../enums";
@@ -27,6 +28,7 @@ interface AssignQuestionsModalProps {
 }
 
 const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssignedIds }: AssignQuestionsModalProps) => {
+    const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState("");
     const [searchVal, setSearchVal] = useState("");
 
@@ -101,11 +103,11 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
     const mapRejectionReason = (reason: RejectionReason) => {
         switch (reason) {
             case RejectionReason.NotFound:
-                return "Question not found in the pool.";
+                return t("instructor.exam_questions.assign_rejection_not_found");
             case RejectionReason.AlreadyAssigned:
-                return "Question is already assigned to this exam.";
+                return t("instructor.exam_questions.assign_rejection_already_assigned");
             case RejectionReason.NotAssigned:
-                return "Question is not assigned to this exam.";
+                return t("instructor.exam_questions.assign_rejection_not_assigned");
             default:
                 return reason;
         }
@@ -117,7 +119,7 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
             .map(Number);
 
         if (questionIdsToAssign.length === 0) {
-            toast.error("Please select at least one question to assign.");
+            toast.error(t("instructor.exam_questions.assign_toast_select_at_least"));
             return;
         }
 
@@ -133,12 +135,12 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
                 const rejected = response.data || [];
                 if (rejected.length > 0) {
                     setRejectedList(rejected);
-                    toast.error(`Partial success. Some questions could not be assigned.`);
+                    toast.error(t("instructor.exam_questions.assign_toast_partial_success"));
                     refetch();
                     setRowSelection({});
                     onSuccess();
                 } else {
-                    toast.success("Questions assigned successfully!");
+                    toast.success(t("instructor.exam_questions.assign_toast_success"));
                     onSuccess();
                     onHide();
                 }
@@ -148,7 +150,7 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
             const errorData = err.response?.data;
             if (errorData && Array.isArray(errorData.data)) {
                 setRejectedList(errorData.data);
-                toast.error(errorData.message || "Failed to assign some questions.");
+                toast.error(errorData.message || t("instructor.exam_questions.assign_toast_failed"));
             }
         } finally {
             setIsSubmitting(false);
@@ -227,36 +229,38 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
             },
             {
                 id: "body",
-                header: "Question Description",
+                header: t("instructor.exam_questions.assign_col_description"),
                 accessorKey: "body",
                 size: 500,
                 cell: (info: any) => <div className="text-wrap text-secondary-800 fw-normal">{info.getValue()}</div>
             },
             {
                 id: "score",
-                header: "Score",
+                header: t("instructor.exam_questions.assign_col_score"),
                 accessorKey: "score",
                 size: 80,
                 cell: (info: any) => <span className="fw-medium text-dark">{info.getValue()} pts</span>
             },
             {
                 id: "level",
-                header: "Difficulty",
+                header: t("instructor.exam_questions.assign_col_difficulty"),
                 accessorKey: "questionLevel",
                 size: 100,
                 cell: (info: any) => {
                     const level = info.getValue();
                     const infoDetails = QuestionLevelInfo[level] || { label: String(level), color: "secondary" };
+                    const labelKey = level === 0 ? "save_difficulty_easy" : level === 1 ? "save_difficulty_medium" : level === 2 ? "save_difficulty_hard" : "";
+                    const translatedLabel = labelKey ? t(`instructor.exam_questions.${labelKey}`) : infoDetails.label;
                     return (
                         <BBadge bg={infoDetails.color} className="text-capitalize">
-                            {infoDetails.label}
+                            {translatedLabel}
                         </BBadge>
                     );
                 }
             },
             {
                 id: "status",
-                header: "Status",
+                header: t("instructor.exam_questions.assign_col_status"),
                 size: 100,
                 cell: ({ row }: any) => {
                     const isAlreadyAssigned = alreadyAssignedIds.includes(row.original.id);
@@ -265,11 +269,11 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
                             bg="success-subtle"
                             className="text-success border border-success border-opacity-10 py-1"
                         >
-                            Assigned
+                            {t("instructor.exam_questions.assign_status_assigned")}
                         </BBadge>
                     ) : (
                         <BBadge bg="light" className="text-muted border border-light-subtle py-1">
-                            Available
+                            {t("instructor.exam_questions.assign_status_available")}
                         </BBadge>
                     );
                 }
@@ -284,7 +288,7 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
         <BModal show={show} onHide={onHide} size="xl" backdrop="static" centered scrollable className="modal-glass">
             <BModal.Header closeButton className="border-bottom-0 pb-0">
                 <BModal.Title className="fs-4 fw-bold text-dark d-flex align-items-center gap-2">
-                    <span>Assign Questions to Exam</span>
+                    <span>{t("instructor.exam_questions.assign_modal_title")}</span>
                 </BModal.Title>
             </BModal.Header>
 
@@ -296,9 +300,9 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
                         dismissible
                         className="mb-4 border-danger border-opacity-20 rounded-3 shadow-sm"
                     >
-                        <h6 className="fw-bold alert-heading mb-2">Some questions were rejected:</h6>
+                        <h6 className="fw-bold alert-heading mb-2">{t("instructor.exam_questions.assign_alert_rejected_title")}</h6>
                         <ul className="mb-0 ps-3">
-                            {rejectedList.map((item) => (
+                             {rejectedList.map((item) => (
                                 <li key={item.id} className="small">
                                     <strong>Question ID #{item.id}:</strong> {mapRejectionReason(item.reason)}
                                 </li>
@@ -311,7 +315,7 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
                 <BForm onSubmit={handleSearchSubmit} className="mb-4">
                     <BInputGroup className="shadow-sm border rounded-3 overflow-hidden bg-white">
                         <BForm.Control
-                            placeholder="Search by question text..."
+                            placeholder={t("instructor.exam_questions.assign_search_placeholder")}
                             value={searchVal}
                             onChange={(e) => setSearchVal(e.target.value)}
                             className="border-0 shadow-none py-2 px-3"
@@ -326,7 +330,7 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
                             </BButton>
                         )}
                         <BButton type="submit" variant="primary" className="px-4 d-flex align-items-center gap-2">
-                            <Search size={16} /> Search
+                            <Search size={16} /> {t("instructor.exam_questions.assign_btn_search")}
                         </BButton>
                     </BInputGroup>
                 </BForm>
@@ -348,10 +352,10 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
 
             <BModal.Footer className="border-top-0 pt-0 px-4 pb-4">
                 <div className="me-auto text-muted small fw-medium">
-                    {selectedCount > 0 && `${selectedCount} question(s) selected`}
+                    {selectedCount > 0 && t("instructor.exam_questions.assign_selected_count", { count: selectedCount })}
                 </div>
                 <BButton variant="secondary" onClick={onHide} disabled={isSubmitting} className="rounded-3">
-                    Cancel
+                    {t("common.cancel")}
                 </BButton>
                 <BButton
                     variant="primary"
@@ -361,10 +365,10 @@ const AssignQuestionsModal = ({ show, onHide, onSuccess, examId, alreadyAssigned
                 >
                     {isSubmitting ? (
                         <>
-                            <BSpinner animation="border" size="sm" /> Assigning...
+                            <BSpinner animation="border" size="sm" /> {t("instructor.exam_questions.assign_btn_assigning")}
                         </>
                     ) : (
-                        `Assign Selected (${selectedCount})`
+                        t("instructor.exam_questions.assign_btn_assign", { count: selectedCount })
                     )}
                 </BButton>
             </BModal.Footer>
