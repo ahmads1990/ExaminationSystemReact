@@ -451,3 +451,19 @@ a:hover {
 .no-caret::after {
     display: none !important;
 }
+
+/* Force Offcanvas Header to LTR layout to keep close button on the rightmost side */
+.offcanvas-header {
+    direction: ltr !important;
+}
+
+/* ─── RTL (Arabic) Specific Overrides ─── */
+html[dir="rtl"] .dropdown-menu-end {
+    right: auto !important;
+    left: 0 !important;
+}
+
+html[dir="rtl"] .navbar .btn-link.me-3 {
+    margin-right: 0 !important;
+    margin-left: 1rem !important;
+}

@@ -56,7 +56,8 @@ const SidebarLink = ({
 const MainLayout = () => {
     const { isAuthenticated, isLoading, user } = useAuth();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isRtl = i18n.language === "ar";
 
     // Resizable Sidebar Logic
     const [sidebarWidth, setSidebarWidth] = useState(260);
@@ -220,6 +221,7 @@ const MainLayout = () => {
             <Offcanvas
                 show={showMobileSidebar}
                 onHide={() => setShowMobileSidebar(false)}
+                placement={isRtl ? "end" : "start"}
                 className="d-lg-none"
                 style={{ width: "280px" }}
             >

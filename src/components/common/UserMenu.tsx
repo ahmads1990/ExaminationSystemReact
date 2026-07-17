@@ -33,6 +33,10 @@ const UserMenu = () => {
         <div className="dropdown" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
             <a
                 href="#"
+                onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpen(!isOpen);
+                }}
                 className={`d-flex align-items-center text-decoration-none dropdown-toggle no-arrow gap-2 ${isOpen ? "show" : ""}`}
                 role="button"
                 aria-expanded={isOpen}
