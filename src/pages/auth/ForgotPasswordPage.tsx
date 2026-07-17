@@ -1,5 +1,6 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,6 +9,7 @@ import AuthService from "../../services/authService";
 
 const ForgotPasswordPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [email, setEmail] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +19,7 @@ const ForgotPasswordPage = () => {
         e.preventDefault();
 
         if (!email) {
-            setError("Please enter your email address.");
+            setError(t("auth.enter_email_error", "Please enter your email address."));
             return;
         }
 
@@ -31,10 +33,10 @@ const ForgotPasswordPage = () => {
                 // Navigate to Reset Password
                 navigate("/reset-password", { state: { email } });
             } else {
-                setError(response.message || "Failed to send reset code. Please try again.");
+                setError(response.message || t("auth.failed_send_code_error", "Failed to send reset code. Please try again."));
             }
         } catch (err: any) {
-            setError("An error occurred. Please try again.");
+            setError(t("auth.generic_error", "An error occurred. Please try again."));
         } finally {
             setIsSubmitting(false);
         }
@@ -51,9 +53,9 @@ const ForgotPasswordPage = () => {
                     <DotLottieReact src={passwordSecurityLottieUrl} loop autoplay />
                 </div>
 
-                <h2 className="fw-bold mb-2">Forgot Password? 🔒</h2>
+                <h2 className="fw-bold mb-2">{t("auth.forgot_pass_title")}</h2>
                 <p className="text-muted px-2">
-                    Enter your email address and we'll send you a 6-digit code to reset your password.
+                    {t("auth.forgot_pass_desc")}
                 </p>
             </div>
 
@@ -69,11 +71,11 @@ const ForgotPasswordPage = () => {
                         className="text-start mb-2 ms-1 fw-semibold text-secondary"
                         style={{ fontSize: "0.9rem" }}
                     >
-                        Email Address
+                        {t("auth.email")}
                     </Form.Label>
                     <Form.Control
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder={t("login.email")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -90,10 +92,10 @@ const ForgotPasswordPage = () => {
                 >
                     {isSubmitting ? (
                         <>
-                            <Spinner animation="border" size="sm" /> Sending...
+                            <Spinner animation="border" size="sm" /> {t("auth.sending")}
                         </>
                     ) : (
-                        "Send Reset Code"
+                        t("auth.btn_send_code")
                     )}
                 </Button>
 
@@ -101,9 +103,9 @@ const ForgotPasswordPage = () => {
 
                 <div className="text-center">
                     <p className="text-muted small mb-0">
-                        Remembered your password?{" "}
+                        {t("auth.remembered_pass")}{" "}
                         <Link to="/login" className="text-primary fw-bold text-decoration-none">
-                            Back to Login
+                            {t("auth.back_to_login")}
                         </Link>
                     </p>
                     <div className="mt-3">
@@ -115,7 +117,7 @@ const ForgotPasswordPage = () => {
                             style={{ borderStyle: "dashed" }}
                             type="button"
                         >
-                            🚀 Skip to Reset Password (Demo)
+                            {t("auth.skip_to_reset")}
                         </Button>
                     </div>
                 </div>

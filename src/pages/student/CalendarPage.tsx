@@ -1,49 +1,52 @@
 import { AlertCircle, Calendar, CheckCircle, Clock, MapPin } from "lucide-react";
 import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { formatDate } from "../../utils/dateUtils";
 
 const CalendarPage = () => {
+    const { t } = useTranslation();
+
     // Mock upcoming events list
     const events = [
         {
             id: 1,
-            title: "Physics I Midterm Exam",
+            title: t("student.calendar.mock_event_1_title", "Physics I Midterm Exam"),
             course: "Physics 101",
             date: new Date("2026-07-20T10:00:00"),
-            duration: "120 mins",
+            duration: `120 ${t("dashboard.minutes")}`,
             type: "Midterm",
             status: "urgent",
-            location: "Online (ExamSys Portal)"
+            location: t("student.calendar.mock_event_1_loc", "Online (ExamSys Portal)")
         },
         {
             id: 2,
-            title: "Database Systems Quiz 2",
+            title: t("student.calendar.mock_event_2_title", "Database Systems Quiz 2"),
             course: "CS 304",
             date: new Date("2026-07-22T14:00:00"),
-            duration: "30 mins",
+            duration: `30 ${t("dashboard.minutes")}`,
             type: "Quiz",
             status: "upcoming",
-            location: "Online (ExamSys Portal)"
+            location: t("student.calendar.mock_event_2_loc", "Online (ExamSys Portal)")
         },
         {
             id: 3,
-            title: "Calculus III Practice Exam",
+            title: t("student.calendar.mock_event_3_title", "Calculus III Practice Exam"),
             course: "Math 201",
             date: new Date("2026-07-25T09:00:00"),
-            duration: "90 mins",
+            duration: `90 ${t("dashboard.minutes")}`,
             type: "Practice",
             status: "upcoming",
-            location: "Self-Paced Practice"
+            location: t("student.calendar.mock_event_3_loc", "Self-Paced Practice")
         },
         {
             id: 4,
-            title: "English Technical Writing Final",
+            title: t("student.calendar.mock_event_4_title", "English Technical Writing Final"),
             course: "ENG 202",
             date: new Date("2026-07-29T16:00:00"),
-            duration: "180 mins",
+            duration: `180 ${t("dashboard.minutes")}`,
             type: "Final",
             status: "scheduled",
-            location: "Online (ExamSys Portal)"
+            location: t("student.calendar.mock_event_4_loc", "Online (ExamSys Portal)")
         }
     ];
 
@@ -52,19 +55,19 @@ const CalendarPage = () => {
             case "urgent":
                 return (
                     <Badge bg="danger" className="px-2 py-1">
-                        Urgent
+                        {t("student.calendar.status_urgent")}
                     </Badge>
                 );
             case "upcoming":
                 return (
                     <Badge bg="warning" className="px-2 py-1 text-dark">
-                        Upcoming
+                        {t("student.calendar.status_upcoming")}
                     </Badge>
                 );
             default:
                 return (
                     <Badge bg="primary" className="px-2 py-1">
-                        Scheduled
+                        {t("student.calendar.status_scheduled")}
                     </Badge>
                 );
         }
@@ -73,9 +76,9 @@ const CalendarPage = () => {
     return (
         <div className="container-fluid py-2" style={{ maxWidth: "1000px" }}>
             <div className="mb-4">
-                <h1 className="h3 fw-bold text-dark mb-1">Calendar & Deadlines</h1>
+                <h1 className="h3 fw-bold text-dark mb-1">{t("student.calendar.title")}</h1>
                 <p className="text-secondary">
-                    Keep track of your upcoming exam schedules, quizzes, and submission deadlines
+                    {t("student.calendar.subtitle")}
                 </p>
             </div>
 
@@ -83,7 +86,7 @@ const CalendarPage = () => {
                 {/* Event Schedule List */}
                 <Col xs={12} lg={8}>
                     <h4 className="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                        <Calendar size={22} className="text-primary" /> Upcoming Schedule
+                        <Calendar size={22} className="text-primary" /> {t("student.calendar.upcoming")}
                     </h4>
                     <div className="d-flex flex-column gap-3">
                         {events.map((event) => (
@@ -122,7 +125,7 @@ const CalendarPage = () => {
                 {/* Quick Reminders Panel */}
                 <Col xs={12} lg={4}>
                     <h4 className="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                        <AlertCircle size={22} className="text-primary" /> Quick Reminders
+                        <AlertCircle size={22} className="text-primary" /> {t("student.calendar.reminders")}
                     </h4>
                     <Card className="border-0 shadow-sm rounded-4 bg-white p-4">
                         <ListGroup variant="flush" className="gap-3">
@@ -132,11 +135,10 @@ const CalendarPage = () => {
                                 </div>
                                 <div>
                                     <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>
-                                        Physics Exam Starting Soon
+                                        {t("student.calendar.reminder_exam_title")}
                                     </div>
                                     <div className="text-secondary small">
-                                        Physics I Midterm is scheduled for July 20th at 10:00 AM. Study guide is
-                                        available.
+                                        {t("student.calendar.reminder_exam_desc")}
                                     </div>
                                 </div>
                             </ListGroup.Item>
@@ -147,10 +149,10 @@ const CalendarPage = () => {
                                 </div>
                                 <div>
                                     <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>
-                                        All Grades Up to Date
+                                        {t("student.calendar.reminder_grades_title")}
                                     </div>
                                     <div className="text-secondary small">
-                                        Your exam history reports show all current graded quiz scores.
+                                        {t("student.calendar.reminder_grades_desc")}
                                     </div>
                                 </div>
                             </ListGroup.Item>

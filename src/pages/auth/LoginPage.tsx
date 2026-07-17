@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import PasswordInput from "../../components/common/forms/PasswordInput";
 import TextInput from "../../components/common/forms/TextInput";
 import { useAuth } from "../../contexts/AuthContext";
@@ -10,6 +11,7 @@ import { validateLoginRequest, ValidationErrors } from "../../utils/validation";
 const LoginPage = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
 
@@ -63,8 +65,8 @@ const LoginPage = () => {
     return (
         <div className="animate-fade-in">
             <div className="text-center mb-4">
-                <h2 className="fw-bold mb-1">Welcome Back</h2>
-                <p className="text-muted">Please sign in to continue</p>
+                <h2 className="fw-bold mb-1">{t("login.welcome")}</h2>
+                <p className="text-muted">{t("login.signin")}</p>
             </div>
 
             {error && (
@@ -78,7 +80,7 @@ const LoginPage = () => {
                 style={{ backgroundColor: "#fffdf0", borderColor: "#ffe69c" }}
             >
                 <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h6 className="mb-0 text-warning-emphasis fw-bold">🚀 Quick Demo Access</h6>
+                    <h6 className="mb-0 text-warning-emphasis fw-bold">🚀 {t("login.demo_access")}</h6>
                     <span className="badge bg-success rounded-pill px-2">Good with it! ✨</span>
                 </div>
                 <div className="row g-2">
@@ -88,7 +90,7 @@ const LoginPage = () => {
                             style={{ fontSize: "0.8rem", cursor: "pointer" }}
                             onClick={() => setFormData({ email: "admin@exam.com", password: "Password123!" })}
                         >
-                            <div className="fw-bold text-primary">Instructor</div>
+                            <div className="fw-bold text-primary">{t("navbar.instructor")}</div>
                             <code>admin@exam.com</code>
                         </div>
                     </div>
@@ -98,14 +100,14 @@ const LoginPage = () => {
                             style={{ fontSize: "0.8rem", cursor: "pointer" }}
                             onClick={() => setFormData({ email: "student@exam.com", password: "Password123!" })}
                         >
-                            <div className="fw-bold text-info">Student</div>
+                            <div className="fw-bold text-info">{t("navbar.student")}</div>
                             <code>student@exam.com</code>
                         </div>
                     </div>
                 </div>
                 <div className="mt-2 text-center">
                     <small className="text-muted" style={{ fontSize: "0.75rem" }}>
-                        Click a user above to auto-fill the form!
+                        {t("login.autofill_hint")}
                     </small>
                 </div>
             </div>
@@ -114,7 +116,7 @@ const LoginPage = () => {
                 <TextInput
                     id="loginEmail"
                     name="email"
-                    label="Email Address"
+                    label={t("login.email")}
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={(value: string) => setFormData({ ...formData, email: value })}
@@ -125,7 +127,7 @@ const LoginPage = () => {
                 <PasswordInput
                     id="loginPassword"
                     name="password"
-                    label="Password"
+                    label={t("login.password")}
                     placeholder="Password"
                     value={formData.password}
                     onChange={(value: string) => setFormData({ ...formData, password: value })}
@@ -134,12 +136,12 @@ const LoginPage = () => {
                 />
 
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                    <Form.Check type="checkbox" label="Remember me" id="rememberMe" className="small text-muted" />
+                    <Form.Check type="checkbox" label={t("login.remember_me")} id="rememberMe" className="small text-muted" />
                     <Link
                         to="/forgot-password"
                         className="text-decoration-none small fw-semibold text-primary hover-opacity"
                     >
-                        Forgot password?
+                        {t("login.forgot_password")}
                     </Link>
                 </div>
 
@@ -151,17 +153,17 @@ const LoginPage = () => {
                 >
                     {loading ? (
                         <>
-                            <Spinner animation="border" size="sm" /> Signing In...
+                            <Spinner animation="border" size="sm" /> {t("login.signing_in")}
                         </>
                     ) : (
-                        "Sign In"
+                        t("login.login")
                     )}
                 </Button>
 
                 <div className="text-center">
-                    <span className="text-muted small">Don't have an account? </span>
+                    <span className="text-muted small">{t("login.no_account")}</span>
                     <Link to="/register" className="text-decoration-none fw-semibold text-primary">
-                        Create Account
+                        {t("login.create_account")}
                     </Link>
                 </div>
             </Form>

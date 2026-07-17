@@ -1,5 +1,6 @@
 import { BookOpen, Calendar, ChevronRight, FileText, History } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Badge, Card, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { StudentAttemptSummaryDto } from "../../api/responses/StudentExamResponses";
@@ -10,6 +11,7 @@ import { formatDate } from "../../utils/dateUtils";
 
 const ExamHistoryPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [attempts, setAttempts] = useState<StudentAttemptSummaryDto[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -40,8 +42,8 @@ const ExamHistoryPage = () => {
         <div className="container-fluid animate-fade-in">
             {/* Page Header */}
             <div className="mb-4">
-                <h2 className="fw-bold mb-1">Exam History</h2>
-                <p className="text-muted">Review your past examination attempts, scores, and grades.</p>
+                <h2 className="fw-bold mb-1">{t("student.history.title")}</h2>
+                <p className="text-muted">{t("student.history.subtitle")}</p>
             </div>
 
             {error && (
@@ -58,10 +60,10 @@ const ExamHistoryPage = () => {
                 </Card>
             ) : attempts.length === 0 ? (
                 <EmptyState
-                    title="No exam attempts yet"
-                    message="You have not taken any examinations yet. Check your dashboard for active exams or search for courses."
+                    title={t("student.history.no_attempts")}
+                    message={t("student.history.no_attempts_desc")}
                     icon={History}
-                    ctaText="Go to Dashboard"
+                    ctaText={t("student.history.go_dashboard")}
                     ctaLink="/student/dashboard"
                 />
             ) : (
@@ -74,12 +76,12 @@ const ExamHistoryPage = () => {
                                     style={{ fontSize: "0.75rem", letterSpacing: "0.05em" }}
                                 >
                                     <tr>
-                                        <th className="py-3 px-4 border-0">Exam Details</th>
-                                        <th className="py-3 px-4 border-0">Course Name</th>
-                                        <th className="py-3 px-4 border-0 text-center">Score</th>
-                                        <th className="py-3 px-4 border-0 text-center">Result</th>
-                                        <th className="py-3 px-4 border-0">Submitted Date</th>
-                                        <th className="py-3 px-4 border-0 text-end">Action</th>
+                                        <th className="py-3 px-4 border-0">{t("student.history.col_exam_details")}</th>
+                                        <th className="py-3 px-4 border-0">{t("student.history.col_course")}</th>
+                                        <th className="py-3 px-4 border-0 text-center">{t("student.history.col_score")}</th>
+                                        <th className="py-3 px-4 border-0 text-center">{t("student.history.col_result")}</th>
+                                        <th className="py-3 px-4 border-0">{t("student.history.col_date")}</th>
+                                        <th className="py-3 px-4 border-0 text-end">{t("student.history.col_action")}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -103,7 +105,7 @@ const ExamHistoryPage = () => {
                                                                 {attempt.examTitle}
                                                             </span>
                                                             <span className="text-muted font-size-11">
-                                                                Attempt #{attempt.attemptId}
+                                                                {t("student.history.attempt_num", { id: attempt.attemptId })}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -131,11 +133,11 @@ const ExamHistoryPage = () => {
                                                                 </span>
                                                             </div>
                                                             <span className="text-muted font-size-11 d-block mt-0.5">
-                                                                {scorePercent}% Grade
+                                                                {scorePercent}% {t("student.history.grade_label")}
                                                             </span>
                                                         </>
                                                     ) : (
-                                                        <span className="text-muted font-size-12 italic">Pending</span>
+                                                        <span className="text-muted font-size-12 italic">{t("student.history.status_pending")}</span>
                                                     )}
                                                 </td>
 
@@ -150,14 +152,14 @@ const ExamHistoryPage = () => {
                                                                     : "text-danger-800"
                                                             }`}
                                                         >
-                                                            {attempt.isPassed ? "PASSED" : "FAILED"}
+                                                            {attempt.isPassed ? t("student.history.pass") : t("student.history.fail")}
                                                         </Badge>
                                                     ) : (
                                                         <Badge
                                                             bg="warning-subtle"
                                                             className="rounded-pill px-2.5 py-1.5 font-size-11 fw-bold text-warning-800"
                                                         >
-                                                            GRADING
+                                                            {t("student.history.grading")}
                                                         </Badge>
                                                     )}
                                                 </td>
@@ -181,7 +183,7 @@ const ExamHistoryPage = () => {
                                                         className="btn btn-sm btn-outline-primary rounded-3 px-3 py-1.5 d-inline-flex align-items-center gap-1 fw-semibold"
                                                         style={{ fontSize: "0.75rem" }}
                                                     >
-                                                        {isGraded ? "View Result" : "Check Status"}{" "}
+                                                        {isGraded ? t("student.history.btn_view_result") : t("student.history.btn_check_status")}{" "}
                                                         <ChevronRight size={14} />
                                                     </button>
                                                 </td>

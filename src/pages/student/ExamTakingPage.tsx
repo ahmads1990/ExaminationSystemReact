@@ -1,5 +1,6 @@
 import { AlertCircle, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Clock, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Badge, Card, Col, Container, ProgressBar, Row, Spinner } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +35,7 @@ const getRemainingSecondsFromJwt = (token: string): number => {
 
 const ExamTakingPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [questions, setQuestions] = useState<ExamQuestionDto[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -56,10 +58,10 @@ const ExamTakingPage = () => {
     useEffect(() => {
         const token = getExamToken();
         if (!token) {
-            toast.error("No active exam session found.");
+            toast.error(t("student.exam_taking.toast_no_session", "No active exam session found."));
             navigate("/student/dashboard");
         }
-    }, [navigate]);
+    }, [navigate, t]);
 
     // Load questions and restore answers from cache
     useEffect(() => {
@@ -127,38 +129,38 @@ const ExamTakingPage = () => {
                         console.error("Failed to decode exam meta", metaErr);
                     }
                 } else {
-                    setError(res.message || "Failed to load exam questions.");
+                    setError(res.message || t("student.exam_taking.loading_error", "Failed to load exam questions."));
                 }
             } catch (err) {
                 console.error("Error loading exam:", err);
-                setError("Unable to load exam. Please make sure you have an active attempt.");
+                setError(t("student.exam_taking.unable_load_error", "Unable to load exam. Please make sure you have an active attempt."));
             } finally {
                 setLoading(false);
             }
         };
 
         initExam();
-    }, []);
+    }, [t]);
 
     const handleAutoSubmit = useCallback(async () => {
         if (isAutoSubmitting) return;
         setIsAutoSubmitting(true);
-        toast.error("Time's up! Submitting exam automatically...", { duration: 5000 });
+        toast.error(t("student.exam_taking.time_up_auto_submit", "Time's up! Submitting exam automatically..."), { duration: 5000 });
 
         try {
             const res = await StudentExamService.submitAttempt();
             removeExamToken();
             localStorage.removeItem("exam_answers_active");
-            toast.success("Exam submitted successfully!");
+            toast.success(t("student.exam_taking.submit_success", "Exam submitted successfully!"));
             navigate(`/student/exams/result?attemptId=${res.data || ""}`);
         } catch (err) {
             console.error("Auto submit failed:", err);
             removeExamToken();
             localStorage.removeItem("exam_answers_active");
-            toast.error("Time ran out. Attempt completed.");
+            toast.error(t("student.exam_taking.time_out_toast", "Time ran out. Attempt completed."));
             navigate("/student/dashboard");
         }
-    }, [isAutoSubmitting, navigate]);
+    }, [isAutoSubmitting, navigate, t]);
 
     // Set up countdown timer
     useEffect(() => {
@@ -186,7 +188,7 @@ const ExamTakingPage = () => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             if (isAutoSubmitting || submitting) return;
             e.preventDefault();
-            e.returnValue = "Warning! Leaving this page will not pause the exam timer.";
+            e.returnValue = t("student.exam_taking.unload_warning", "Warning! Leaving this page will not pause the exam timer.");
             return e.returnValue;
         };
 
@@ -213,7 +215,7 @@ const ExamTakingPage = () => {
         } catch (err) {
             console.error(`Failed to auto-save answer for question ${questionId}:`, err);
             setSavingStatus((prev) => ({ ...prev, [questionId]: "error" }));
-            toast.error("Connection error. Failed to save answer to server.");
+            toast.error(t("student.exam_taking.conn_error", "Connection error. Failed to save answer to server."));
         }
     };
 
@@ -225,11 +227,11 @@ const ExamTakingPage = () => {
             const res = await StudentExamService.submitAttempt();
             removeExamToken();
             localStorage.removeItem("exam_answers_active");
-            toast.success("Exam submitted successfully!");
+            toast.success(t("student.exam_taking.submit_success", "Exam submitted successfully!"));
             navigate(`/student/exams/result?attemptId=${res.data || ""}`);
         } catch (err: any) {
             console.error("Manual submit failed:", err);
-            toast.error(err.response?.data?.message || "Failed to submit the exam. Please try again.");
+            toast.error(err.response?.data?.message || t("student.exam_taking.manual_submit_failed", "Failed to submit the exam. Please try again."));
             setSubmitting(false);
         }
     };
@@ -244,7 +246,7 @@ const ExamTakingPage = () => {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center min-vh-100 bg-light">
                 <Spinner animation="border" variant="primary" className="mb-3" />
-                <p className="text-muted fw-semibold">Setting up your secure exam environment...</p>
+                <p className="text-muted fw-semibold">{t("student.exam_taking.loading_exam", "Setting up your secure exam environment...")}</p>
             </div>
         );
     }
@@ -255,12 +257,12 @@ const ExamTakingPage = () => {
                 <Card className="border-0 shadow-sm rounded-4 text-center max-w-md mx-auto">
                     <Card.Body className="p-4">
                         <AlertCircle size={40} className="text-danger mb-3 mx-auto" />
-                        <h4 className="fw-bold mb-3">Exam Error</h4>
+                        <h4 className="fw-bold mb-3">{t("student.exam_taking.error_title", "Exam Error")}</h4>
                         <Alert variant="danger" className="py-2.5 px-3">
-                            {error || "No questions found for this exam attempt."}
+                            {error || t("student.exam_taking.no_questions_error", "No questions found for this exam attempt.")}
                         </Alert>
                         <ActionButton variant="primary" onClick={() => navigate("/student/dashboard")} fullWidth>
-                            Go back to Dashboard
+                            {t("student.exam_taking.btn_dashboard", "Go back to Dashboard")}
                         </ActionButton>
                     </Card.Body>
                 </Card>
@@ -284,13 +286,13 @@ const ExamTakingPage = () => {
                     <div>
                         <div className="d-flex align-items-center gap-2">
                             <span className="text-white-50 fw-semibold text-uppercase font-size-11">
-                                {examMeta?.courseName || "Active Course"}
+                                {examMeta?.courseName || t("student.exam_taking.syncing", "Syncing...")}
                             </span>
                             <span className="badge bg-danger rounded-pill fw-semibold font-size-10">
-                                DO NOT REFRESH
+                                {t("student.exam_taking.do_not_refresh", "DO NOT REFRESH")}
                             </span>
                         </div>
-                        <h4 className="fw-bold mb-0 text-white mt-0.5">{examMeta?.title || "Exam Attempt"}</h4>
+                        <h4 className="fw-bold mb-0 text-white mt-0.5">{examMeta?.title || t("student.exam_taking.syncing", "Syncing...")}</h4>
                     </div>
 
                     {/* TIMER & PROGRESS */}
@@ -298,7 +300,7 @@ const ExamTakingPage = () => {
                         <div className="d-flex align-items-center gap-3 bg-secondary-900 border border-secondary-800 rounded-3 px-3 py-2">
                             <div className="d-flex flex-column text-end">
                                 <span className="text-white-50 font-size-10 text-uppercase fw-semibold tracking-wider">
-                                    Remaining Time
+                                    {t("student.exam_taking.sidebar_time_left")}
                                 </span>
                                 <span
                                     className={`fs-5 fw-bold leading-none mt-0.5 d-flex align-items-center gap-1.5 ${
@@ -321,7 +323,7 @@ const ExamTakingPage = () => {
                             disabled={submitting || isAutoSubmitting}
                             className="fw-bold px-4"
                         >
-                            Submit Exam
+                            {t("student.exam_taking.btn_submit")}
                         </ActionButton>
                     </div>
                 </div>
@@ -329,7 +331,7 @@ const ExamTakingPage = () => {
                 {/* PROGRESS BAR */}
                 <div className="d-flex align-items-center gap-3 mt-3">
                     <span className="font-size-11 text-white-50 text-nowrap fw-semibold">
-                        Progress: {answeredCount} of {totalQuestions} answered
+                        {t("student.exam_taking.sidebar_progress")}: {answeredCount} {t("student.exam_taking.sidebar_answered", "of")} {totalQuestions}
                     </span>
                     <ProgressBar
                         now={progressPercent}
@@ -347,7 +349,7 @@ const ExamTakingPage = () => {
                     <Col lg={3} className="order-2 order-lg-1">
                         <Card className="border-0 shadow-sm rounded-4 bg-white sticky-top" style={{ top: "140px" }}>
                             <Card.Body className="p-3.5">
-                                <h6 className="fw-bold text-secondary-800 mb-3">Question Navigator</h6>
+                                <h6 className="fw-bold text-secondary-800 mb-3">{t("student.exam_taking.sidebar_questions", "Questions")}</h6>
                                 <div
                                     className="d-grid grid-cols-5 gap-2"
                                     style={{
@@ -409,28 +411,28 @@ const ExamTakingPage = () => {
                                             className="bg-primary rounded-circle"
                                             style={{ width: "12px", height: "12px", display: "inline-block" }}
                                         ></span>
-                                        <span>Current Question</span>
+                                        <span>{t("student.exam_taking.legend_current")}</span>
                                     </div>
                                     <div className="d-flex align-items-center gap-2 text-muted">
                                         <span
                                             className="bg-success rounded-circle"
                                             style={{ width: "12px", height: "12px", display: "inline-block" }}
                                         ></span>
-                                        <span>Answered & Saved</span>
+                                        <span>{t("student.exam_taking.legend_saved")}</span>
                                     </div>
                                     <div className="d-flex align-items-center gap-2 text-muted">
                                         <span
                                             className="border border-secondary rounded-circle"
                                             style={{ width: "12px", height: "12px", display: "inline-block" }}
                                         ></span>
-                                        <span>Unanswered</span>
+                                        <span>{t("student.exam_taking.legend_unanswered")}</span>
                                     </div>
                                     <div className="d-flex align-items-center gap-2 text-muted">
                                         <span
                                             className="bg-danger rounded-circle"
                                             style={{ width: "12px", height: "12px", display: "inline-block" }}
                                         ></span>
-                                        <span>Save Error (Unsaved)</span>
+                                        <span>{t("student.exam_taking.legend_error")}</span>
                                     </div>
                                 </div>
                             </Card.Body>
@@ -447,7 +449,7 @@ const ExamTakingPage = () => {
                                             bg="secondary"
                                             className="px-2.5 py-1.5 bg-secondary-subtle text-secondary-800 rounded-pill"
                                         >
-                                            Question {currentIndex + 1} of {totalQuestions}
+                                            {t("student.exam_taking.question_label", { current: currentIndex + 1, total: totalQuestions })}
                                         </Badge>
                                     </div>
 
@@ -458,7 +460,7 @@ const ExamTakingPage = () => {
                                                 className="text-muted d-flex align-items-center gap-1.5"
                                                 style={{ fontSize: "var(--text-xs)" }}
                                             >
-                                                <RefreshCw size={12} className="spin text-primary" /> Saving answer...
+                                                <RefreshCw size={12} className="spin text-primary" /> {t("student.exam_taking.status_saving")}
                                             </span>
                                         )}
                                         {savingStatus[currentQuestion.questionId] === "saved" && (
@@ -466,7 +468,7 @@ const ExamTakingPage = () => {
                                                 className="text-success d-flex align-items-center gap-1.5"
                                                 style={{ fontSize: "var(--text-xs)" }}
                                             >
-                                                <CheckCircle2 size={12} /> Progress auto-saved
+                                                <CheckCircle2 size={12} /> {t("student.exam_taking.status_saved")}
                                             </span>
                                         )}
                                         {savingStatus[currentQuestion.questionId] === "error" && (
@@ -474,7 +476,7 @@ const ExamTakingPage = () => {
                                                 className="text-danger d-flex align-items-center gap-1.5"
                                                 style={{ fontSize: "var(--text-xs)" }}
                                             >
-                                                <AlertTriangle size={12} /> Auto-save failed! Click again to retry.
+                                                <AlertTriangle size={12} /> {t("student.exam_taking.status_error")}
                                             </span>
                                         )}
                                     </div>
@@ -530,7 +532,7 @@ const ExamTakingPage = () => {
                                         disabled={currentIndex === 0}
                                         className="btn btn-outline-secondary d-flex align-items-center gap-1.5 px-3 py-2 rounded-3"
                                     >
-                                        <ChevronLeft size={16} /> Previous
+                                        <ChevronLeft size={16} /> {t("student.exam_taking.btn_previous")}
                                     </button>
 
                                     {currentIndex < totalQuestions - 1 ? (
@@ -538,7 +540,7 @@ const ExamTakingPage = () => {
                                             onClick={() => setCurrentIndex((prev) => prev + 1)}
                                             className="btn btn-primary d-flex align-items-center gap-1.5 px-4 py-2 rounded-3"
                                         >
-                                            Next <ChevronRight size={16} />
+                                            {t("student.exam_taking.btn_next")} <ChevronRight size={16} />
                                         </button>
                                     ) : (
                                         <ActionButton
@@ -547,7 +549,7 @@ const ExamTakingPage = () => {
                                             disabled={submitting}
                                             className="px-4 py-2"
                                         >
-                                            Submit Exam
+                                            {t("student.exam_taking.btn_submit")}
                                         </ActionButton>
                                     )}
                                 </div>
@@ -562,9 +564,9 @@ const ExamTakingPage = () => {
                 show={showSubmitModal}
                 onHide={() => setShowSubmitModal(false)}
                 onConfirm={handleManualSubmit}
-                title="Submit Exam?"
-                description={`You have answered ${answeredCount} out of ${totalQuestions} questions. Are you sure you want to finish and submit? You cannot make any more changes after submitting.`}
-                confirmLabel="Yes, Submit"
+                title={t("student.exam_taking.modal_title")}
+                description={t("student.exam_taking.modal_desc", { answered: answeredCount, total: totalQuestions })}
+                confirmLabel={t("student.exam_taking.modal_confirm")}
                 confirmVariant="success"
                 icon={<CheckCircle2 size={32} className="text-success" />}
                 iconBgColor="#ecfdf5"

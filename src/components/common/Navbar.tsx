@@ -1,5 +1,7 @@
-import { Menu, Moon, Sun } from "lucide-react";
+import { Globe, Menu, Moon, Sun } from "lucide-react";
 import { useState } from "react";
+import { Dropdown } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -9,12 +11,27 @@ interface NavbarProps {
     onToggleSidebar?: () => void;
 }
 
+const languagesList = [
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" }
+];
+
 const Navbar = ({ onToggleSidebar }: NavbarProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    const { t, i18n } = useTranslation();
 
     const toggleNavbar = () => setIsOpen(!isOpen);
+
+    const changeLanguage = (lang: string) => {
+        i18n.changeLanguage(lang);
+        localStorage.setItem("app_lang", lang);
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        document.documentElement.lang = lang;
+    };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-premium sticky-top">
@@ -55,6 +72,29 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
 
                     {/* SECTION 3: AUTH / USER ACTIONS */}
                     <div className="d-flex align-items-center gap-3">
+                        {/* Language Selector Dropdown */}
+                        <Dropdown align="end">
+                            <Dropdown.Toggle
+                                as="button"
+                                className="btn btn-link text-decoration-none text-secondary p-0 d-flex align-items-center justify-content-center border-0 shadow-none btn-theme-toggle no-caret"
+                                id="languageDropdown"
+                                title="Change Language"
+                            >
+                                <Globe size={18} />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="dropdown-menu-custom shadow border-0 p-1">
+                                {languagesList.map((lang) => (
+                                    <Dropdown.Item
+                                        key={lang.code}
+                                        className={`d-flex align-items-center gap-2 rounded-2 ${i18n.language === lang.code ? "active bg-primary-subtle text-primary" : ""}`}
+                                        onClick={() => changeLanguage(lang.code)}
+                                    >
+                                        <span>{lang.flag}</span> {lang.name}
+                                    </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
+
                         <button
                             type="button"
                             onClick={toggleTheme}
@@ -70,10 +110,10 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                         ) : (
                             <>
                                 <Link to="/login" className="btn btn-auth-outline text-decoration-none">
-                                    Log In
+                                    {t("navbar.login")}
                                 </Link>
                                 <Link to="/register" className="btn btn-auth-primary text-decoration-none">
-                                    Get Started
+                                    {t("navbar.get_started")}
                                 </Link>
                             </>
                         )}

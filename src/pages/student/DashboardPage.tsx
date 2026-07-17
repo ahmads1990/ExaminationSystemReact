@@ -1,5 +1,6 @@
 import { BookOpen, CalendarDays, CheckCircle, Clock, FileText, Target } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Badge, Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { StudentEnrollmentDto } from "../../api/responses/StudentCourseResponses";
@@ -16,6 +17,7 @@ import { formatDate } from "../../utils/dateUtils";
 const StudentDashboardPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { t } = useTranslation();
 
     const [enrollments, setEnrollments] = useState<StudentEnrollmentDto[]>([]);
     const [availableExams, setAvailableExams] = useState<AvailableExamDto[]>([]);
@@ -61,15 +63,15 @@ const StudentDashboardPage = () => {
 
     const getRemainingAttemptsStr = (exam: AvailableExamDto) => {
         const remaining = exam.maxAttempts - exam.attemptsTaken;
-        return `${remaining} of ${exam.maxAttempts} remaining`;
+        return t("dashboard.attempts_remaining", { remaining, total: exam.maxAttempts });
     };
 
     return (
         <div className="container-fluid animate-fade-in">
             {/* Welcoming Header */}
             <div className="mb-4">
-                <h2 className="fw-bold mb-1">Welcome back, {user?.name || "Student"}!</h2>
-                <p className="text-muted">Here is an overview of your active courses and upcoming exams.</p>
+                <h2 className="fw-bold mb-1">{t("dashboard.welcome_student", { name: user?.name || "Student" })}</h2>
+                <p className="text-muted">{t("dashboard.student_desc")}</p>
             </div>
 
             {error && (
@@ -84,10 +86,10 @@ const StudentDashboardPage = () => {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h4 className="fw-bold mb-0 text-secondary-800 d-flex align-items-center gap-2">
                             <FileText size={22} className="text-primary" />
-                            Available Exams
+                            {t("dashboard.available_exams")}
                         </h4>
                         <Badge bg="primary" className="rounded-pill px-2.5 py-1.5 fw-semibold">
-                            {availableExams.length} Active
+                            {availableExams.length} {t("dashboard.active")}
                         </Badge>
                     </div>
 
@@ -95,8 +97,8 @@ const StudentDashboardPage = () => {
                         <SkeletonCard count={3} />
                     ) : availableExams.length === 0 ? (
                         <EmptyState
-                            title="All caught up!"
-                            message="There are no pending exams available for your enrolled courses right now."
+                            title={t("dashboard.all_caught_up")}
+                            message={t("dashboard.no_pending_exams")}
                             icon={CheckCircle}
                         />
                     ) : (
@@ -151,7 +153,7 @@ const StudentDashboardPage = () => {
                                                         >
                                                             <Clock size={14} className="text-primary opacity-75" />
                                                             <span className="fw-medium">
-                                                                {exam.maxDurationInMinutes} mins
+                                                                {exam.maxDurationInMinutes} {t("dashboard.minutes")}
                                                             </span>
                                                         </div>
                                                         <div
@@ -173,7 +175,7 @@ const StudentDashboardPage = () => {
                                                                     className="text-primary opacity-75"
                                                                 />
                                                                 <span className="fw-medium text-danger">
-                                                                    Due: {formatDate(exam.deadlineDate)}
+                                                                    {t("dashboard.due")}: {formatDate(exam.deadlineDate)}
                                                                 </span>
                                                             </div>
                                                         )}
@@ -188,10 +190,10 @@ const StudentDashboardPage = () => {
                                                         fullWidth
                                                     >
                                                         {!hasAttemptsLeft
-                                                            ? "Attempts Used"
+                                                            ? t("dashboard.attempts_used")
                                                             : deadlinePassed
-                                                              ? "Expired"
-                                                              : "Take Exam"}
+                                                              ? t("dashboard.expired")
+                                                              : t("dashboard.take_exam")}
                                                     </ActionButton>
                                                 </div>
                                             </Card.Body>
@@ -208,13 +210,13 @@ const StudentDashboardPage = () => {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h4 className="fw-bold mb-0 text-secondary-800 d-flex align-items-center gap-2">
                             <BookOpen size={22} className="text-primary" />
-                            My Courses
+                            {t("dashboard.my_courses")}
                         </h4>
                         <Badge
                             bg="secondary"
                             className="rounded-pill px-2.5 py-1.5 fw-semibold bg-secondary-subtle text-secondary-800"
                         >
-                            {enrollments.length} Enrolled
+                            {enrollments.length} {t("dashboard.enrolled")}
                         </Badge>
                     </div>
 
@@ -222,10 +224,10 @@ const StudentDashboardPage = () => {
                         <SkeletonCard count={3} />
                     ) : enrollments.length === 0 ? (
                         <EmptyState
-                            title="No courses yet"
-                            message="Browse available courses and enroll in them to start taking exams."
+                            title={t("dashboard.no_courses_yet")}
+                            message={t("dashboard.browse_courses_desc")}
                             icon={BookOpen}
-                            ctaText="Browse Courses"
+                            ctaText={t("dashboard.browse_courses_btn")}
                             ctaLink="/courses"
                         />
                     ) : (
@@ -240,7 +242,7 @@ const StudentDashboardPage = () => {
                                                     bg="success"
                                                     className="rounded-pill py-1 px-2 text-uppercase font-size-10"
                                                 >
-                                                    Finished
+                                                    {t("dashboard.finished")}
                                                 </Badge>
                                             )}
                                         </div>
@@ -249,7 +251,7 @@ const StudentDashboardPage = () => {
                                             style={{ fontSize: "0.75rem" }}
                                         >
                                             <CalendarDays size={13} className="text-secondary opacity-75" />
-                                            <span>Enrolled: {formatDate(enrollment.enrollmentDate)}</span>
+                                            <span>{t("dashboard.enrolled_date")}{formatDate(enrollment.enrollmentDate)}</span>
                                         </div>
                                     </Card.Body>
                                 </Card>

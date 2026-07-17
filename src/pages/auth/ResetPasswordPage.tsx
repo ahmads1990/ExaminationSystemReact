@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Button, Form, Spinner } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -9,6 +10,7 @@ import AuthService from "../../services/authService";
 const ResetPasswordPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
 
     // Expected to be passed from ForgotPasswordPage
     const email = location.state?.email || "";
@@ -23,17 +25,17 @@ const ResetPasswordPage = () => {
         e.preventDefault();
 
         if (!email) {
-            setError("Session expired. Please request a new code.");
+            setError(t("auth.session_expired_error", "Session expired. Please request a new code."));
             return;
         }
 
         if (otp.length < 6) {
-            setError("Please enter the complete 6-digit code.");
+            setError(t("auth.complete_code_error", "Please enter the complete 6-digit code."));
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("auth.passwords_mismatch_error", "Passwords do not match."));
             return;
         }
 
@@ -50,12 +52,12 @@ const ResetPasswordPage = () => {
 
             if (response.success) {
                 // On success → redirect to /login with "Password changed" toast
-                navigate("/login", { state: { message: "Password reset successfully! You can now login." } });
+                navigate("/login", { state: { message: t("auth.reset_success_msg", "Password reset successfully! You can now login.") } });
             } else {
-                setError(response.message || "Failed to reset password. Please try again.");
+                setError(response.message || t("auth.failed_reset_error", "Failed to reset password. Please try again."));
             }
         } catch (err: any) {
-            setError("An error occurred. Please try again.");
+            setError(t("auth.generic_error", "An error occurred. Please try again."));
         } finally {
             setIsSubmitting(false);
         }
@@ -64,9 +66,9 @@ const ResetPasswordPage = () => {
     return (
         <div className="animate-fade-in mx-auto" style={{ maxWidth: "400px" }}>
             <div className="text-center mb-4">
-                <h2 className="fw-bold mb-2">Reset Password ✨</h2>
+                <h2 className="fw-bold mb-2">{t("auth.reset_pass_title")}</h2>
                 <p className="text-muted px-2">
-                    Enter the 6-digit code we sent to your email and choose a new password.
+                    {t("auth.reset_pass_desc")}
                 </p>
                 {email && <div className="fw-bold text-primary mb-2">{email}</div>}
             </div>
@@ -84,7 +86,7 @@ const ResetPasswordPage = () => {
                         className="text-start mb-2 ms-1 fw-semibold text-secondary"
                         style={{ fontSize: "0.9rem" }}
                     >
-                        Enter 6-digit code
+                        {t("auth.enter_code")}
                     </Form.Label>
                     <OtpInput length={6} value={otp} onChange={setOtp} error={!!error} />
                 </div>
@@ -93,8 +95,8 @@ const ResetPasswordPage = () => {
                 <PasswordInput
                     id="newPassword"
                     name="newPassword"
-                    label="New Password"
-                    placeholder="Enter new password"
+                    label={t("auth.enter_new_pass")}
+                    placeholder={t("auth.enter_new_pass")}
                     value={newPassword}
                     onChange={(value: string) => setNewPassword(value)}
                     required
@@ -103,8 +105,8 @@ const ResetPasswordPage = () => {
                 <PasswordInput
                     id="confirmPassword"
                     name="confirmPassword"
-                    label="Confirm Password"
-                    placeholder="Confirm new password"
+                    label={t("auth.confirm_new_pass")}
+                    placeholder={t("auth.confirm_new_pass")}
                     value={confirmPassword}
                     onChange={(value: string) => setConfirmPassword(value)}
                     required
@@ -118,10 +120,10 @@ const ResetPasswordPage = () => {
                 >
                     {isSubmitting ? (
                         <>
-                            <Spinner animation="border" size="sm" /> Resetting...
+                            <Spinner animation="border" size="sm" /> {t("auth.resetting")}
                         </>
                     ) : (
-                        "Reset Password"
+                        t("auth.btn_reset_pass")
                     )}
                 </Button>
 
@@ -129,9 +131,9 @@ const ResetPasswordPage = () => {
 
                 <div className="text-center">
                     <p className="text-muted small mb-0">
-                        Remembered your password?{" "}
+                        {t("auth.remembered_pass")}{" "}
                         <Link to="/login" className="text-primary fw-bold text-decoration-none">
-                            Back to Login
+                            {t("auth.back_to_login")}
                         </Link>
                     </p>
                 </div>

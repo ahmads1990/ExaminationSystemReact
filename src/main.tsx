@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import App from "./App.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ThemeProvider } from "./contexts/ThemeContext.tsx";
+import "./i18n/config";
 import "./index.css";
 import "./styles/components.css";
 

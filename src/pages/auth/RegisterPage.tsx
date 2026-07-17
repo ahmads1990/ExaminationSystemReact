@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Button, Col, Form, Row, Spinner, Tab, Tabs } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/common/forms/PasswordInput";
@@ -39,15 +40,16 @@ interface InstructorFormData {
 
 const RegisterPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [key, setKey] = useState<UserType>(UserType.Student);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
 
     // Education level options
     const levelOptions = [
-        { value: "HighSchool", label: "High School" },
-        { value: "Bachelor", label: "Bachelor's Degree" },
-        { value: "Master", label: "Master's Degree" }
+        { value: "HighSchool", label: t("auth.high_school") },
+        { value: "Bachelor", label: t("auth.bachelor") },
+        { value: "Master", label: t("auth.master") }
     ];
 
     // Student form state
@@ -175,8 +177,8 @@ const RegisterPage = () => {
     return (
         <div className="animate-fade-in">
             <div className="text-center mb-4">
-                <h2 className="fw-bold mb-1">Create Account</h2>
-                <p className="text-muted">Join us as a Student or Instructor</p>
+                <h2 className="fw-bold mb-1">{t("auth.register_title")}</h2>
+                <p className="text-muted">{t("auth.register_subtitle")}</p>
             </div>
 
             {error && (
@@ -191,14 +193,14 @@ const RegisterPage = () => {
                 onSelect={(k) => setKey((k as UserType) || UserType.Student)}
                 className="mb-4 nav-justified custom-tabs"
             >
-                <Tab eventKey={UserType.Student} title="Student">
+                <Tab eventKey={UserType.Student} title={t("auth.student")}>
                     <Form onSubmit={handleRegister} className="mt-3">
                         <Row>
                             <Col md={6}>
                                 <TextInput
                                     id="studentName"
                                     name="name"
-                                    label="Full Name"
+                                    label={t("auth.fullname")}
                                     placeholder="John Doe"
                                     value={studentForm.name}
                                     onChange={(value: string) => setStudentForm({ ...studentForm, name: value })}
@@ -212,7 +214,7 @@ const RegisterPage = () => {
                                 <TextInput
                                     id="studentUser"
                                     name="username"
-                                    label="Username"
+                                    label={t("auth.username")}
                                     placeholder="johndoe"
                                     value={studentForm.username}
                                     onChange={(value: string) => setStudentForm({ ...studentForm, username: value })}
@@ -227,7 +229,7 @@ const RegisterPage = () => {
                         <TextInput
                             id="studentEmail"
                             name="email"
-                            label="Email Address"
+                            label={t("auth.email")}
                             placeholder="name@example.com"
                             value={studentForm.email}
                             onChange={(value: string) => setStudentForm({ ...studentForm, email: value })}
@@ -240,7 +242,7 @@ const RegisterPage = () => {
                                 <PasswordInput
                                     id="studentPass"
                                     name="password"
-                                    label="Password"
+                                    label={t("auth.password")}
                                     placeholder="Password"
                                     value={studentForm.password}
                                     onChange={(value: string) => setStudentForm({ ...studentForm, password: value })}
@@ -253,7 +255,7 @@ const RegisterPage = () => {
                                 <PasswordInput
                                     id="studentConfirm"
                                     name="confirmPassword"
-                                    label="Confirm Password"
+                                    label={t("auth.confirm_password")}
                                     placeholder="Confirm Password"
                                     value={studentForm.confirmPassword}
                                     onChange={(value: string) =>
@@ -270,20 +272,20 @@ const RegisterPage = () => {
                                 <SelectInput
                                     id="studentLevel"
                                     name="level"
-                                    label="Education Level"
+                                    label={t("auth.edu_level")}
                                     value={studentForm.level}
                                     onChange={(value: string) => setStudentForm({ ...studentForm, level: value })}
                                     options={levelOptions}
                                     error={studentErrors.level}
                                     required
-                                    placeholder="Select Level"
+                                    placeholder={t("auth.select_level")}
                                 />
                             </Col>
                             <Col md={6}>
                                 <TextInput
                                     id="studentGroup"
                                     name="group"
-                                    label="Group (Optional)"
+                                    label={t("auth.group_optional")}
                                     placeholder="e.g., Group A"
                                     value={studentForm.group}
                                     onChange={(value: string) => setStudentForm({ ...studentForm, group: value })}
@@ -301,23 +303,23 @@ const RegisterPage = () => {
                         >
                             {loading ? (
                                 <>
-                                    <Spinner animation="border" size="sm" /> Creating Account...
+                                    <Spinner animation="border" size="sm" /> {t("auth.creating_account", "Creating Account...")}
                                 </>
                             ) : (
-                                "Register as Student"
+                                t("auth.btn_register_student")
                             )}
                         </Button>
                     </Form>
                 </Tab>
 
-                <Tab eventKey={UserType.Instructor} title="Instructor">
+                <Tab eventKey={UserType.Instructor} title={t("auth.instructor")}>
                     <Form onSubmit={handleRegister} className="mt-3">
                         <Row>
                             <Col md={6}>
                                 <TextInput
                                     id="instrName"
                                     name="name"
-                                    label="Full Name"
+                                    label={t("auth.fullname")}
                                     placeholder="Dr. Jane Smith"
                                     value={instructorForm.name}
                                     onChange={(value: string) => setInstructorForm({ ...instructorForm, name: value })}
@@ -331,7 +333,7 @@ const RegisterPage = () => {
                                 <TextInput
                                     id="instrUser"
                                     name="username"
-                                    label="Username"
+                                    label={t("auth.username")}
                                     placeholder="janesmith"
                                     value={instructorForm.username}
                                     onChange={(value: string) =>
@@ -348,7 +350,7 @@ const RegisterPage = () => {
                         <TextInput
                             id="instrEmail"
                             name="email"
-                            label="Email Address"
+                            label={t("auth.email")}
                             placeholder="name@example.com"
                             value={instructorForm.email}
                             onChange={(value: string) => setInstructorForm({ ...instructorForm, email: value })}
@@ -361,7 +363,7 @@ const RegisterPage = () => {
                                 <PasswordInput
                                     id="instrPass"
                                     name="password"
-                                    label="Password"
+                                    label={t("auth.password")}
                                     placeholder="Password"
                                     value={instructorForm.password}
                                     onChange={(value: string) =>
@@ -376,7 +378,7 @@ const RegisterPage = () => {
                                 <PasswordInput
                                     id="instrConfirm"
                                     name="confirmPassword"
-                                    label="Confirm Password"
+                                    label={t("auth.confirm_password")}
                                     placeholder="Confirm Password"
                                     value={instructorForm.confirmPassword}
                                     onChange={(value: string) =>
@@ -391,7 +393,7 @@ const RegisterPage = () => {
                         <TextAreaInput
                             id="instrBio"
                             name="bio"
-                            label="Bio (Optional)"
+                            label={t("auth.bio_optional")}
                             placeholder="Tell us about yourself..."
                             value={instructorForm.bio}
                             onChange={(value: string) => setInstructorForm({ ...instructorForm, bio: value })}
@@ -403,7 +405,7 @@ const RegisterPage = () => {
                         <TextInput
                             id="instrSpecialization"
                             name="specialization"
-                            label="Specialization (Optional)"
+                            label={t("auth.specialization_optional")}
                             placeholder="e.g., Computer Science"
                             value={instructorForm.specialization}
                             onChange={(value: string) =>
@@ -421,10 +423,10 @@ const RegisterPage = () => {
                         >
                             {loading ? (
                                 <>
-                                    <Spinner animation="border" size="sm" /> Creating Account...
+                                    <Spinner animation="border" size="sm" /> {t("auth.creating_account", "Creating Account...")}
                                 </>
                             ) : (
-                                "Register as Instructor"
+                                t("auth.btn_register_instructor")
                             )}
                         </Button>
                     </Form>
@@ -432,9 +434,9 @@ const RegisterPage = () => {
             </Tabs>
 
             <div className="text-center mt-4">
-                <span className="text-muted small">Already have an account? </span>
+                <span className="text-muted small">{t("auth.already_account")}</span>
                 <Link to="/login" className="text-decoration-none fw-semibold text-primary">
-                    Sign In
+                    {t("login.login")}
                 </Link>
             </div>
         </div>

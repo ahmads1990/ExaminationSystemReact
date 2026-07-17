@@ -1,7 +1,10 @@
 import { Award, Cpu, Info, ShieldAlert } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Card, Col, Container, Row } from "react-bootstrap";
 
 const AboutPage = () => {
+    const { t } = useTranslation();
+
     return (
         <Container className="py-4" style={{ maxWidth: "900px" }}>
             <Card className="border-0 shadow-sm rounded-4 bg-white p-5">
@@ -10,16 +13,14 @@ const AboutPage = () => {
                         <Info size={28} />
                     </div>
                     <div>
-                        <h1 className="h3 fw-bold text-dark mb-0">About ExamSys</h1>
-                        <span className="text-secondary small">Academic Excellence & Innovation</span>
+                        <h1 className="h3 fw-bold text-dark mb-0">{t("common.about_title")}</h1>
+                        <span className="text-secondary small">{t("common.about_subtitle")}</span>
                     </div>
                 </div>
 
                 <div className="text-secondary d-flex flex-column gap-4" style={{ lineHeight: 1.6 }}>
                     <p>
-                        ExamSys is a premium, high-integrity online examination platform built to assist academic
-                        institutions in conducting safe, flexible, and automated tests. We bridge the gap between
-                        convenience and rigorous assessment metrics.
+                        {t("common.about_para")}
                     </p>
 
                     <Row className="g-4 mt-2">
@@ -28,9 +29,9 @@ const AboutPage = () => {
                                 <div className="text-primary mb-2">
                                     <Cpu size={24} />
                                 </div>
-                                <h6 className="fw-bold text-dark">Automated Workflow</h6>
+                                <h6 className="fw-bold text-dark">{t("common.about_card1_title")}</h6>
                                 <p className="small mb-0 text-secondary">
-                                    Instantly create exams, compile scores, and distribute performance diagnostics.
+                                    {t("common.about_card1_desc")}
                                 </p>
                             </Card>
                         </Col>
@@ -39,9 +40,9 @@ const AboutPage = () => {
                                 <div className="text-success mb-2">
                                     <Award size={24} />
                                 </div>
-                                <h6 className="fw-bold text-dark">Clear Metrics</h6>
+                                <h6 className="fw-bold text-dark">{t("common.about_card2_title")}</h6>
                                 <p className="small mb-0 text-secondary">
-                                    High-fidelity student performance analytics and grading systems for instructors.
+                                    {t("common.about_card2_desc")}
                                 </p>
                             </Card>
                         </Col>
@@ -50,9 +51,9 @@ const AboutPage = () => {
                                 <div className="text-warning mb-2">
                                     <ShieldAlert size={24} />
                                 </div>
-                                <h6 className="fw-bold text-dark">Honor Safeguards</h6>
+                                <h6 className="fw-bold text-dark">{t("common.about_card3_title")}</h6>
                                 <p className="small mb-0 text-secondary">
-                                    Auto-save caches, connection integrity tracking, and strict anti-cheat policies.
+                                    {t("common.about_card3_desc")}
                                 </p>
                             </Card>
                         </Col>

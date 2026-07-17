@@ -1,5 +1,6 @@
 import { ArrowLeft, Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Badge, Card } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ActionButton from "../../components/common/ActionButton";
@@ -15,6 +16,7 @@ import { formatDate } from "../../utils/dateUtils";
 const SubmissionsPage = () => {
     const { examId } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const examIdNum = Number(examId);
 
     // Pagination Hook
@@ -124,7 +126,7 @@ const SubmissionsPage = () => {
                         className="d-flex align-items-center cursor-pointer select-none"
                         onClick={() => handleSort("StudentName")}
                     >
-                        Student Name {renderSortArrow("StudentName")}
+                        {t("instructor.submissions.table_student_name")} {renderSortArrow("StudentName")}
                     </div>
                 ),
                 accessorKey: "studentName",
@@ -138,7 +140,7 @@ const SubmissionsPage = () => {
                         className="d-flex align-items-center cursor-pointer select-none"
                         onClick={() => handleSort("Status")}
                     >
-                        Status {renderSortArrow("Status")}
+                        {t("instructor.submissions.table_status")} {renderSortArrow("Status")}
                     </div>
                 ),
                 accessorKey: "status",
@@ -176,7 +178,7 @@ const SubmissionsPage = () => {
                         className="d-flex align-items-center cursor-pointer select-none"
                         onClick={() => handleSort("Grade")}
                     >
-                        Grade {renderSortArrow("Grade")}
+                        {t("instructor.submissions.table_grade")} {renderSortArrow("Grade")}
                     </div>
                 ),
                 size: 180,
@@ -190,13 +192,13 @@ const SubmissionsPage = () => {
                         );
                     }
                     if (attempt.status === ExamAttemptStatus.Grading) {
-                        return <span className="text-info fw-medium">Grading...</span>;
+                        return <span className="text-info fw-medium">{t("instructor.submissions.status_grading")}</span>;
                     }
                     if (
                         attempt.status === ExamAttemptStatus.Completed ||
                         attempt.status === ExamAttemptStatus.TimedOut
                     ) {
-                        return <span className="text-secondary fw-medium">Pending Grade</span>;
+                        return <span className="text-secondary fw-medium">{t("instructor.submissions.status_pending_grade")}</span>;
                     }
                     return <span className="text-muted">-</span>;
                 }
@@ -208,7 +210,7 @@ const SubmissionsPage = () => {
                         className="d-flex align-items-center cursor-pointer select-none"
                         onClick={() => handleSort("CreateDate")}
                     >
-                        Started Date {renderSortArrow("CreateDate")}
+                        {t("instructor.submissions.table_started_date")} {renderSortArrow("CreateDate")}
                     </div>
                 ),
                 accessorKey: "createDate",
@@ -217,17 +219,17 @@ const SubmissionsPage = () => {
             },
             {
                 id: "completionTime",
-                header: "Completion Time",
+                header: t("instructor.submissions.table_completion_time"),
                 accessorKey: "completionTime",
                 size: 180,
                 cell: (info: any) => <span>{info.getValue() || "-"}</span>
             }
         ],
-        [orderBy, sortDirection, handleSort, renderSortArrow]
+        [orderBy, sortDirection, handleSort, renderSortArrow, t]
     );
 
     if (isNaN(examIdNum)) {
-        return <Alert variant="danger">Invalid Exam ID</Alert>;
+        return <Alert variant="danger">{t("instructor.submissions.invalid_exam_id")}</Alert>;
     }
 
     return (
@@ -239,8 +241,8 @@ const SubmissionsPage = () => {
                         <ArrowLeft size={18} />
                     </ActionButton>
                     <div>
-                        <h2 className="mb-1 fw-bold">Exam Submissions</h2>
-                        <span className="text-muted">{isLoadingExam ? "Loading exam info..." : examInfo?.title}</span>
+                        <h2 className="mb-1 fw-bold">{t("instructor.submissions.title")}</h2>
+                        <span className="text-muted">{isLoadingExam ? t("instructor.submissions.loading_exam_info") : examInfo?.title}</span>
                     </div>
                 </div>
             </div>
@@ -257,7 +259,7 @@ const SubmissionsPage = () => {
                                 <input
                                     type="text"
                                     className="form-control border-start-0 border-0 bg-light py-2"
-                                    placeholder="Search student name..."
+                                    placeholder={t("instructor.submissions.search_placeholder")}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -269,13 +271,13 @@ const SubmissionsPage = () => {
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value as ExamAttemptStatus | "")}
                             >
-                                <option value="">All Statuses</option>
-                                <option value={ExamAttemptStatus.NotStarted}>Not Started</option>
-                                <option value={ExamAttemptStatus.InProgress}>In Progress</option>
-                                <option value={ExamAttemptStatus.Completed}>Completed</option>
-                                <option value={ExamAttemptStatus.TimedOut}>Timed Out</option>
-                                <option value={ExamAttemptStatus.Grading}>Grading</option>
-                                <option value={ExamAttemptStatus.Graded}>Graded</option>
+                                <option value="">{t("instructor.exams.all_statuses")}</option>
+                                <option value={ExamAttemptStatus.NotStarted}>{ExamAttemptStatus.NotStarted}</option>
+                                <option value={ExamAttemptStatus.InProgress}>{ExamAttemptStatus.InProgress}</option>
+                                <option value={ExamAttemptStatus.Completed}>{ExamAttemptStatus.Completed}</option>
+                                <option value={ExamAttemptStatus.TimedOut}>{ExamAttemptStatus.TimedOut}</option>
+                                <option value={ExamAttemptStatus.Grading}>{ExamAttemptStatus.Grading}</option>
+                                <option value={ExamAttemptStatus.Graded}>{ExamAttemptStatus.Graded}</option>
                             </select>
                         </div>
                     </div>

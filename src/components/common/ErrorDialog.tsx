@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Modal } from "react-bootstrap";
 import { ApiErrorCode } from "../../api/contracts/apiErrorCode";
 
@@ -11,9 +12,9 @@ interface ErrorDialogProps {
     variant?: "error" | "success";
 }
 
-function parseApiError(error: unknown): { message: string; details: string[] } {
+function parseApiError(error: unknown, t: any): { message: string; details: string[] } {
     const data = (error as any)?.response?.data;
-    if (!data) return { message: (error as any)?.message ?? "An unexpected error occurred.", details: [] };
+    if (!data) return { message: (error as any)?.message ?? t("common.unexpected_error", "An unexpected error occurred."), details: [] };
 
     const details: string[] = [];
     if (data.errorCode === ApiErrorCode.ValidationFailed && data.data && typeof data.data === "object") {
@@ -23,13 +24,14 @@ function parseApiError(error: unknown): { message: string; details: string[] } {
         });
     }
 
-    return { message: data.message ?? "An error occurred.", details };
+    return { message: data.message ?? t("common.occurred_error", "An error occurred."), details };
 }
 
 const ErrorDialog: React.FC<ErrorDialogProps> = ({ show, onHide, error, message, details = [], variant = "error" }) => {
+    const { t } = useTranslation();
     const parsed = useMemo(
-        () => (error ? parseApiError(error) : { message: message ?? "", details }),
-        [error, message, details]
+        () => (error ? parseApiError(error, t) : { message: message ?? "", details }),
+        [error, message, details, t]
     );
 
     return (
@@ -57,7 +59,7 @@ const ErrorDialog: React.FC<ErrorDialogProps> = ({ show, onHide, error, message,
                     className="px-5 rounded-3 fw-medium"
                     onClick={onHide}
                 >
-                    OK
+                    {t("common.ok", "OK")}
                 </Button>
             </Modal.Body>
         </Modal>

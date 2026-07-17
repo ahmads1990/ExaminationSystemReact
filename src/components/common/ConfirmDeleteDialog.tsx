@@ -1,5 +1,6 @@
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal, Spinner } from "react-bootstrap";
 
 interface ConfirmDeleteDialogProps {
@@ -16,10 +17,14 @@ const ConfirmDeleteDialog = ({
     onHide,
     onConfirm,
     title,
-    description = "This action cannot be undone.",
-    confirmLabel = "Delete"
+    description,
+    confirmLabel
 }: ConfirmDeleteDialogProps) => {
     const [isDeleting, setIsDeleting] = useState(false);
+    const { t } = useTranslation();
+
+    const finalDescription = description || t("common.cannot_undone", "This action cannot be undone.");
+    const finalConfirmLabel = confirmLabel || t("common.delete", "Delete");
 
     const handleConfirm = async () => {
         setIsDeleting(true);
@@ -42,20 +47,20 @@ const ConfirmDeleteDialog = ({
                 </div>
 
                 <h5 className="fw-bold mb-1">{title}</h5>
-                <p className="text-muted small mb-4">{description}</p>
+                <p className="text-muted small mb-4">{finalDescription}</p>
 
                 <div className="d-flex gap-2 justify-content-center">
                     <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isDeleting}>
-                        Cancel
+                        {t("common.cancel", "Cancel")}
                     </button>
                     <button type="button" className="btn btn-danger px-4" onClick={handleConfirm} disabled={isDeleting}>
                         {isDeleting ? (
                             <>
                                 <Spinner animation="border" size="sm" className="me-2" />
-                                {confirmLabel}ing...
+                                {finalConfirmLabel}...
                             </>
                         ) : (
-                            confirmLabel
+                            finalConfirmLabel
                         )}
                     </button>
                 </div>

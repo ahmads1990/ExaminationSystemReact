@@ -1,5 +1,6 @@
 import { Bell, KeyRound, Save, Shield, Sliders, User } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Badge, Button, Card, Col, Dropdown, Form, ListGroup, Nav, Row } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -46,6 +47,7 @@ const timezoneOptions = [
 
 const SettingsPage = () => {
     const { user } = useAuth();
+    const { t, i18n } = useTranslation();
     const [activeTab, setActiveTab] = useState("profile");
 
     // Profile State
@@ -55,7 +57,6 @@ const SettingsPage = () => {
     const [phone, setPhone] = useState("555-019-2834");
     const [timezone, setTimezone] = useState("Asia/Riyadh");
     const [bio, setBio] = useState("Academic account on ExamSys platform.");
-    const [role] = useState(user?.role || "Student");
 
     // Notifications State
     const [emailNotifications, setEmailNotifications] = useState(true);
@@ -70,7 +71,7 @@ const SettingsPage = () => {
 
     // Appearance / Preferences State
     const [theme, setTheme] = useState("light");
-    const [language, setLanguage] = useState("en");
+    const [language, setLanguage] = useState(i18n.language || "en");
     const [fontSize, setFontSize] = useState("medium");
 
     // Flag Lookup Data (Placed after state hook initializations)
@@ -93,39 +94,43 @@ const SettingsPage = () => {
 
     const handleSaveProfile = (e: React.FormEvent) => {
         e.preventDefault();
-        toast.success("Profile details saved successfully!");
+        toast.success(t("common.settings_toast_profile"));
     };
 
     const handleSaveNotifications = (e: React.FormEvent) => {
         e.preventDefault();
-        toast.success("Notification preferences updated!");
+        toast.success(t("common.settings_toast_notifications"));
     };
 
     const handleSaveSecurity = (e: React.FormEvent) => {
         e.preventDefault();
-        toast.success("Security settings configured!");
+        toast.success(t("common.settings_toast_security"));
     };
 
     const handleSavePreferences = (e: React.FormEvent) => {
         e.preventDefault();
-        toast.success("Application preferences saved!");
+        i18n.changeLanguage(language);
+        localStorage.setItem("app_lang", language);
+        document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+        document.documentElement.lang = language;
+        toast.success(t("common.settings_toast_preferences"));
     };
 
     const handleDetectTimezone = () => {
         try {
             const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
             setTimezone(tz);
-            toast.success(`Detected timezone: ${tz}`);
+            toast.success(t("common.settings_toast_tz_detect", { tz }));
         } catch (e) {
-            toast.error("Failed to detect timezone automatically.");
+            toast.error(t("common.settings_toast_tz_fail"));
         }
     };
 
     return (
         <div className="container-fluid py-2" style={{ maxWidth: "1000px" }}>
             <div className="mb-4">
-                <h1 className="h3 fw-bold text-dark mb-1">Account Settings</h1>
-                <p className="text-secondary">Manage your profile, preferences, alerts, and security settings</p>
+                <h1 className="h3 fw-bold text-dark mb-1">{t("common.settings_title")}</h1>
+                <p className="text-secondary">{t("common.settings_manage_desc")}</p>
             </div>
 
             <Row className="g-4">
@@ -141,11 +146,12 @@ const SettingsPage = () => {
                                     backgroundColor:
                                         activeTab === "profile" ? "var(--color-primary-500)" : "transparent",
                                     color: activeTab === "profile" ? "#fff" : "var(--bs-secondary-color)",
-                                    fontWeight: 500
+                                    fontWeight: 500,
+                                    textAlign: "start"
                                 }}
                             >
                                 <User size={18} />
-                                <span>Profile Details</span>
+                                <span>{t("common.settings_profile_details")}</span>
                             </Nav.Link>
                             <Nav.Link
                                 active={activeTab === "notifications"}
@@ -155,11 +161,12 @@ const SettingsPage = () => {
                                     backgroundColor:
                                         activeTab === "notifications" ? "var(--color-primary-500)" : "transparent",
                                     color: activeTab === "notifications" ? "#fff" : "var(--bs-secondary-color)",
-                                    fontWeight: 500
+                                    fontWeight: 500,
+                                    textAlign: "start"
                                 }}
                             >
                                 <Bell size={18} />
-                                <span>Notifications</span>
+                                <span>{t("common.settings_notifications")}</span>
                             </Nav.Link>
                             <Nav.Link
                                 active={activeTab === "security"}
@@ -169,11 +176,12 @@ const SettingsPage = () => {
                                     backgroundColor:
                                         activeTab === "security" ? "var(--color-primary-500)" : "transparent",
                                     color: activeTab === "security" ? "#fff" : "var(--bs-secondary-color)",
-                                    fontWeight: 500
+                                    fontWeight: 500,
+                                    textAlign: "start"
                                 }}
                             >
                                 <Shield size={18} />
-                                <span>Security & 2FA</span>
+                                <span>{t("common.settings_security_2fa")}</span>
                             </Nav.Link>
                             <Nav.Link
                                 active={activeTab === "preferences"}
@@ -183,11 +191,12 @@ const SettingsPage = () => {
                                     backgroundColor:
                                         activeTab === "preferences" ? "var(--color-primary-500)" : "transparent",
                                     color: activeTab === "preferences" ? "#fff" : "var(--bs-secondary-color)",
-                                    fontWeight: 500
+                                    fontWeight: 500,
+                                    textAlign: "start"
                                 }}
                             >
                                 <Sliders size={18} />
-                                <span>Preferences</span>
+                                <span>{t("common.settings_preferences")}</span>
                             </Nav.Link>
                         </Nav>
                     </Card>
@@ -200,7 +209,7 @@ const SettingsPage = () => {
                         {activeTab === "profile" && (
                             <Form onSubmit={handleSaveProfile}>
                                 <h4 className="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                                    <User size={20} className="text-primary" /> Profile Details
+                                    <User size={20} className="text-primary" /> {t("common.settings_profile_details")}
                                 </h4>
 
                                 <div className="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded-3">
@@ -214,7 +223,7 @@ const SettingsPage = () => {
                                     <div>
                                         <div className="fw-bold text-dark">{name || "User"}</div>
                                         <div className="text-secondary small text-capitalize">
-                                            {role.toLowerCase()} Account
+                                            {user?.role === "Instructor" ? t("common.profile_instructor_acc") : t("common.profile_student_acc")}
                                         </div>
                                     </div>
                                 </div>
@@ -222,12 +231,12 @@ const SettingsPage = () => {
                                 <Row className="g-3">
                                     <Col xs={12} sm={6}>
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold text-secondary">Full Name</Form.Label>
+                                            <Form.Label className="fw-semibold text-secondary">{t("common.settings_full_name")}</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
-                                                placeholder="Enter your full name"
+                                                placeholder={t("common.contact_name_placeholder")}
                                                 required
                                                 className="rounded-3 border-light py-2"
                                             />
@@ -236,13 +245,13 @@ const SettingsPage = () => {
                                     <Col xs={12} sm={6}>
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold text-secondary">
-                                                Email Address
+                                                {t("auth.email_address")}
                                             </Form.Label>
                                             <Form.Control
                                                 type="email"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
-                                                placeholder="Enter your email"
+                                                placeholder={t("common.contact_email_placeholder")}
                                                 required
                                                 className="rounded-3 border-light py-2"
                                             />
@@ -250,7 +259,7 @@ const SettingsPage = () => {
                                     </Col>
                                     <Col xs={12} sm={6}>
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold text-secondary">Phone Number</Form.Label>
+                                            <Form.Label className="fw-semibold text-secondary">{t("common.settings_phone_number")}</Form.Label>
                                             <div className="input-group">
                                                 <Dropdown onSelect={(key) => setCountryCode(key || "+1")}>
                                                     <Dropdown.Toggle
@@ -315,7 +324,7 @@ const SettingsPage = () => {
                                     <Col xs={12} sm={6}>
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold text-secondary d-flex justify-content-between align-items-center w-100">
-                                                <span>Timezone</span>
+                                                <span>{t("common.profile_timezone")}</span>
                                                 <Button
                                                     type="button"
                                                     variant="link"
@@ -323,7 +332,7 @@ const SettingsPage = () => {
                                                     onClick={handleDetectTimezone}
                                                     style={{ fontSize: "0.8rem" }}
                                                 >
-                                                    Detect Automatically
+                                                    {t("common.settings_detect_auto")}
                                                 </Button>
                                             </Form.Label>
                                             <Form.Select
@@ -345,13 +354,13 @@ const SettingsPage = () => {
                                 </Row>
 
                                 <Form.Group className="mb-4">
-                                    <Form.Label className="fw-semibold text-secondary">Account Bio</Form.Label>
+                                    <Form.Label className="fw-semibold text-secondary">{t("common.settings_account_bio")}</Form.Label>
                                     <Form.Control
                                         as="textarea"
                                         rows={3}
                                         value={bio}
                                         onChange={(e) => setBio(e.target.value)}
-                                        placeholder="Tell us about yourself"
+                                        placeholder={t("common.settings_bio_placeholder")}
                                         className="rounded-3 border-light py-2"
                                     />
                                 </Form.Group>
@@ -360,7 +369,7 @@ const SettingsPage = () => {
                                     type="submit"
                                     className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm hover-bg-primary-dark"
                                 >
-                                    <Save size={16} /> Save Changes
+                                    <Save size={16} /> {t("common.settings_save_btn")}
                                 </Button>
                             </Form>
                         )}
@@ -369,15 +378,15 @@ const SettingsPage = () => {
                         {activeTab === "notifications" && (
                             <Form onSubmit={handleSaveNotifications}>
                                 <h4 className="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                                    <Bell size={20} className="text-primary" /> Notifications
+                                    <Bell size={20} className="text-primary" /> {t("common.settings_notifications")}
                                 </h4>
 
                                 <div className="d-flex flex-column gap-3 mb-4">
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-semibold text-dark">Email Alerts</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_email_alerts")}</div>
                                             <div className="text-secondary small">
-                                                Receive notifications of important changes via email.
+                                                {t("common.settings_email_alerts_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -391,9 +400,9 @@ const SettingsPage = () => {
 
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-semibold text-dark">Browser Push Alerts</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_push_alerts")}</div>
                                             <div className="text-secondary small">
-                                                Play sounds and display alerts inside the browser.
+                                                {t("common.settings_push_alerts_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -407,9 +416,9 @@ const SettingsPage = () => {
 
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-semibold text-dark">Exam Reminders</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_exam_reminders")}</div>
                                             <div className="text-secondary small">
-                                                Notify me 24 hours before any scheduled exam opens.
+                                                {t("common.settings_exam_reminders_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -423,9 +432,9 @@ const SettingsPage = () => {
 
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-semibold text-dark">SMS Reminders</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_sms_reminders")}</div>
                                             <div className="text-secondary small">
-                                                Receive urgent low-timer or deadline alerts via text message.
+                                                {t("common.settings_sms_reminders_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -439,9 +448,9 @@ const SettingsPage = () => {
 
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-semibold text-dark">Timer Sound Warnings</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_sound_warnings")}</div>
                                             <div className="text-secondary small">
-                                                Play a subtle tick sound during the final 5 minutes of exams.
+                                                {t("common.settings_sound_warnings_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -455,9 +464,9 @@ const SettingsPage = () => {
 
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-semibold text-dark">Weekly Reports Digest</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_weekly_digest")}</div>
                                             <div className="text-secondary small">
-                                                Receive weekly progress summaries and statistics.
+                                                {t("common.settings_weekly_digest_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -474,7 +483,7 @@ const SettingsPage = () => {
                                     type="submit"
                                     className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm"
                                 >
-                                    <Save size={16} /> Save Preferences
+                                    <Save size={16} /> {t("common.settings_save_notify_btn")}
                                 </Button>
                             </Form>
                         )}
@@ -483,15 +492,15 @@ const SettingsPage = () => {
                         {activeTab === "security" && (
                             <Form onSubmit={handleSaveSecurity}>
                                 <h4 className="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                                    <Shield size={20} className="text-primary" /> Security & 2FA
+                                    <Shield size={20} className="text-primary" /> {t("common.settings_security_2fa")}
                                 </h4>
 
                                 <div className="mb-4 d-flex flex-column gap-3">
                                     <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light-subtle">
                                         <div>
-                                            <div className="fw-bold text-dark">Two-Factor Authentication (2FA)</div>
+                                            <div className="fw-bold text-dark">{t("common.settings_two_factor")}</div>
                                             <div className="text-secondary small">
-                                                Protect your exam workspace with an additional device validation lock.
+                                                {t("common.settings_two_factor_desc")}
                                             </div>
                                         </div>
                                         <Form.Check
@@ -505,22 +514,22 @@ const SettingsPage = () => {
 
                                     <div className="p-3 border rounded-3 bg-light-subtle d-flex align-items-center justify-content-between">
                                         <div>
-                                            <div className="fw-semibold text-dark">Update Password</div>
+                                            <div className="fw-semibold text-dark">{t("common.settings_update_password")}</div>
                                             <div className="text-secondary small">
-                                                Keep your account secure by updating your secret key password regularly.
+                                                {t("common.settings_update_password_desc")}
                                             </div>
                                         </div>
                                         <Link
                                             to="/change-password"
                                             className="btn btn-outline-secondary btn-sm rounded-2 px-3 py-1.5 fw-semibold d-flex align-items-center gap-1 text-decoration-none"
                                         >
-                                            <KeyRound size={14} /> Change Password
+                                            <KeyRound size={14} /> {t("common.settings_change_pwd_btn")}
                                         </Link>
                                     </div>
                                 </div>
 
                                 <div className="mb-4">
-                                    <h6 className="fw-bold text-dark mb-2">Recent Login Activity</h6>
+                                    <h6 className="fw-bold text-dark mb-2">{t("common.settings_recent_login")}</h6>
                                     <ListGroup className="rounded-3 border border-light overflow-hidden">
                                         <ListGroup.Item className="d-flex justify-content-between align-items-center p-3 small text-secondary bg-white">
                                             <div>
@@ -529,7 +538,7 @@ const SettingsPage = () => {
                                                 </div>
                                                 <div className="text-muted small">July 16, 2026 - 19:10 PM</div>
                                             </div>
-                                            <Badge bg="success">Current Session</Badge>
+                                            <Badge bg="success">{t("common.settings_current_session")}</Badge>
                                         </ListGroup.Item>
                                         <ListGroup.Item className="d-flex justify-content-between align-items-center p-3 small text-secondary bg-white">
                                             <div>
@@ -541,9 +550,9 @@ const SettingsPage = () => {
                                             <Button
                                                 variant="link"
                                                 className="p-0 text-danger text-decoration-none small"
-                                                onClick={() => toast.success("Session revoked.")}
+                                                onClick={() => toast.success(t("common.settings_terminate_success"))}
                                             >
-                                                Revoke
+                                                {t("common.settings_revoke_btn")}
                                             </Button>
                                         </ListGroup.Item>
                                     </ListGroup>
@@ -552,9 +561,9 @@ const SettingsPage = () => {
                                             variant="outline-danger"
                                             size="sm"
                                             className="rounded-2 fw-semibold px-3"
-                                            onClick={() => toast.success("All other active sessions revoked.")}
+                                            onClick={() => toast.success(t("common.settings_terminate_success"))}
                                         >
-                                            Terminate Other Sessions
+                                            {t("common.settings_terminate_sessions")}
                                         </Button>
                                     </div>
                                 </div>
@@ -563,7 +572,7 @@ const SettingsPage = () => {
                                     type="submit"
                                     className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm"
                                 >
-                                    <Save size={16} /> Save Security settings
+                                    <Save size={16} /> {t("common.settings_save_security_btn")}
                                 </Button>
                             </Form>
                         )}
@@ -572,27 +581,27 @@ const SettingsPage = () => {
                         {activeTab === "preferences" && (
                             <Form onSubmit={handleSavePreferences}>
                                 <h4 className="fw-bold mb-4 text-dark d-flex align-items-center gap-2">
-                                    <Sliders size={20} className="text-primary" /> Application Preferences
+                                    <Sliders size={20} className="text-primary" /> {t("common.settings_preferences")}
                                 </h4>
 
                                 <Row className="g-3 mb-4">
                                     <Col xs={12} sm={6}>
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold text-secondary">UI Theme</Form.Label>
+                                            <Form.Label className="fw-semibold text-secondary">{t("common.settings_ui_theme")}</Form.Label>
                                             <Form.Select
                                                 value={theme}
                                                 onChange={(e) => setTheme(e.target.value)}
                                                 className="rounded-3 border-light py-2"
                                             >
-                                                <option value="light">Default Light Mode</option>
-                                                <option value="dark">Premium Dark Mode</option>
-                                                <option value="system">Auto System Theme</option>
+                                                <option value="light">{t("common.settings_theme_light")}</option>
+                                                <option value="dark">{t("common.settings_theme_dark")}</option>
+                                                <option value="system">{t("common.settings_theme_system")}</option>
                                             </Form.Select>
                                         </Form.Group>
                                     </Col>
                                     <Col xs={12} sm={6}>
                                         <Form.Group className="mb-3">
-                                            <Form.Label className="fw-semibold text-secondary">Language</Form.Label>
+                                            <Form.Label className="fw-semibold text-secondary">{t("common.settings_lang_label")}</Form.Label>
                                             <Dropdown onSelect={(key) => setLanguage(key || "en")} className="w-100">
                                                 <Dropdown.Toggle
                                                     variant="white"
@@ -639,7 +648,7 @@ const SettingsPage = () => {
                                     <Col xs={12}>
                                         <Form.Group className="mb-3">
                                             <Form.Label className="fw-semibold text-secondary">
-                                                Default Font Size
+                                                {t("common.settings_font_size")}
                                             </Form.Label>
                                             <div className="d-flex gap-3 mt-1">
                                                 {["small", "medium", "large"].map((size) => (
@@ -647,11 +656,10 @@ const SettingsPage = () => {
                                                         key={size}
                                                         type="radio"
                                                         id={`font-size-${size}`}
-                                                        label={size.charAt(0).toUpperCase() + size.slice(1)}
+                                                        label={t(`common.settings_font_size_${size}`)}
                                                         name="fontSize"
                                                         checked={fontSize === size}
                                                         onChange={() => setFontSize(size)}
-                                                        className="text-capitalize"
                                                     />
                                                 ))}
                                             </div>
@@ -663,7 +671,7 @@ const SettingsPage = () => {
                                     type="submit"
                                     className="d-flex align-items-center gap-2 rounded-3 px-4 py-2 border-0 bg-primary shadow-sm"
                                 >
-                                    <Save size={16} /> Save Preferences
+                                    <Save size={16} /> {t("common.settings_save_btn")}
                                 </Button>
                             </Form>
                         )}

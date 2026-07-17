@@ -1,6 +1,7 @@
 import { Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import CourseService from "../../services/courseService";
 import TextAreaInput from "../common/forms/TextAreaInput";
@@ -21,6 +22,7 @@ interface FormErrors {
 }
 
 const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalProps) => {
+    const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [creditHours, setCreditHours] = useState("");
@@ -40,23 +42,23 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
 
     const validate = (): boolean => {
         const newErrors: FormErrors = {};
-        if (!title.trim()) newErrors.title = "Course title is required.";
-        else if (title.length > 100) newErrors.title = "Course title must not exceed 100 characters.";
+        if (!title.trim()) newErrors.title = t("instructor.courses.err_title_req");
+        else if (title.length > 100) newErrors.title = t("instructor.courses.err_title_len");
 
-        if (!description.trim()) newErrors.description = "Course description is required.";
+        if (!description.trim()) newErrors.description = t("instructor.courses.err_desc_req");
         else if (description.trim().length < 20)
-            newErrors.description = "Course description must be at least 20 characters long.";
-        else if (description.length > 500) newErrors.description = "Course description must not exceed 500 characters.";
+            newErrors.description = t("instructor.courses.err_desc_min");
+        else if (description.length > 500) newErrors.description = t("instructor.courses.err_desc_max");
 
         const hours = parseInt(creditHours);
-        if (!creditHours) newErrors.creditHours = "Credit hours is required.";
+        if (!creditHours) newErrors.creditHours = t("instructor.courses.err_hours_req");
         else if (isNaN(hours) || hours < 1 || hours > 6)
-            newErrors.creditHours = "Credit hours must be between 1 and 6.";
+            newErrors.creditHours = t("instructor.courses.err_hours_val");
 
         const maxEnroll = parseInt(maxEnrollment);
-        if (!maxEnrollment) newErrors.maxEnrollment = "Max enrollment limit is required.";
+        if (!maxEnrollment) newErrors.maxEnrollment = t("instructor.courses.err_limit_req");
         else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000)
-            newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
+            newErrors.maxEnrollment = t("instructor.courses.err_limit_val");
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -102,7 +104,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                         <Pencil size={20} color="#fff" />
                     </div>
                     <div>
-                        <Modal.Title className="fw-bold fs-5 mb-0">Edit Course</Modal.Title>
+                        <Modal.Title className="fw-bold fs-5 mb-0">{t("instructor.courses.modal_edit_title")}</Modal.Title>
                         <p
                             className="text-muted small mb-0"
                             style={{
@@ -123,8 +125,8 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                     <TextInput
                         id="edit-course-title"
                         name="title"
-                        label="Course Title"
-                        placeholder="e.g. Introduction to Computer Science"
+                        label={t("instructor.courses.field_title")}
+                        placeholder={t("instructor.courses.field_title_placeholder")}
                         value={title}
                         onChange={setTitle}
                         error={errors.title}
@@ -134,8 +136,8 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                     <TextAreaInput
                         id="edit-course-description"
                         name="description"
-                        label="Description"
-                        placeholder="Describe what students will learn in this course"
+                        label={t("instructor.courses.field_desc")}
+                        placeholder={t("instructor.courses.field_desc_placeholder")}
                         value={description}
                         onChange={setDescription}
                         error={errors.description}
@@ -150,7 +152,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                                 className="form-label fw-semibold"
                                 style={{ fontSize: "var(--text-sm)" }}
                             >
-                                Credit Hours
+                                {t("instructor.courses.field_hours")} *
                             </label>
                             <input
                                 id="edit-credit-hours"
@@ -158,7 +160,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                                 min={1}
                                 max={6}
                                 className={`form-control bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
-                                placeholder="Enter credit hours (1–6)"
+                                placeholder={t("instructor.courses.field_hours_placeholder")}
                                 value={creditHours}
                                 onChange={(e) => setCreditHours(e.target.value)}
                             />
@@ -170,7 +172,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                                 className="form-label fw-semibold"
                                 style={{ fontSize: "var(--text-sm)" }}
                             >
-                                Max Enrollment Limit
+                                {t("instructor.courses.field_limit")} *
                             </label>
                             <input
                                 id="edit-max-enrollment"
@@ -178,7 +180,7 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
                                 min={1}
                                 max={1000}
                                 className={`form-control bg-light border-light-subtle ${errors.maxEnrollment ? "is-invalid" : ""}`}
-                                placeholder="Enter max enrollment limit"
+                                placeholder={t("instructor.courses.field_limit_placeholder")}
                                 value={maxEnrollment}
                                 onChange={(e) => setMaxEnrollment(e.target.value)}
                             />
@@ -190,16 +192,16 @@ const EditCourseModal = ({ show, onHide, course, onSuccess }: EditCourseModalPro
 
             <Modal.Footer className="border-0 px-4 pb-4 pt-3 gap-2">
                 <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isSubmitting}>
-                    Cancel
+                    {t("common.cancel")}
                 </button>
                 <button type="submit" form="edit-course-form" className="btn btn-primary px-4" disabled={isSubmitting}>
                     {isSubmitting ? (
                         <>
                             <Spinner animation="border" size="sm" className="me-2" />
-                            Saving...
+                            {t("instructor.courses.btn_saving")}
                         </>
                     ) : (
-                        "Save Changes"
+                        t("instructor.courses.btn_save")
                     )}
                 </button>
             </Modal.Footer>

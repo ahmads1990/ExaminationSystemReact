@@ -1,6 +1,7 @@
 import { BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Col, FloatingLabel, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { CourseDto } from "../../api/responses/courses/CourseDto";
 import CourseService from "../../services/courseService";
 import TextAreaInput from "../common/forms/TextAreaInput";
@@ -27,6 +28,7 @@ interface FormErrors {
 }
 
 const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState<FormData>({
         title: "",
         description: "",
@@ -45,24 +47,24 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
 
     const validate = (): boolean => {
         const newErrors: FormErrors = {};
-        if (!formData.title.trim()) newErrors.title = "Course title is required.";
-        else if (formData.title.length > 100) newErrors.title = "Course title must not exceed 100 characters.";
+        if (!formData.title.trim()) newErrors.title = t("instructor.courses.err_title_req");
+        else if (formData.title.length > 100) newErrors.title = t("instructor.courses.err_title_len");
 
-        if (!formData.description.trim()) newErrors.description = "Course description is required.";
+        if (!formData.description.trim()) newErrors.description = t("instructor.courses.err_desc_req");
         else if (formData.description.trim().length < 20)
-            newErrors.description = "Course description must be at least 20 characters long.";
+            newErrors.description = t("instructor.courses.err_desc_min");
         else if (formData.description.length > 500)
-            newErrors.description = "Course description must not exceed 500 characters.";
+            newErrors.description = t("instructor.courses.err_desc_max");
 
         const hours = parseInt(formData.creditHours);
-        if (!formData.creditHours) newErrors.creditHours = "Credit hours is required.";
+        if (!formData.creditHours) newErrors.creditHours = t("instructor.courses.err_hours_req");
         else if (isNaN(hours) || hours < 1 || hours > 6)
-            newErrors.creditHours = "Credit hours must be between 1 and 6.";
+            newErrors.creditHours = t("instructor.courses.err_hours_val");
 
         const maxEnroll = parseInt(formData.maxEnrollment);
-        if (!formData.maxEnrollment) newErrors.maxEnrollment = "Max enrollment limit is required.";
+        if (!formData.maxEnrollment) newErrors.maxEnrollment = t("instructor.courses.err_limit_req");
         else if (isNaN(maxEnroll) || maxEnroll < 1 || maxEnroll > 1000)
-            newErrors.maxEnrollment = "Max enrollment limit must be between 1 and 1000.";
+            newErrors.maxEnrollment = t("instructor.courses.err_limit_val");
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -110,8 +112,8 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                         <BookOpen size={22} style={{ color: "var(--color-primary-600)" }} />
                     </div>
                     <div>
-                        <Modal.Title className="fw-bold fs-5 mb-0">Create New Course</Modal.Title>
-                        <p className="text-muted small mb-0">Fill in the details to add a new course</p>
+                        <Modal.Title className="fw-bold fs-5 mb-0">{t("instructor.courses.modal_add_title")}</Modal.Title>
+                        <p className="text-muted small mb-0">{t("instructor.courses.modal_add_subtitle")}</p>
                     </div>
                 </div>
             </Modal.Header>
@@ -121,8 +123,8 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                     <TextInput
                         id="add-course-title"
                         name="title"
-                        label="Course Title"
-                        placeholder="e.g. Introduction to Computer Science"
+                        label={t("instructor.courses.field_title")}
+                        placeholder={t("instructor.courses.field_title_placeholder")}
                         value={formData.title}
                         onChange={(v: string) => setFormData((p) => ({ ...p, title: v }))}
                         error={errors.title}
@@ -132,8 +134,8 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                     <TextAreaInput
                         id="add-course-description"
                         name="description"
-                        label="Description"
-                        placeholder="Describe what students will learn in this course"
+                        label={t("instructor.courses.field_desc")}
+                        placeholder={t("instructor.courses.field_desc_placeholder")}
                         value={formData.description}
                         onChange={(v: string) => setFormData((p) => ({ ...p, description: v }))}
                         error={errors.description}
@@ -143,13 +145,13 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                     />
                     <Row className="g-3 mb-3">
                         <Col md={6}>
-                            <FloatingLabel controlId="add-credit-hours" label="Credit Hours *">
+                            <FloatingLabel controlId="add-credit-hours" label={`${t("instructor.courses.field_hours")} *`}>
                                 <Form.Control
                                     type="number"
                                     min={1}
                                     max={6}
                                     className={`bg-light border-light-subtle ${errors.creditHours ? "is-invalid" : ""}`}
-                                    placeholder="Enter credit hours (1–6)"
+                                    placeholder={t("instructor.courses.field_hours_placeholder")}
                                     value={formData.creditHours}
                                     onChange={(e) => setFormData((p) => ({ ...p, creditHours: e.target.value }))}
                                     isInvalid={!!errors.creditHours}
@@ -160,13 +162,13 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
                             </FloatingLabel>
                         </Col>
                         <Col md={6}>
-                            <FloatingLabel controlId="add-max-enrollment" label="Max Enrollment *">
+                            <FloatingLabel controlId="add-max-enrollment" label={`${t("instructor.courses.field_limit")} *`}>
                                 <Form.Control
                                     type="number"
                                     min={1}
                                     max={1000}
                                     className={`bg-light border-light-subtle ${errors.maxEnrollment ? "is-invalid" : ""}`}
-                                    placeholder="Enter max enrollment limit"
+                                    placeholder={t("instructor.courses.field_limit_placeholder")}
                                     value={formData.maxEnrollment}
                                     onChange={(e) => setFormData((p) => ({ ...p, maxEnrollment: e.target.value }))}
                                     isInvalid={!!errors.maxEnrollment}
@@ -182,16 +184,16 @@ const AddCourseModal = ({ show, onHide, onSuccess }: AddCourseModalProps) => {
 
             <Modal.Footer className="border-0 px-4 pb-4 pt-3 gap-2">
                 <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isSubmitting}>
-                    Cancel
+                    {t("common.cancel")}
                 </button>
                 <button type="submit" form="add-course-form" className="btn btn-primary px-4" disabled={isSubmitting}>
                     {isSubmitting ? (
                         <>
                             <Spinner animation="border" size="sm" className="me-2" />
-                            Creating...
+                            {t("instructor.courses.btn_creating")}
                         </>
                     ) : (
-                        "Create Course"
+                        t("instructor.courses.btn_create")
                     )}
                 </button>
             </Modal.Footer>

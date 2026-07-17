@@ -1,5 +1,6 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Button, Spinner } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import contactUsLottieUrl from "../../assets/lottie-animations/contactUs.lottie?url";
@@ -9,6 +10,7 @@ import AuthService from "../../services/authService";
 const VerifyEmailPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
 
     // Expected to be passed from RegisterPage after successful registration
     const email = location.state?.email || "";
@@ -30,12 +32,12 @@ const VerifyEmailPage = () => {
 
     const handleVerifySubmit = async () => {
         if (!email) {
-            setError("Session expired. Please register again or login.");
+            setError(t("auth.session_expired_register_error", "Session expired. Please register again or login."));
             return;
         }
 
         if (otp.length < 6) {
-            setError("Please enter the complete 6-digit code.");
+            setError(t("auth.complete_code_error", "Please enter the complete 6-digit code."));
             return;
         }
 
@@ -48,13 +50,13 @@ const VerifyEmailPage = () => {
 
             if (response.success) {
                 // Navigate to Login
-                navigate("/login", { state: { message: "Email verified successfully! You can now login." } });
+                navigate("/login", { state: { message: t("auth.email_verified_success", "Email verified successfully! You can now login.") } });
             } else {
-                setError(response.message || "Failed to verify code. Please try again.");
+                setError(response.message || t("auth.failed_verify_code_error", "Failed to verify code. Please try again."));
                 setOtp("");
             }
         } catch (err: any) {
-            setError("Invalid code or an error occurred.");
+            setError(t("auth.invalid_code_error", "Invalid code or an error occurred."));
             setOtp(""); // Clear OTP on error
         } finally {
             setIsSubmitting(false);
@@ -64,7 +66,7 @@ const VerifyEmailPage = () => {
     const handleResend = async () => {
         if (countdown > 0) return;
         if (!userId) {
-            setError("Unable to resend: Missing user info.");
+            setError(t("auth.resend_missing_info_error", "Unable to resend: Missing user info."));
             return;
         }
 
@@ -75,13 +77,13 @@ const VerifyEmailPage = () => {
         try {
             const response = await AuthService.resendVerification(userId);
             if (response.success) {
-                setSuccessMsg("Verification code resent successfully!");
+                setSuccessMsg(t("auth.code_resent_success", "Verification code resent successfully!"));
                 setCountdown(30); // Reset timer
             } else {
-                setError(response.message || "Failed to resend code.");
+                setError(response.message || t("auth.failed_resend_error", "Failed to resend code."));
             }
         } catch (err) {
-            setError("An error occurred while trying to resend the code.");
+            setError(t("auth.resend_error", "An error occurred while trying to resend the code."));
         } finally {
             setIsSubmitting(false);
         }
@@ -98,10 +100,9 @@ const VerifyEmailPage = () => {
                     <DotLottieReact src={contactUsLottieUrl} loop autoplay />
                 </div>
 
-                <h2 className="fw-bold mb-2">Almost There! ✨</h2>
+                <h2 className="fw-bold mb-2">{t("auth.verify_title")}</h2>
                 <p className="text-muted px-2">
-                    We've sent a 6-digit code to <strong>{email}</strong>. <br />
-                    Please enter it below to verify your email and complete your registration!
+                    {t("auth.verify_desc", { email })}
                 </p>
             </div>
 
@@ -126,7 +127,7 @@ const VerifyEmailPage = () => {
                 {/* OTP Input Component */}
                 <div>
                     <div className="text-start mb-2 ms-1 fw-semibold text-secondary" style={{ fontSize: "0.9rem" }}>
-                        Enter 6-digit code
+                        {t("auth.enter_code")}
                     </div>
                     <OtpInput length={6} value={otp} onChange={setOtp} error={!!error} />
                 </div>
@@ -139,10 +140,10 @@ const VerifyEmailPage = () => {
                 >
                     {isSubmitting ? (
                         <>
-                            <Spinner animation="border" size="sm" /> Verifying...
+                            <Spinner animation="border" size="sm" /> {t("auth.verifying")}
                         </>
                     ) : (
-                        "Verify Account"
+                        t("auth.btn_verify_account")
                     )}
                 </Button>
 
@@ -151,10 +152,10 @@ const VerifyEmailPage = () => {
                 {/* Resend Timer section */}
                 <div className="text-center">
                     <p className="text-muted small mb-0">
-                        Didn't receive the code?{" "}
+                        {t("auth.no_code")}{" "}
                         {countdown > 0 ? (
                             <span className="fw-semibold text-secondary">
-                                Resend in 00:{countdown.toString().padStart(2, "0")}
+                                {t("auth.resend_in", { seconds: countdown.toString().padStart(2, "0") })}
                             </span>
                         ) : (
                             <span
@@ -162,7 +163,7 @@ const VerifyEmailPage = () => {
                                 style={{ cursor: "pointer" }}
                                 onClick={handleResend}
                             >
-                                Resend Code
+                                {t("auth.btn_resend_code")}
                             </span>
                         )}
                     </p>

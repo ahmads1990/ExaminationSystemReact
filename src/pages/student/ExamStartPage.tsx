@@ -1,5 +1,6 @@
 import { AlertTriangle, ArrowLeft, Calendar, Clock, FileText, PlayCircle, Target } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, Card, Spinner } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +15,7 @@ import { saveExamToken } from "../../utils/storage";
 const ExamStartPage = () => {
     const { examId } = useParams<{ examId: string }>();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [exam, setExam] = useState<AvailableExamDto | null>(null);
     const [loading, setLoading] = useState(true);
@@ -33,14 +35,14 @@ const ExamStartPage = () => {
                     if (foundExam) {
                         setExam(foundExam);
                     } else {
-                        setError("Exam not found or is no longer available.");
+                        setError(t("student.exam_start.not_found", "Exam not found or is no longer available."));
                     }
                 } else {
-                    setError(response.message || "Failed to retrieve exam details.");
+                    setError(response.message || t("student.exam_start.failed_retrieve", "Failed to retrieve exam details."));
                 }
             } catch (err) {
                 console.error("Error fetching exam details:", err);
-                setError("An error occurred while loading the exam details.");
+                setError(t("student.exam_start.generic_error", "An error occurred while loading the exam details."));
             } finally {
                 setLoading(false);
             }
@@ -58,10 +60,10 @@ const ExamStartPage = () => {
             const response = await StudentExamService.startExam(Number(examId));
             if (response.success && response.data) {
                 saveExamToken(response.data);
-                toast.success("Exam started! Good luck.");
+                toast.success(t("student.exam_start.started_toast", "Exam started! Good luck."));
                 navigate("/student/exams/take");
             } else {
-                setError(response.message || "Could not start the exam.");
+                setError(response.message || t("student.exam_start.failed_start_error", "Could not start the exam."));
             }
         } catch (err: any) {
             console.error("Error starting exam attempt:", err);
@@ -71,22 +73,22 @@ const ExamStartPage = () => {
             if (errorCode === ApiErrorCode.HasActiveAttempt) {
                 if (typeof returnedToken === "string" && returnedToken.length > 0) {
                     saveExamToken(returnedToken);
-                    toast.success("Resuming active exam attempt.");
+                    toast.success(t("student.exam_start.resume_toast", "Resuming active exam attempt."));
                     navigate("/student/exams/take");
                 } else {
-                    toast.success("Resuming active attempt...");
+                    toast.success(t("student.exam_start.resume_generic_toast", "Resuming active attempt..."));
                     navigate("/student/exams/take");
                 }
             } else if (errorCode === ApiErrorCode.MaxAttemptsExceeded) {
-                setError("You have reached the maximum number of attempts for this exam.");
+                setError(t("student.exam_start.max_attempts_error", "You have reached the maximum number of attempts for this exam."));
             } else if (errorCode === ApiErrorCode.ExamDeadlinePassed) {
-                setError("The deadline to take this exam has passed.");
+                setError(t("student.exam_start.deadline_error", "The deadline to take this exam has passed."));
             } else if (errorCode === ApiErrorCode.NotEnrolledInCourse) {
-                setError("You must be enrolled in the course offering this exam.");
+                setError(t("student.exam_start.not_enrolled_error", "You must be enrolled in the course offering this exam."));
             } else if (errorCode === ApiErrorCode.ExamNotPublished) {
-                setError("This exam is not currently published.");
+                setError(t("student.exam_start.not_published_error", "This exam is not currently published."));
             } else {
-                setError(err.response?.data?.message || "Failed to start the exam attempt.");
+                setError(err.response?.data?.message || t("student.exam_start.failed_start_error", "Failed to start the exam attempt."));
             }
         } finally {
             setSubmitting(false);
@@ -97,7 +99,7 @@ const ExamStartPage = () => {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center py-5 min-vh-50">
                 <Spinner animation="border" variant="primary" className="mb-3" />
-                <p className="text-muted">Loading exam details...</p>
+                <p className="text-muted">{t("student.exam_start.loading_details")}</p>
             </div>
         );
     }
@@ -110,16 +112,16 @@ const ExamStartPage = () => {
                         <div className="bg-danger-subtle text-danger rounded-circle p-3 d-inline-flex mb-3">
                             <AlertTriangle size={32} />
                         </div>
-                        <h4 className="fw-bold mb-3">Unable to Start Exam</h4>
+                        <h4 className="fw-bold mb-3">{t("student.exam_start.unable_start")}</h4>
                         <Alert variant="danger" className="text-start py-2.5 px-3">
-                            {error || "We couldn't retrieve the exam info."}
+                            {error || t("student.exam_start.no_exam_info")}
                         </Alert>
                         <ActionButton
                             variant="outline-primary"
                             onClick={() => navigate("/student/dashboard")}
                             fullWidth
                         >
-                            <ArrowLeft size={16} className="me-2" /> Back to Dashboard
+                            <ArrowLeft size={16} className="me-2" /> {t("student.exam_start.back_dashboard")}
                         </ActionButton>
                     </Card.Body>
                 </Card>
@@ -138,7 +140,7 @@ const ExamStartPage = () => {
                 className="btn border-0 p-0 text-muted hover-text-primary d-flex align-items-center gap-1.5 mb-4"
                 style={{ fontSize: "var(--text-sm)", fontWeight: 500 }}
             >
-                <ArrowLeft size={16} /> Back to Dashboard
+                <ArrowLeft size={16} /> {t("student.exam_start.back_dashboard")}
             </button>
 
             <Card className="border-0 shadow-sm rounded-4 bg-white overflow-hidden">
@@ -171,9 +173,9 @@ const ExamStartPage = () => {
                             <div className="p-3 bg-light rounded-3 text-center h-100 d-flex flex-column justify-content-center align-items-center">
                                 <Clock size={20} className="text-primary mb-2" />
                                 <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">
-                                    Duration
+                                    {t("student.exam_start.duration")}
                                 </span>
-                                <strong className="fs-5 text-dark mt-0.5">{exam.maxDurationInMinutes} mins</strong>
+                                <strong className="fs-5 text-dark mt-0.5">{exam.maxDurationInMinutes} {t("dashboard.minutes")}</strong>
                             </div>
                         </div>
 
@@ -181,11 +183,11 @@ const ExamStartPage = () => {
                             <div className="p-3 bg-light rounded-3 text-center h-100 d-flex flex-column justify-content-center align-items-center">
                                 <Target size={20} className="text-primary mb-2" />
                                 <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">
-                                    Attempts
+                                    {t("student.exam_start.attempts")}
                                 </span>
-                                <strong className="fs-5 text-dark mt-0.5">{remainingAttempts} left</strong>
+                                <strong className="fs-5 text-dark mt-0.5">{remainingAttempts} {t("student.exam_start.left")}</strong>
                                 <span className="text-muted" style={{ fontSize: "0.65rem" }}>
-                                    of {exam.maxAttempts} max
+                                    {t("student.exam_start.max_attempts_label", { count: exam.maxAttempts })}
                                 </span>
                             </div>
                         </div>
@@ -197,7 +199,7 @@ const ExamStartPage = () => {
                                     className={isDeadlinePassed ? "text-danger mb-2" : "text-primary mb-2"}
                                 />
                                 <span className="text-muted d-block font-size-11 text-uppercase fw-semibold tracking-wider">
-                                    Due Date
+                                    {t("student.exam_start.due_date")}
                                 </span>
                                 <strong className={`fs-6 mt-0.5 ${isDeadlinePassed ? "text-danger" : "text-dark"}`}>
                                     {formatDate(exam.deadlineDate)}
@@ -209,27 +211,23 @@ const ExamStartPage = () => {
                     <div className="border-top pt-4 mb-4">
                         <h5 className="fw-bold text-secondary-800 mb-3 d-flex align-items-center gap-2">
                             <FileText size={18} className="text-primary" />
-                            Exam Rules & Instructions
+                            {t("student.exam_start.rules_title")}
                         </h5>
                         <ul
                             className="text-secondary ps-3.5 mb-0"
                             style={{ fontSize: "var(--text-sm)", lineHeight: "1.7" }}
                         >
                             <li className="mb-2">
-                                <strong>Time Limit:</strong> Once you click "Begin Exam", the timer starts and cannot be
-                                paused. Refreshing or closing the tab will <strong>NOT</strong> stop the timer.
+                                {t("student.exam_start.rule_time")}
                             </li>
                             <li className="mb-2">
-                                <strong>Auto-Save:</strong> Your answers are saved automatically when selected. If you
-                                lose connection, they will remain stored locally and sync when you're back.
+                                {t("student.exam_start.rule_save")}
                             </li>
                             <li className="mb-2">
-                                <strong>Submission:</strong> You can submit early at any time. When the timer hits 0,
-                                your exam will be automatically submitted with your currently saved answers.
+                                {t("student.exam_start.rule_submit")}
                             </li>
                             <li className="mb-2">
-                                <strong>Integrity:</strong> Do not open multiple tabs or switch screens as it might
-                                violate examination policies. Ensure a stable internet connection.
+                                {t("student.exam_start.rule_integrity")}
                             </li>
                         </ul>
                     </div>
@@ -245,12 +243,12 @@ const ExamStartPage = () => {
                             {submitting ? (
                                 <>
                                     <Spinner animation="border" size="sm" className="me-2" />
-                                    Starting Exam...
+                                    {t("student.exam_start.btn_starting")}
                                 </>
                             ) : (
                                 <>
                                     <PlayCircle size={18} className="me-2" />
-                                    {exam.attemptsTaken > 0 ? "Resume Exam Attempt" : "Begin Exam"}
+                                    {exam.attemptsTaken > 0 ? t("student.exam_start.btn_resume") : t("student.exam_start.btn_begin")}
                                 </>
                             )}
                         </ActionButton>
@@ -263,8 +261,8 @@ const ExamStartPage = () => {
                                 <AlertTriangle size={20} className="flex-shrink-0" />
                                 <span style={{ fontSize: "var(--text-sm)" }}>
                                     {isDeadlinePassed
-                                        ? "This exam is locked because the deadline has passed."
-                                        : "You have used all allowable attempts for this exam."}
+                                        ? t("student.exam_start.alert_locked_deadline")
+                                        : t("student.exam_start.alert_no_attempts")}
                                 </span>
                             </Alert>
                         )}

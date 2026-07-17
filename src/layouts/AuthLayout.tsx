@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
@@ -7,6 +8,7 @@ import { useAuth } from "../contexts/AuthContext";
 const AuthLayout = () => {
     const { isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!isLoading && isAuthenticated) {
@@ -60,7 +62,7 @@ const AuthLayout = () => {
                             </Card>
 
                             <div className="text-center mt-4 text-muted small">
-                                &copy; {new Date().getFullYear()} Examination System. All rights reserved.
+                                &copy; {new Date().getFullYear()} {t("auth.copyright", "Examination System. All rights reserved.")}
                             </div>
                         </Col>
                     </Row>

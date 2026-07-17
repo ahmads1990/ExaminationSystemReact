@@ -1,17 +1,19 @@
 import { BookOpen, Edit, FileCheck, Globe, ShieldCheck, Smartphone } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
 const ProfilePage = () => {
     const { user } = useAuth();
+    const { t } = useTranslation();
 
     // Default mock data if fields are not configured
     const userProfile = {
         phone: "+1 (555) 019-2834",
         timezone: "Asia/Riyadh (UTC +3:00)",
-        bio: "Academic profile on ExamSys portal.",
-        roleLabel: user?.role === "Instructor" ? "Instructor Account" : "Student Account",
+        bio: t("common.profile_default_bio"),
+        roleLabel: user?.role === "Instructor" ? t("common.profile_instructor_acc") : t("common.profile_student_acc"),
         joinedDate: "October 12, 2025",
         status: "Active"
     };
@@ -58,7 +60,7 @@ const ProfilePage = () => {
                                 to="/settings"
                                 className="btn btn-outline-secondary btn-sm rounded-3 px-3 py-2 fw-semibold d-flex align-items-center gap-2"
                             >
-                                <Edit size={14} /> Edit Profile
+                                <Edit size={14} /> {t("common.profile_edit_btn")}
                             </Link>
                         </div>
                     </div>
@@ -69,10 +71,10 @@ const ProfilePage = () => {
                 {/* LEFT COLUMN: ABOUT / DETAILS */}
                 <Col xs={12} md={5}>
                     <Card className="border-0 shadow-sm rounded-4 bg-white p-4 h-100">
-                        <h5 className="fw-bold text-dark mb-3">About Me</h5>
+                        <h5 className="fw-bold text-dark mb-3">{t("common.profile_about_me")}</h5>
                         <p className="text-secondary small mb-4">{userProfile.bio}</p>
 
-                        <h5 className="fw-bold text-dark mb-3">Account Details</h5>
+                        <h5 className="fw-bold text-dark mb-3">{t("common.profile_acc_details")}</h5>
                         <div className="d-flex flex-column gap-3">
                             <div className="d-flex align-items-center gap-3 p-2 bg-light-subtle rounded-3">
                                 <div className="p-2 rounded-2 bg-primary-subtle text-primary">
@@ -80,7 +82,7 @@ const ProfilePage = () => {
                                 </div>
                                 <div>
                                     <div className="text-muted small" style={{ fontSize: "0.75rem" }}>
-                                        Phone Number
+                                        {t("common.profile_phone")}
                                     </div>
                                     <div className="fw-semibold text-dark small">{userProfile.phone}</div>
                                 </div>
@@ -92,7 +94,7 @@ const ProfilePage = () => {
                                 </div>
                                 <div>
                                     <div className="text-muted small" style={{ fontSize: "0.75rem" }}>
-                                        Timezone
+                                        {t("common.profile_timezone")}
                                     </div>
                                     <div className="fw-semibold text-dark small">{userProfile.timezone}</div>
                                 </div>
@@ -104,21 +106,21 @@ const ProfilePage = () => {
                                 </div>
                                 <div>
                                     <div className="text-muted small" style={{ fontSize: "0.75rem" }}>
-                                        Status
+                                        {t("common.profile_status")}
                                     </div>
                                     <div className="fw-semibold text-success small d-flex align-items-center gap-1">
                                         <span
                                             className="bg-success rounded-circle d-inline-block"
                                             style={{ width: "6px", height: "6px" }}
                                         />
-                                        Verified Member
+                                        {t("common.profile_verified")}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mt-4 pt-3 border-top text-muted small text-center text-md-start">
-                            Member since: {userProfile.joinedDate}
+                            {t("common.profile_joined", { date: userProfile.joinedDate })}
                         </div>
                     </Card>
                 </Col>
@@ -129,10 +131,10 @@ const ProfilePage = () => {
                         {isInstructor ? (
                             <>
                                 <h5 className="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
-                                    <BookOpen size={18} className="text-primary" /> Teaching Summary
+                                    <BookOpen size={18} className="text-primary" /> {t("common.profile_teaching_summary")}
                                 </h5>
                                 <p className="text-secondary small mb-4">
-                                    A snapshot of courses and items you administer on this platform.
+                                    {t("common.profile_teaching_desc")}
                                 </p>
 
                                 <ListGroup className="rounded-3 border border-light overflow-hidden mb-3">
@@ -141,10 +143,10 @@ const ProfilePage = () => {
                                             <div className="fw-semibold text-dark small">
                                                 CS-101: Introduction to Computing
                                             </div>
-                                            <div className="text-muted small">120 Active Students</div>
+                                            <div className="text-muted small">{t("common.profile_students_count", { count: 120 })}</div>
                                         </div>
                                         <Badge bg="primary" pill>
-                                            Active
+                                            {t("instructor.exams.status_active")}
                                         </Badge>
                                     </ListGroup.Item>
                                     <ListGroup.Item className="d-flex justify-content-between align-items-center p-3 bg-white">
@@ -152,34 +154,34 @@ const ProfilePage = () => {
                                             <div className="fw-semibold text-dark small">
                                                 CS-302: Database Management Systems
                                             </div>
-                                            <div className="text-muted small">85 Active Students</div>
+                                            <div className="text-muted small">{t("common.profile_students_count", { count: 85 })}</div>
                                         </div>
                                         <Badge bg="primary" pill>
-                                            Active
+                                            {t("instructor.exams.status_active")}
                                         </Badge>
                                     </ListGroup.Item>
                                 </ListGroup>
 
                                 <div className="bg-light p-3 rounded-3 d-flex align-items-center justify-content-between">
                                     <div>
-                                        <div className="fw-bold text-dark mb-0 small">Total Exams Released</div>
-                                        <span className="text-secondary small">8 quizzes and tests administered.</span>
+                                        <div className="fw-bold text-dark mb-0 small">{t("common.profile_total_exams")}</div>
+                                        <span className="text-secondary small">{t("common.profile_exams_count")}</span>
                                     </div>
                                     <Link
                                         to="/instructor/exams"
                                         className="btn btn-primary btn-sm rounded-2 fw-semibold px-3 py-1.5"
                                     >
-                                        Manage Exams
+                                        {t("common.profile_manage_exams")}
                                     </Link>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <h5 className="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
-                                    <FileCheck size={18} className="text-success" /> Academic Progress
+                                    <FileCheck size={18} className="text-success" /> {t("common.profile_academic_progress")}
                                 </h5>
                                 <p className="text-secondary small mb-4">
-                                    Your current enrolled classes and examination achievements.
+                                    {t("common.profile_academic_desc")}
                                 </p>
 
                                 <ListGroup className="rounded-3 border border-light overflow-hidden mb-3">
@@ -188,10 +190,10 @@ const ProfilePage = () => {
                                             <div className="fw-semibold text-dark small">
                                                 Introduction to Machine Learning
                                             </div>
-                                            <div className="text-muted small">Last Test: Grade A (94%)</div>
+                                            <div className="text-muted small">{t("common.profile_last_test", { grade: "A", score: 94 })}</div>
                                         </div>
                                         <Badge bg="success" pill>
-                                            Enrolled
+                                            {t("common.profile_enrolled")}
                                         </Badge>
                                     </ListGroup.Item>
                                     <ListGroup.Item className="d-flex justify-content-between align-items-center p-3 bg-white">
@@ -199,26 +201,26 @@ const ProfilePage = () => {
                                             <div className="fw-semibold text-dark small">
                                                 Data Structures & Algorithms
                                             </div>
-                                            <div className="text-muted small">Last Test: Grade B+ (88%)</div>
+                                            <div className="text-muted small">{t("common.profile_last_test", { grade: "B+", score: 88 })}</div>
                                         </div>
                                         <Badge bg="success" pill>
-                                            Enrolled
+                                            {t("common.profile_enrolled")}
                                         </Badge>
                                     </ListGroup.Item>
                                 </ListGroup>
 
                                 <div className="bg-light p-3 rounded-3 d-flex align-items-center justify-content-between">
                                     <div>
-                                        <div className="fw-bold text-dark mb-0 small">Upcoming Deadlines</div>
+                                        <div className="fw-bold text-dark mb-0 small">{t("common.profile_upcoming_deadlines")}</div>
                                         <span className="text-secondary small">
-                                            CS-202 Quiz 3 is scheduled next week.
+                                            {t("common.profile_deadline_desc")}
                                         </span>
                                     </div>
                                     <Link
                                         to="/student/calendar"
                                         className="btn btn-success btn-sm rounded-2 fw-semibold px-3 py-1.5"
                                     >
-                                        View Calendar
+                                        {t("common.profile_view_calendar")}
                                     </Link>
                                 </div>
                             </>

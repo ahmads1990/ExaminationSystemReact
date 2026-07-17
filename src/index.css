@@ -446,3 +446,8 @@ a:hover {
 [data-theme="dark"] .text-info {
     color: #22d3ee !important;
 }
+
+/* Custom CSS helper to hide dropdown toggle caret arrows */
+.no-caret::after {
+    display: none !important;
+}

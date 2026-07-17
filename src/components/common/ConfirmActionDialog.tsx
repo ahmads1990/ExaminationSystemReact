@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal, Spinner } from "react-bootstrap";
 
 interface ConfirmActionDialogProps {
@@ -19,12 +20,15 @@ const ConfirmActionDialog = ({
     onConfirm,
     title,
     description,
-    confirmLabel = "Confirm",
+    confirmLabel,
     confirmVariant = "primary",
     icon,
     iconBgColor = "#fef3c7" // light yellow/warning by default
 }: ConfirmActionDialogProps) => {
     const [isLoading, setIsLoading] = useState(false);
+    const { t } = useTranslation();
+
+    const finalConfirmLabel = confirmLabel || t("common.confirm", "Confirm");
 
     const handleConfirm = async () => {
         setIsLoading(true);
@@ -53,7 +57,7 @@ const ConfirmActionDialog = ({
 
                 <div className="d-flex gap-2 justify-content-center">
                     <button type="button" className="btn btn-secondary px-4" onClick={onHide} disabled={isLoading}>
-                        Cancel
+                        {t("common.cancel", "Cancel")}
                     </button>
                     <button
                         type="button"
@@ -64,10 +68,10 @@ const ConfirmActionDialog = ({
                         {isLoading ? (
                             <>
                                 <Spinner animation="border" size="sm" className="me-2" />
-                                {confirmLabel}...
+                                {finalConfirmLabel}...
                             </>
                         ) : (
-                            confirmLabel
+                            finalConfirmLabel
                         )}
                     </button>
                 </div>

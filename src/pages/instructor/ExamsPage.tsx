@@ -1,5 +1,6 @@
 import { CalendarDays, Clock, FileText, GraduationCap, Plus, Search, Target } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal, Spinner } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,7 @@ import { formatDate } from "../../utils/dateUtils";
 
 const ExamsPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [exams, setExams] = useState<ExamDto[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -67,16 +69,16 @@ const ExamsPage = () => {
             const isoDate = new Date(publishDate).toISOString();
             const resp = await ExamService.publishExam({ id: examIdToPublish, publishDate: isoDate });
             if (resp.success) {
-                toast.success("Exam published successfully.");
+                toast.success(t("instructor.exams.toast_publish_success", "Exam published successfully."));
                 setShowPublishModal(false);
                 setPublishDate("");
                 setExamIdToPublish(null);
                 fetchExams();
             } else {
-                toast.error(resp.message || "Failed to publish exam.");
+                toast.error(resp.message || t("instructor.exams.toast_publish_failed", "Failed to publish exam."));
             }
         } catch (err: any) {
-            const errorMsg = err.response?.data?.message || "An error occurred while publishing the exam.";
+            const errorMsg = err.response?.data?.message || t("instructor.exams.toast_publish_error", "An error occurred while publishing the exam.");
             toast.error(errorMsg);
         } finally {
             setIsPublishing(false);
@@ -133,18 +135,18 @@ const ExamsPage = () => {
     }, [debouncedSearch, typeFilter, statusFilter, courseFilter, pageIndex, pageSize]);
 
     const handleDelete = async (id: number) => {
-        if (!confirm("Are you sure you want to delete this exam?")) return;
+        if (!confirm(t("instructor.exams.toast_delete_confirm", "Are you sure you want to delete this exam?"))) return;
         setIsDeleting(id);
         try {
             const resp = await ExamService.deleteExam(id);
             if (resp.success) {
-                toast.success("Exam deleted successfully.");
+                toast.success(t("instructor.exams.toast_delete_success", "Exam deleted successfully."));
                 fetchExams();
             } else {
-                toast.error(resp.message || "Failed to delete exam.");
+                toast.error(resp.message || t("instructor.exams.toast_delete_failed", "Failed to delete exam."));
             }
         } catch {
-            toast.error("An error occurred while deleting the exam.");
+            toast.error(t("instructor.exams.toast_delete_error", "An error occurred while deleting the exam."));
         } finally {
             setIsDeleting(null);
         }
@@ -157,13 +159,13 @@ const ExamsPage = () => {
             try {
                 const resp = await ExamService.unpublishExam(examId);
                 if (resp.success) {
-                    toast.success("Exam unpublished successfully.");
+                    toast.success(t("instructor.exams.toast_unpublish_success", "Exam unpublished successfully."));
                     fetchExams();
                 } else {
-                    toast.error(resp.message || "Failed to unpublish exam.");
+                    toast.error(resp.message || t("instructor.exams.toast_unpublish_failed", "Failed to unpublish exam."));
                 }
             } catch {
-                toast.error("An error occurred while unpublishing exam.");
+                toast.error(t("instructor.exams.toast_unpublish_error", "An error occurred while unpublishing exam."));
             } finally {
                 setIsStatusChanging(null);
             }
@@ -189,7 +191,7 @@ const ExamsPage = () => {
             {/* Header */}
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
                 <div>
-                    <h2 className="fw-bold mb-1">My Exams</h2>
+                    <h2 className="fw-bold mb-1">{t("instructor.exams.title")}</h2>
                 </div>
                 <ActionButton
                     variant="primary"
@@ -201,7 +203,7 @@ const ExamsPage = () => {
                         setShowSaveModal(true);
                     }}
                 >
-                    New Exam
+                    {t("instructor.exams.btn_new")}
                 </ActionButton>
             </div>
 
@@ -217,7 +219,7 @@ const ExamsPage = () => {
                                 <input
                                     type="text"
                                     className="form-control border-start-0 bg-light py-2"
-                                    placeholder="Search by title..."
+                                    placeholder={t("instructor.exams.search_placeholder")}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
@@ -229,7 +231,7 @@ const ExamsPage = () => {
                                 value={courseFilter}
                                 onChange={(e) => setCourseFilter(e.target.value === "" ? "" : parseInt(e.target.value))}
                             >
-                                <option value="">All Courses</option>
+                                <option value="">{t("instructor.exams.all_courses")}</option>
                                 {courses.map((course) => (
                                     <option key={course.id} value={course.id}>
                                         {course.title}
@@ -243,7 +245,7 @@ const ExamsPage = () => {
                                 value={typeFilter}
                                 onChange={(e) => setTypeFilter(e.target.value as ExamType | "")}
                             >
-                                <option value="">All Types</option>
+                                <option value="">{t("instructor.exams.all_types")}</option>
                                 {Object.entries(EXAM_TYPE_LABELS).map(([value, label]) => (
                                     <option key={`exam-type-${value}`} value={value}>
                                         {label}
@@ -257,7 +259,7 @@ const ExamsPage = () => {
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value as ExamStatus | "")}
                             >
-                                <option value="">All Statuses</option>
+                                <option value="">{t("instructor.exams.all_statuses")}</option>
                                 {Object.entries(EXAM_STATUS_LABELS).map(([value, label]) => (
                                     <option key={`exam-status-${value}`} value={value}>
                                         {label}
@@ -274,10 +276,10 @@ const ExamsPage = () => {
                 <SkeletonCard count={6} />
             ) : exams.length === 0 ? (
                 <EmptyState
-                    title="No exams found"
-                    message="You haven't created any examinations yet, or nothing matches your active filter query."
+                    title={t("instructor.exams.no_exams")}
+                    message={t("instructor.exams.no_exams_desc")}
                     icon={FileText}
-                    ctaText="Create First Exam"
+                    ctaText={t("instructor.exams.btn_create_first")}
                     onCtaClick={() => {
                         setExamToEdit(null);
                         setShowSaveModal(true);
@@ -339,7 +341,7 @@ const ExamsPage = () => {
                                                             padding: "0.35em 0.8em"
                                                         }}
                                                     >
-                                                        {isPublished ? "Published" : "Draft"}
+                                                        {isPublished ? t("instructor.exams.published_label") : t("instructor.exams.draft_label")}
                                                     </span>
                                                 </div>
                                             </div>
@@ -362,21 +364,25 @@ const ExamsPage = () => {
                                                     title="Duration"
                                                 >
                                                     <Clock size={14} className="text-primary opacity-75" />
-                                                    <span className="fw-medium">{exam.maxDurationInMinutes} min</span>
+                                                    <span className="fw-medium">
+                                                        {exam.maxDurationInMinutes === 1
+                                                            ? t("instructor.exams.duration_min", { count: exam.maxDurationInMinutes })
+                                                            : t("instructor.exams.duration_mins", { count: exam.maxDurationInMinutes })}
+                                                    </span>
                                                 </div>
                                                 <div
                                                     className="d-flex align-items-center gap-1 text-muted"
                                                     title="Total Grade"
                                                 >
                                                     <GraduationCap size={14} className="text-primary opacity-75" />
-                                                    <span className="fw-medium">{exam.totalGrade} pts</span>
+                                                    <span className="fw-medium">{t("instructor.exams.total_grade_pts", { count: exam.totalGrade })}</span>
                                                 </div>
                                                 <div
                                                     className="d-flex align-items-center gap-1 text-muted"
                                                     title="Passing Score"
                                                 >
                                                     <Target size={14} className="text-primary opacity-75" />
-                                                    <span className="fw-medium">Pass: {exam.passingScore}</span>
+                                                    <span className="fw-medium">{t("instructor.exams.passing_score_label", { count: exam.passingScore })}</span>
                                                 </div>
                                                 {exam.deadlineDate && (
                                                     <div
@@ -402,9 +408,9 @@ const ExamsPage = () => {
                                                 {isStatusChanging === examId ? (
                                                     <Spinner animation="border" size="sm" />
                                                 ) : isPublished ? (
-                                                    "Unpublish"
+                                                    t("instructor.exams.unpublish_btn")
                                                 ) : (
-                                                    "Publish"
+                                                    t("instructor.exams.publish_btn")
                                                 )}
                                             </ActionButton>
                                             <ActionButton
@@ -415,28 +421,28 @@ const ExamsPage = () => {
                                                 }}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
-                                                Edit
+                                                {t("instructor.exams.btn_edit")}
                                             </ActionButton>
                                             <ActionButton
                                                 variant="outline-secondary"
                                                 onClick={() => navigate(`/instructor/exams/${examId}/questions`)}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
-                                                Questions
+                                                {t("instructor.exams.btn_questions")}
                                             </ActionButton>
                                             <ActionButton
                                                 variant="outline-primary"
                                                 onClick={() => navigate(`/instructor/exams/${examId}/submissions`)}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
-                                                Submissions
+                                                {t("instructor.exams.btn_submissions")}
                                             </ActionButton>
                                             <ActionButton
                                                 variant="outline-danger"
                                                 onClick={() => handleDelete(examId)}
                                                 disabled={isDeleting === examId || isStatusChanging === examId}
                                             >
-                                                Delete
+                                                {t("instructor.exams.btn_delete")}
                                             </ActionButton>
                                         </div>
                                     </div>
@@ -463,16 +469,15 @@ const ExamsPage = () => {
             {/* Publish Date Selection Modal */}
             <Modal show={showPublishModal} onHide={() => setShowPublishModal(false)} centered>
                 <Modal.Header closeButton className="border-0 pb-0">
-                    <Modal.Title className="fw-bold text-dark">Publish Exam</Modal.Title>
+                    <Modal.Title className="fw-bold text-dark">{t("instructor.exams.publish_modal_title")}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="py-3">
                     <p className="text-muted small mb-3">
-                        Please select a future date and time to publish this exam. Students will not be able to attempt
-                        it before this date.
+                        {t("instructor.exams.publish_modal_desc")}
                     </p>
                     <div className="form-group">
                         <label className="form-label fw-semibold text-secondary-800" htmlFor="publish-date-input">
-                            Publish Date & Time
+                            {t("instructor.exams.publish_date_label")}
                         </label>
                         <input
                             id="publish-date-input"
@@ -486,7 +491,7 @@ const ExamsPage = () => {
                 </Modal.Body>
                 <Modal.Footer className="border-0 pt-0">
                     <ActionButton variant="outline-secondary" onClick={() => setShowPublishModal(false)}>
-                        Cancel
+                        {t("instructor.exams.btn_cancel")}
                     </ActionButton>
                     <ActionButton
                         variant="success"
@@ -494,7 +499,7 @@ const ExamsPage = () => {
                         disabled={isPublishing || !publishDate}
                         fullWidth={false}
                     >
-                        {isPublishing ? <Spinner animation="border" size="sm" /> : "Confirm Publish"}
+                        {isPublishing ? <Spinner animation="border" size="sm" /> : t("instructor.exams.btn_confirm_publish")}
                     </ActionButton>
                 </Modal.Footer>
             </Modal>

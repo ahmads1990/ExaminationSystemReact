@@ -11,6 +11,7 @@ import {
     X
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Nav, Offcanvas } from "react-bootstrap";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Footer from "../components/common/Footer";
@@ -36,22 +37,26 @@ const SidebarLink = ({
     icon: LucideIcon;
     label: string;
     onClick?: () => void;
-}) => (
-    <NavLink
-        to={to}
-        onClick={onClick}
-        className={({ isActive }) =>
-            `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary hover-bg-light"}`
-        }
-    >
-        <Icon size={18} style={{ flexShrink: 0 }} />
-        <span className="text-truncate">{label}</span>
-    </NavLink>
-);
+}) => {
+    const { t } = useTranslation();
+    return (
+        <NavLink
+            to={to}
+            onClick={onClick}
+            className={({ isActive }) =>
+                `nav-link d-flex align-items-center gap-3 rounded-2 px-3 py-2 ${isActive ? "bg-primary text-white shadow-sm" : "text-secondary hover-bg-light"}`
+            }
+        >
+            <Icon size={18} style={{ flexShrink: 0 }} />
+            <span className="text-truncate">{t(label)}</span>
+        </NavLink>
+    );
+};
 
 const MainLayout = () => {
     const { isAuthenticated, isLoading, user } = useAuth();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     // Resizable Sidebar Logic
     const [sidebarWidth, setSidebarWidth] = useState(260);
@@ -103,27 +108,27 @@ const MainLayout = () => {
 
     // Student specific links
     const studentItems: NavItem[] = [
-        { to: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-        { to: "/courses", icon: BookOpen, label: "Courses & Enrollment" },
-        { to: "/student/history", icon: History, label: "My Exam History" },
-        { to: "/student/calendar", icon: Calendar, label: "Academic Calendar" },
-        { to: "/support", icon: HelpCircle, label: "Help & Support" }
+        { to: "/student/dashboard", icon: LayoutDashboard, label: "navbar.dashboard" },
+        { to: "/courses", icon: BookOpen, label: "navbar.courses" },
+        { to: "/student/history", icon: History, label: "navbar.history" },
+        { to: "/student/calendar", icon: Calendar, label: "navbar.calendar" },
+        { to: "/support", icon: HelpCircle, label: "navbar.support" }
     ];
 
     // Instructor specific links
     const instructorItems: NavItem[] = [
-        { to: "/instructor/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-        { to: "/instructor/courses", icon: BookOpen, label: "My Courses" },
-        { to: "/instructor/exams", icon: FileText, label: "Exams" },
-        { to: "/instructor/grading", icon: CheckSquare, label: "Grade Submissions" },
-        { to: "/instructor/analytics", icon: BarChart2, label: "Analytics & Reports" },
-        { to: "/support", icon: HelpCircle, label: "Help & Support" }
+        { to: "/instructor/dashboard", icon: LayoutDashboard, label: "navbar.dashboard" },
+        { to: "/instructor/courses", icon: BookOpen, label: "navbar.my_courses" },
+        { to: "/instructor/exams", icon: FileText, label: "navbar.exams" },
+        { to: "/instructor/grading", icon: CheckSquare, label: "navbar.grading" },
+        { to: "/instructor/analytics", icon: BarChart2, label: "navbar.analytics" },
+        { to: "/support", icon: HelpCircle, label: "navbar.support" }
     ];
 
     const currentItems = user?.role === UserRole.Instructor ? instructorItems : studentItems;
 
     // Filter items based on search input query
-    const filteredItems = currentItems.filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filteredItems = currentItems.filter((item) => t(item.label).toLowerCase().includes(searchQuery.toLowerCase()));
 
     const renderSidebarContent = (isMobile = false) => (
         <div className="p-3 h-100 d-flex flex-column gap-2">
@@ -133,13 +138,13 @@ const MainLayout = () => {
                     className="text-uppercase text-secondary fw-bold tracking-wider"
                     style={{ fontSize: "0.68rem", letterSpacing: "0.08em" }}
                 >
-                    Navigation
+                    {t("navbar.navigation")}
                 </span>
                 <span
                     className="badge bg-light text-secondary border px-2 py-1"
                     style={{ fontSize: "0.62rem", fontWeight: 600 }}
                 >
-                    {user?.role === UserRole.Instructor ? "Instructor" : "Student"}
+                    {user?.role === UserRole.Instructor ? t("navbar.instructor") : t("navbar.student")}
                 </span>
             </div>
 
@@ -154,7 +159,7 @@ const MainLayout = () => {
                     <input
                         type="text"
                         className="form-control form-control-sm bg-light border-0 rounded-2 text-dark"
-                        placeholder="Quick search..."
+                        placeholder={t("navbar.search")}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
@@ -199,7 +204,7 @@ const MainLayout = () => {
                     ))
                 ) : (
                     <div className="text-center py-4 text-muted" style={{ fontSize: "0.8rem" }}>
-                        No matches found
+                        {t("navbar.no_matches")}
                     </div>
                 )}
             </Nav>
