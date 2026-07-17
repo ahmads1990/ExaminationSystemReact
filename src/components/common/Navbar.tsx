@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react";
 import { Globe, Menu, Moon, Sun } from "lucide-react";
 import { Dropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import UserMenu from "./UserMenu";
@@ -21,6 +22,29 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
     const { isAuthenticated } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const { t, i18n } = useTranslation();
+    const location = useLocation();
+
+    const isLandingPage = !isAuthenticated && location.pathname === "/";
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        if (!isLandingPage) {
+            setScrolled(true);
+            return;
+        }
+
+        const handleScroll = () => {
+            if (window.scrollY > 20) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        setScrolled(window.scrollY > 20);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [isLandingPage]);
 
     const changeLanguage = (lang: string) => {
         i18n.changeLanguage(lang);
@@ -30,7 +54,7 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
     };
 
     return (
-        <nav className="navbar navbar-premium sticky-top">
+        <nav className={`navbar navbar-premium sticky-top ${isLandingPage && !scrolled ? "navbar-transparent" : ""}`}>
             <div className="container-fluid px-3 px-md-4 px-lg-5">
                 <div className="d-flex align-items-center justify-content-between w-100">
                     {/* Left Section: Sidebar Toggle + Brand Logo */}
@@ -51,6 +75,27 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                         <Link className="navbar-brand navbar-brand-text fw-bold fs-4 m-0" to="/">
                             Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                         </Link>
+
+                        {/* Landing Page Navigation Links (Only for guests on landing page) */}
+                        {isLandingPage && (
+                            <div className="d-none d-lg-flex align-items-center gap-4 ms-4">
+                                <a href="#features" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                    {t("landing.nav.features", "Features")}
+                                </a>
+                                <a href="#how-it-works" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                    {t("landing.nav.how_it_works", "How It Works")}
+                                </a>
+                                <a href="#pricing" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                    {t("landing.nav.pricing", "Pricing")}
+                                </a>
+                                <a href="#testimonials" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                    {t("landing.nav.testimonials", "Testimonials")}
+                                </a>
+                                <a href="#faq" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                    {t("landing.nav.faq", "FAQ")}
+                                </a>
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Section: Globe, Theme, UserMenu / Auth Buttons */}

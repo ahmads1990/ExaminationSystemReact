@@ -13,7 +13,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Nav, Offcanvas } from "react-bootstrap";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import Footer from "../components/common/Footer";
 import Navbar from "../components/common/Navbar";
 import { useAuth } from "../contexts/AuthContext";
@@ -56,8 +56,12 @@ const SidebarLink = ({
 const MainLayout = () => {
     const { isAuthenticated, isLoading, user } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const { t, i18n } = useTranslation();
     const isRtl = i18n.language === "ar";
+
+    const publicPaths = ["/", "/about", "/contact", "/support", "/terms", "/privacy"];
+    const isPublicPath = publicPaths.includes(location.pathname);
 
     // Resizable Sidebar Logic
     const [sidebarWidth, setSidebarWidth] = useState(260);
@@ -98,10 +102,10 @@ const MainLayout = () => {
     }, [resize, stopResizing]);
 
     useEffect(() => {
-        if (!isLoading && !isAuthenticated) {
+        if (!isLoading && !isAuthenticated && !isPublicPath) {
             navigate("/login");
         }
-    }, [isAuthenticated, isLoading, navigate]);
+    }, [isAuthenticated, isLoading, isPublicPath, navigate]);
 
     if (isLoading) {
         return null;
@@ -218,52 +222,56 @@ const MainLayout = () => {
             <Navbar onToggleSidebar={() => setShowMobileSidebar(true)} />
 
             {/* MOBILE SIDEBAR DRAWERS */}
-            <Offcanvas
-                show={showMobileSidebar}
-                onHide={() => setShowMobileSidebar(false)}
-                placement={isRtl ? "end" : "start"}
-                className="d-lg-none"
-                style={{ width: "280px" }}
-            >
-                <Offcanvas.Header closeButton className="border-bottom">
-                    <Offcanvas.Title className="fw-bold text-dark fs-5">
-                        Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
-                    </Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body className="p-0 bg-white">{renderSidebarContent(true)}</Offcanvas.Body>
-            </Offcanvas>
+            {isAuthenticated && (
+                <Offcanvas
+                    show={showMobileSidebar}
+                    onHide={() => setShowMobileSidebar(false)}
+                    placement={isRtl ? "end" : "start"}
+                    className="d-lg-none"
+                    style={{ width: "280px" }}
+                >
+                    <Offcanvas.Header closeButton className="border-bottom">
+                        <Offcanvas.Title className="fw-bold text-dark fs-5">
+                            Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
+                        </Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body className="p-0 bg-white">{renderSidebarContent(true)}</Offcanvas.Body>
+                </Offcanvas>
+            )}
 
             {/* MAIN CONTAINER */}
             <div className="d-flex flex-grow-1">
                 {/* SIDEBAR (Desktop) */}
-                <aside
-                    className="bg-white border-end d-none d-lg-block position-relative"
-                    style={{
-                        width: `${sidebarWidth}px`,
-                        minWidth: `${sidebarWidth}px`,
-                        minHeight: "calc(100vh - 60px)",
-                        transition: isResizing.current ? "none" : "width 0.1s ease"
-                    }}
-                >
-                    {renderSidebarContent(false)}
-
-                    {/* Resize Handle on Right Border */}
-                    <div
-                        onMouseDown={startResizing}
+                {isAuthenticated && (
+                    <aside
+                        className="bg-white border-end d-none d-lg-block position-relative"
                         style={{
-                            position: "absolute",
-                            top: 0,
-                            right: 0,
-                            width: "4px",
-                            height: "100%",
-                            cursor: "col-resize",
-                            backgroundColor: "transparent",
-                            transition: "background-color 0.2s ease",
-                            zIndex: 10
+                            width: `${sidebarWidth}px`,
+                            minWidth: `${sidebarWidth}px`,
+                            minHeight: "calc(100vh - 60px)",
+                            transition: isResizing.current ? "none" : "width 0.1s ease"
                         }}
-                        className="sidebar-resize-handle"
-                    />
-                </aside>
+                    >
+                        {renderSidebarContent(false)}
+
+                        {/* Resize Handle on Right Border */}
+                        <div
+                            onMouseDown={startResizing}
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                right: 0,
+                                width: "4px",
+                                height: "100%",
+                                cursor: "col-resize",
+                                backgroundColor: "transparent",
+                                transition: "background-color 0.2s ease",
+                                zIndex: 10
+                            }}
+                            className="sidebar-resize-handle"
+                        />
+                    </aside>
+                )}
 
                 {/* RIGHT SIDE CONTAINER */}
                 <div className="d-flex flex-column flex-grow-1 min-vh-0">
