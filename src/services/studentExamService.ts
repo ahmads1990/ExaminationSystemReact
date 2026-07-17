@@ -1,6 +1,7 @@
 import api from "../api/api";
 import { ENDPOINTS } from "../api/endpoints";
 import { ApiResponse } from "../api/responses/ApiResponse";
+import { PaginatedResponse } from "../api/responses/PaginatedResponse";
 import {
     AttemptResultDto,
     AvailableExamDto,
@@ -48,8 +49,13 @@ const StudentExamService = {
         return response.data;
     },
 
-    getExamHistory: async (): Promise<ApiResponse<StudentAttemptSummaryDto[]>> => {
-        const response = await api.get<ApiResponse<StudentAttemptSummaryDto[]>>(`${serviceEndpoint}/history`);
+    getExamHistory: async (params?: {
+        PageIndex?: number;
+        PageSize?: number;
+    }): Promise<PaginatedResponse<StudentAttemptSummaryDto>> => {
+        const response = await api.get<PaginatedResponse<StudentAttemptSummaryDto>>(`${serviceEndpoint}/history`, {
+            params
+        });
         return response.data;
     }
 };
