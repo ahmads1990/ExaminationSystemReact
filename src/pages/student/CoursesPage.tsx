@@ -75,6 +75,7 @@ const StudentCoursesPage = () => {
                     next.add(courseId);
                     return next;
                 });
+                fetchCourses();
             } else {
                 toast.error(resp.message || t("student.courses.failed_enroll", "Failed to enroll in course."));
             }
@@ -132,6 +133,10 @@ const StudentCoursesPage = () => {
                     <Row className="g-4 mb-4">
                         {courses.map((course) => {
                             const isEnrolled = enrolledIds.has(course.id);
+                            const enrolledCount = course.enrolledCount ?? 0;
+                            const maxEnrollment = course.maxEnrollment > 0 ? course.maxEnrollment : 50;
+                            const isFull = !isEnrolled && enrolledCount >= maxEnrollment;
+
                             return (
                                 <Col key={course.id} xs={12} md={6} xl={4}>
                                     <Card className="h-100 border-0 shadow-sm card-custom hover-lift transition-all">
@@ -141,7 +146,7 @@ const StudentCoursesPage = () => {
                                                 className="position-absolute top-0 start-0 w-100"
                                                 style={{
                                                     height: "4px",
-                                                    backgroundColor: isEnrolled ? "#10b981" : "#3b82f6",
+                                                    backgroundColor: isEnrolled ? "#10b981" : isFull ? "#ef4444" : "#3b82f6",
                                                     borderRadius: "8px 8px 0 0"
                                                 }}
                                             />
@@ -175,7 +180,7 @@ const StudentCoursesPage = () => {
                                             </p>
 
                                             <div
-                                                className="d-flex align-items-center gap-2 border-top-dashed pt-3"
+                                                className="d-flex align-items-center justify-content-between border-top-dashed pt-3"
                                                 style={{ fontSize: "var(--text-xs)" }}
                                             >
                                                 <div
@@ -187,6 +192,9 @@ const StudentCoursesPage = () => {
                                                         {t("student.courses.instructor_label")}{course.instructorName || "N/A"}
                                                     </span>
                                                 </div>
+                                                <span className="badge bg-light text-secondary border rounded-pill">
+                                                    👥 {enrolledCount} / {maxEnrollment}
+                                                </span>
                                             </div>
                                         </Card.Body>
 
@@ -197,6 +205,13 @@ const StudentCoursesPage = () => {
                                                     style={{ fontSize: "0.9rem" }}
                                                 >
                                                     <Clock size={16} className="me-2" />✓ {t("student.courses.status_enrolled")}
+                                                </div>
+                                            ) : isFull ? (
+                                                <div
+                                                    className="d-flex align-items-center justify-content-center bg-danger-subtle text-danger py-2 px-3 rounded-3 fw-bold w-100"
+                                                    style={{ fontSize: "0.9rem" }}
+                                                >
+                                                    🔒 {t("student.courses.status_full", "Course Full")}
                                                 </div>
                                             ) : (
                                                 <ActionButton

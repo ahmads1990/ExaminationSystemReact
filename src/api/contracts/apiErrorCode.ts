@@ -50,6 +50,8 @@ export enum ApiErrorCode {
     HasActiveAttempt = 4019,
     AttemptNotCompleted = 4020,
     GradingInProgress = 4021,
+    CourseMaxEnrollmentReached = 4022,
+    StudentMaxCoursesExceeded = 4023,
 
     // Server Errors (5000-5999)
     InternalServerError = 5000,
