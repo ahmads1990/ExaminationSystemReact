@@ -129,13 +129,21 @@ const LandingPage: React.FC = () => {
                         </div>
                         <div className="col-lg-6 text-center">
                             <div className="landing-floating-visual position-relative mx-auto" style={{ maxWidth: "550px" }}>
+                                <div className="landing-badge-floating landing-badge-floating-top">
+                                    <ShieldCheck size={16} className="text-success" />
+                                    <span>{t("landing.hero.badge_auto_grading", "⚡ 100% Instant Auto-Grading")}</span>
+                                </div>
                                 <img
                                     src={heroMockupImg}
                                     alt="ExamSys Dashboard Mockup"
                                     className="img-fluid rounded-3 shadow-lg border"
                                     style={{ background: "var(--surface-card)" }}
                                 />
-                            </div>
+                                <div className="landing-badge-floating landing-badge-floating-bottom">
+                                    <Cpu size={16} className="text-success" />
+                                    <span>{t("landing.hero.badge_tamper_locked", "🔒 Tamper-Resistant Integrity")}</span>
+                                </div>
+                                </div>
                         </div>
                     </div>
                 </div>

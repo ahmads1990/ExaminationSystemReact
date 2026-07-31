@@ -76,22 +76,22 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                             Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                         </Link>
 
-                        {/* Landing Page Navigation Links (Only for guests on landing page) */}
-                        {isLandingPage && (
-                            <div className="d-none d-lg-flex align-items-center gap-4 ms-4">
-                                <a href="#features" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                        {/* Guest Navigation Links (Available for all unauthenticated users) */}
+                        {!isAuthenticated && (
+                            <div className="d-none d-lg-flex align-items-center gap-4 gap-xl-5 ms-4 ms-xl-5 ps-lg-3">
+                                <a href="/#features" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.features", "Features")}
                                 </a>
-                                <a href="#how-it-works" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#how-it-works" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.how_it_works", "How It Works")}
                                 </a>
-                                <a href="#pricing" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#pricing" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.pricing", "Pricing")}
                                 </a>
-                                <a href="#testimonials" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#testimonials" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.testimonials", "Testimonials")}
                                 </a>
-                                <a href="#faq" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#faq" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.faq", "FAQ")}
                                 </a>
                             </div>

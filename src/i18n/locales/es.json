@@ -658,5 +658,162 @@
       "invalid_exam_id": "ID de examen no válido",
       "loading_exam_info": "Cargando información del examen..."
     }
+  },
+  "landing": {
+    "nav": {
+      "features": "Características",
+      "how_it_works": "Cómo funciona",
+      "pricing": "Precios",
+      "testimonials": "Testimonios",
+      "faq": "Preguntas frecuentes"
+    },
+    "hero": {
+      "badge": "✦ Diseñado para la Educación Moderna",
+      "headline": "La plataforma de exámenes creada para el rigor académico",
+      "subheadline": "Desde bancos de preguntas hasta resultados instantáneos: ExamSys ofrece a los instructores un control completo y a los estudiantes una experiencia de evaluación tranquila y enfocada.",
+      "cta_primary": "Empieza gratis",
+      "cta_secondary": "Ver demostración",
+      "trust_institutions": "+500 Instituciones",
+      "trust_exams": "+50.000 Exámenes creados",
+      "trust_rating": "Calificación 4.9★",
+      "badge_auto_grading": "⚡ Calificación automática instantánea 100%",
+      "badge_tamper_locked": "🔒 Integridad a prueba de manipulaciones"
+    },
+    "features_ticker": {
+      "auto_grading": "⚡ Calificación automática",
+      "analytics": "📊 Analíticas en tiempo real",
+      "tamper_resistant": "🔒 Resistente a manipulaciones",
+      "multilang": "🌍 Multilingüe",
+      "mobile_ready": "📱 Optimizado para móviles",
+      "timed_exams": "⏱ Exámenes con límite de tiempo",
+      "question_banks": "📂 Bancos de preguntas",
+      "course_mgmt": "🎓 Gestión de cursos",
+      "jwt_auth": "🔐 Autenticación JWT"
+    },
+    "services": {
+      "section_title": "Funcionalidades diseñadas para el rigor académico",
+      "section_subtitle": "Todo lo que necesitas para ofrecer evaluaciones justas de alto nivel o cuestionarios rápidos en el aula.",
+      "card_1": {
+        "title": "Centro de control del instructor",
+        "desc": "Crea y gestiona cursos, exámenes y bancos de preguntas desde un panel unificado. Establece puntajes de aprobación, límites de tiempo y publica con un clic."
+      },
+      "card_2": {
+        "title": "Calificación automática inteligente",
+        "desc": "Preguntas de opción múltiple calificadas al instante. Resultados disponibles en cuanto finaliza el tiempo, sin esperas ni revisiones manuales."
+      },
+      "card_3": {
+        "title": "Experiencia del estudiante centrada",
+        "desc": "Interfaz limpia y sin distracciones con navegador de preguntas, guardado automático y temporizador en vivo."
+      },
+      "card_4": {
+        "title": "Analíticas e informes profundos",
+        "desc": "Desglose de rendimiento por examen, distribución de aprobados/reprobados, promedios y progreso a lo largo del tiempo."
+      },
+      "card_5": {
+        "title": "Seguro y resistente a manipulaciones",
+        "desc": "Autenticación basada en JWT, acceso separado por roles y bloqueo de preguntas en exámenes publicados."
+      },
+      "card_6": {
+        "title": "Multilingüe y preparado para RTL",
+        "desc": "Funciona en inglés, árabe, español y francés con cambio automático de diseño RTL/LTR."
+      }
+    },
+    "how_it_works": {
+      "section_title": "Flujo de trabajo simple y riguroso",
+      "section_subtitle": "Configurar exámenes toma minutos. Gestionarlos toma segundos.",
+      "step_1": {
+        "title": "Crea tu curso",
+        "desc": "Los instructores se registran, crean un curso, establecen límites de inscripción e invitan a los estudiantes."
+      },
+      "step_2": {
+        "title": "Crea y publica exámenes",
+        "desc": "Agrega preguntas, configura límites de tiempo y puntajes de aprobación, luego publica cuando estés listo."
+      },
+      "step_3": {
+        "title": "Revisa los resultados al instante",
+        "desc": "En el momento en que se envía un examen, se calculan las puntuaciones. Los estudiantes ven sus resultados inmediatamente."
+      }
+    },
+    "stats": {
+      "institutions": "Instituciones educativas",
+      "exams": "Exámenes creados",
+      "questions": "Preguntas respondidas",
+      "rating": "Calificación promedio de la plataforma"
+    },
+    "pricing": {
+      "section_title": "Precios simples y transparentes",
+      "section_subtitle": "Empieza gratis, actualiza a medida que creces. Sin comisiones ocultas.",
+      "tier_free": {
+        "name": "Gratis",
+        "f1": "Hasta 3 cursos",
+        "f2": "50 estudiantes por curso",
+        "f3": "Analíticas básicas",
+        "cta": "Empieza gratis"
+      },
+      "tier_pro": {
+        "popular": "Más popular",
+        "name": "Pro",
+        "f1": "Cursos ilimitados",
+        "f2": "500 estudiantes por curso",
+        "f3": "Analíticas e informes completos",
+        "f4": "Soporte prioritario",
+        "cta": "Actualizar a Pro"
+      },
+      "tier_enterprise": {
+        "name": "Empresa",
+        "price": "Personalizado",
+        "f1": "Todo ilimitado",
+        "f2": "Inicio de sesión único (SSO)",
+        "f3": "SLA y soporte dedicado",
+        "cta": "Contactar a ventas"
+      }
+    },
+    "testimonials": {
+      "section_title": "Con la confianza de educadores de todo el mundo",
+      "card_1": {
+        "quote": "ExamSys reemplazó por completo nuestro sistema en papel. Calificar solía tomar 3 días; ahora es instantáneo.",
+        "name": "Dra. Sarah M.",
+        "role": "Profesora universitaria"
+      },
+      "card_2": {
+        "quote": "Mis estudiantes prefieren el formato en línea. La interfaz es limpia y el temporizador no causa pánico.",
+        "name": "James L.",
+        "role": "Instructor en línea"
+      },
+      "card_3": {
+        "quote": "El soporte RTL en árabe es impecable. Administramos una institución bilingüe y ambas partes funcionan perfectamente.",
+        "name": "Fatima A.",
+        "role": "Coordinadora académica"
+      }
+    },
+    "faq": {
+      "section_title": "Preguntas frecuentes",
+      "q_1": "¿ExamSys es gratuito?",
+      "a_1": "¡Sí! Nuestro plan gratuito incluye todo lo que necesitas para empezar: 3 cursos, 50 estudiantes y analíticas básicas sin costo.",
+      "q_2": "¿Cómo funciona la calificación automática?",
+      "a_2": "Cuando un estudiante envía su examen, la plataforma compara instantáneamente cada respuesta seleccionada con la opción correcta y calcula el puntaje final.",
+      "q_3": "¿Puedo personalizar los umbrales de aprobación?",
+      "a_3": "Absolutamente. Al crear o editar un examen, puedes establecer el porcentaje de aprobación exacto para cada examen individualmente.",
+      "q_4": "¿ExamSys admite árabe y lenguajes RTL?",
+      "a_4": "Sí. La plataforma admite totalmente el árabe con cambio automático de diseño RTL.",
+      "q_5": "¿Cómo se mantiene la integridad del examen?",
+      "a_5": "Una vez publicado un examen con entregas, las preguntas se bloquean automáticamente.",
+      "q_6": "¿Los estudiantes ven sus resultados de inmediato?",
+      "a_6": "Sí, para exámenes calificados automáticamente, los resultados están disponibles de inmediato.",
+      "q_7": "¿Hay una versión apta para dispositivos móviles?",
+      "a_7": "Sí, toda la plataforma es adaptable a dispositivos móviles.",
+      "q_8": "¿Cuántos estudiantes pueden inscribirse en un curso?",
+      "a_8": "En el plan gratuito hasta 50 por curso, Pro 500 y Enterprise ilimitado.",
+      "q_9": "¿Puedo establecer un límite de tiempo?",
+      "a_9": "Sí, puedes configurar límites de tiempo por examen con temporizador en vivo.",
+      "q_10": "¿Cómo empiezo?",
+      "a_10": "Haz clic en 'Empieza gratis', registra tu cuenta y crea tu primer curso en menos de 5 minutos."
+    },
+    "cta_banner": {
+      "headline": "¿Listo para transformar tu flujo de evaluación?",
+      "subtext": "Únete a más de 500 instituciones que ya usan ExamSys. La configuración lleva menos de 5 minutos.",
+      "btn_primary": "Crear cuenta gratuita",
+      "btn_secondary": "Programar una demostración"
+    }
   }
 }

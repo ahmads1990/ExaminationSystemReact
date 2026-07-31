@@ -680,7 +680,164 @@
       "status_grading": "Grading...",
       "status_pending_grade": "Pending Grade",
       "invalid_exam_id": "Invalid Exam ID",
-      "loading_exam_info": "Loading exam info..."
+      "loading_exam_info": "Loading exam details..."
+    }
+  },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "how_it_works": "How It Works",
+      "pricing": "Pricing",
+      "testimonials": "Testimonials",
+      "faq": "FAQ"
+    },
+    "hero": {
+      "badge": "✦ Built for Modern Education",
+      "headline": "The Examination Platform Built for Academic Rigor",
+      "subheadline": "From question banks to instant results — ExamSys gives instructors complete control and students a calm, focused testing experience.",
+      "cta_primary": "Get Started Free",
+      "cta_secondary": "Watch Demo",
+      "trust_institutions": "500+ Institutions",
+      "trust_exams": "50,000+ Exams Created",
+      "trust_rating": "4.9★ Rated",
+      "badge_auto_grading": "⚡ 100% Instant Auto-Grading",
+      "badge_tamper_locked": "🔒 Tamper-Resistant Integrity"
+    },
+    "features_ticker": {
+      "auto_grading": "⚡ Auto-Grading",
+      "analytics": "📊 Real-time Analytics",
+      "tamper_resistant": "🔒 Tamper-Resistant",
+      "multilang": "🌍 Multi-Language",
+      "mobile_ready": "📱 Mobile-Ready",
+      "timed_exams": "⏱ Timed Exams",
+      "question_banks": "📂 Question Banks",
+      "course_mgmt": "🎓 Course Management",
+      "jwt_auth": "🔐 JWT Auth"
+    },
+    "services": {
+      "section_title": "Features Built for Academic Rigor",
+      "section_subtitle": "Everything you need to deliver fair, high-stakes assessments or simple classroom quizzes.",
+      "card_1": {
+        "title": "Instructor Command Center",
+        "desc": "Build and manage courses, exams, and question banks — all from one clean dashboard. Set passing scores, time limits, and publish with one click."
+      },
+      "card_2": {
+        "title": "Intelligent Auto-Grading",
+        "desc": "MCQ submissions graded instantly. Results available the moment time runs out — no waiting, no manual review."
+      },
+      "card_3": {
+        "title": "Student-First Exam Experience",
+        "desc": "Clean, distraction-free exam interface with question navigator, auto-save, and live countdown. Students stay focused — not frustrated."
+      },
+      "card_4": {
+        "title": "Deep Analytics & Reports",
+        "desc": "Per-exam performance breakdowns, pass/fail distribution, average score trends, and student progress over time."
+      },
+      "card_5": {
+        "title": "Secure & Tamper-Resistant",
+        "desc": "JWT-based auth, role-separated access, and question locking on published exams — academic integrity is always enforced."
+      },
+      "card_6": {
+        "title": "Multi-Language & RTL Ready",
+        "desc": "Runs in English, Arabic, Spanish, and French with automatic RTL layout switching — built to serve global campuses."
+      }
+    },
+    "how_it_works": {
+      "section_title": "Simple, Rigorous Workflow",
+      "section_subtitle": "Setting up exams takes minutes. Managing them takes seconds.",
+      "step_1": {
+        "title": "Create Your Course",
+        "desc": "Instructors sign up, create a course, set enrollment limits, and invite students — or let them enroll freely."
+      },
+      "step_2": {
+        "title": "Build & Publish Exams",
+        "desc": "Add questions, set time limits and passing scores, then publish when ready. The platform handles everything else."
+      },
+      "step_3": {
+        "title": "Review Results Instantly",
+        "desc": "The moment an exam is submitted, scores are calculated. Students see their results. Instructors see the full picture."
+      }
+    },
+    "stats": {
+      "institutions": "Educational Institutions",
+      "exams": "Exams Created",
+      "questions": "Questions Answered",
+      "rating": "Average Platform Rating"
+    },
+    "pricing": {
+      "section_title": "Simple, Transparent Pricing",
+      "section_subtitle": "Start free, upgrade as you grow. No hidden fees.",
+      "tier_free": {
+        "name": "Free",
+        "f1": "Up to 3 courses",
+        "f2": "50 students per course",
+        "f3": "Basic analytics",
+        "cta": "Get Started Free"
+      },
+      "tier_pro": {
+        "popular": "Most Popular",
+        "name": "Pro",
+        "f1": "Unlimited courses",
+        "f2": "500 students per course",
+        "f3": "Full analytics & reports",
+        "f4": "Priority support",
+        "cta": "Upgrade to Pro"
+      },
+      "tier_enterprise": {
+        "name": "Enterprise",
+        "price": "Custom",
+        "f1": "Unlimited everything",
+        "f2": "Single Sign-On (SSO)",
+        "f3": "SLA & Dedicated support",
+        "cta": "Contact Sales"
+      }
+    },
+    "testimonials": {
+      "section_title": "Trusted by Educators Worldwide",
+      "card_1": {
+        "quote": "ExamSys completely replaced our paper-based system. Grading used to take 3 days — now it is instant.",
+        "name": "Dr. Sarah M.",
+        "role": "University Professor"
+      },
+      "card_2": {
+        "quote": "My students actually prefer the online format. The interface is clean and the timer does not cause panic.",
+        "name": "James L.",
+        "role": "Online Instructor"
+      },
+      "card_3": {
+        "quote": "The Arabic RTL support is flawless. We run a bilingual institution and both sides work perfectly.",
+        "name": "Fatima A.",
+        "role": "Academic Coordinator"
+      }
+    },
+    "faq": {
+      "section_title": "Frequently Asked Questions",
+      "q_1": "Is ExamSys free to use?",
+      "a_1": "Yes! Our Free plan includes everything you need to get started — 3 courses, 50 students, and basic analytics at no cost.",
+      "q_2": "How does auto-grading work?",
+      "a_2": "When a student submits their exam (or time runs out), the platform instantly compares each selected answer to the correct choice and calculates the final score automatically.",
+      "q_3": "Can I customize passing score thresholds?",
+      "a_3": "Absolutely. When creating or editing an exam, you can set the exact passing score percentage for each exam individually.",
+      "q_4": "Does ExamSys support Arabic and RTL languages?",
+      "a_4": "Yes. The platform fully supports Arabic with automatic RTL layout switching. Spanish and French are also supported.",
+      "q_5": "How is exam integrity maintained?",
+      "a_5": "Once an exam is published and has submissions, questions are automatically locked — preventing edits that could compromise grading fairness.",
+      "q_6": "Can students see their results immediately?",
+      "a_6": "Yes. For auto-graded exams, results are available the moment the submission is processed — typically within seconds.",
+      "q_7": "Is there a mobile-friendly version?",
+      "a_7": "Yes. The entire platform is responsive and tested on mobile. Students can take exams from any device.",
+      "q_8": "How many students can enroll in one course?",
+      "a_8": "On the Free plan, up to 50 per course. Pro plan supports 500, and Enterprise is unlimited.",
+      "q_9": "Can I set a time limit on exams?",
+      "a_9": "Yes. You can configure time limits per exam. The student sees a live countdown, and the exam auto-submits when time expires.",
+      "q_10": "How do I get started?",
+      "a_10": "Click 'Get Started Free' at the top of this page, register an account, and you can create your first course in under 5 minutes."
+    },
+    "cta_banner": {
+      "headline": "Ready to transform your assessment workflow?",
+      "subtext": "Join 500+ institutions already running on ExamSys. Setup takes under 5 minutes.",
+      "btn_primary": "Create Free Account",
+      "btn_secondary": "Schedule a Demo"
     }
   }
 }
