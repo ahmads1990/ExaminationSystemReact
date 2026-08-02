@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Globe, Menu, Moon, Sun } from "lucide-react";
+import { Building2, Globe, Menu, Moon, Sun } from "lucide-react";
 import { Dropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -19,13 +19,14 @@ const languagesList = [
 ];
 
 const Navbar = ({ onToggleSidebar }: NavbarProps) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const location = useLocation();
 
     const isLandingPage = !isAuthenticated && location.pathname === "/";
     const [scrolled, setScrolled] = useState(false);
+    const tenantName = localStorage.getItem("tenantName") || (user as any)?.tenantName || "Default University";
 
     useEffect(() => {
         if (!isLandingPage) {
@@ -98,8 +99,14 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                         )}
                     </div>
 
-                    {/* Right Section: Globe, Theme, UserMenu / Auth Buttons */}
+                    {/* Right Section: Tenant Badge Display, Globe, Theme, UserMenu / Auth Buttons */}
                     <div className="d-flex align-items-center gap-2 gap-sm-3">
+                        {/* Tenant Badge Display */}
+                        <div className="d-none d-sm-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-primary-subtle text-primary border border-primary-subtle" style={{ fontSize: "0.82rem", fontWeight: 500 }} title="Current Institution Tenant">
+                            <Building2 size={14} />
+                            <span>{tenantName}</span>
+                        </div>
+
                         {/* Language Selector Dropdown */}
                         <Dropdown align="end">
                             <Dropdown.Toggle
