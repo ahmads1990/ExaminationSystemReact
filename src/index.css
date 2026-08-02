@@ -158,6 +158,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -198,6 +199,7 @@ body {
 a {
     color: var(--color-primary-600);
 }
+
 a:hover {
     color: var(--color-primary-700);
 }
@@ -211,19 +213,26 @@ a:hover {
 }
 
 [data-theme="dark"] {
-    --surface-bg: #0b0f19; /* slate-950 */
-    --surface-card: #111827; /* slate-900 */
-    --surface-border: #1f2937; /* slate-800 */
+    --surface-bg: #0b0f19;
+    /* slate-950 */
+    --surface-card: #111827;
+    /* slate-900 */
+    --surface-border: #1f2937;
+    /* slate-800 */
 
-    --text-primary: #f9fafb; /* gray-50 */
-    --text-secondary: #d1d5db; /* gray-300 */
-    --text-muted: #9ca3af; /* gray-400 */
+    --text-primary: #f9fafb;
+    /* gray-50 */
+    --text-secondary: #d1d5db;
+    /* gray-300 */
+    --text-muted: #9ca3af;
+    /* gray-400 */
 
     /* Customize outline button background on dark hover */
     --color-primary-50: #022c22;
     --color-primary-100: #064e3b;
     --color-primary-400: #10b981;
-    --color-primary-500: #059669; /* Make primary color darker/emerald in dark mode */
+    --color-primary-500: #059669;
+    /* Make primary color darker/emerald in dark mode */
     --color-primary-600: #047857;
     --color-primary-700: #065f46;
 
@@ -252,9 +261,11 @@ a:hover {
 .dashboard-card-courses {
     background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%) !important;
 }
+
 .dashboard-card-students {
     background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
 }
+
 .dashboard-card-exams {
     background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%) !important;
 }
@@ -262,9 +273,11 @@ a:hover {
 [data-theme="dark"] .dashboard-card-courses {
     background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
 }
+
 [data-theme="dark"] .dashboard-card-students {
     background: linear-gradient(135deg, #022c22 0%, #064e3b 100%) !important;
 }
+
 [data-theme="dark"] .dashboard-card-exams {
     background: linear-gradient(135deg, #164e63 0%, #0891b2 100%) !important;
 }
@@ -408,7 +421,8 @@ a:hover {
 
 /* Quick Demo Access Card in Dark Mode */
 [data-theme="dark"] .demo-credentials-card {
-    background-color: rgba(245, 158, 11, 0.05) !important; /* light warm yellow tint */
+    background-color: rgba(245, 158, 11, 0.05) !important;
+    /* light warm yellow tint */
     border-color: rgba(245, 158, 11, 0.25) !important;
 }
 

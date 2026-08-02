@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Globe, Menu, Moon, Sun } from "lucide-react";
+import { Building2, Globe, Menu, Moon, Sun } from "lucide-react";
 import { Dropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -19,13 +19,14 @@ const languagesList = [
 ];
 
 const Navbar = ({ onToggleSidebar }: NavbarProps) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const location = useLocation();
 
     const isLandingPage = !isAuthenticated && location.pathname === "/";
     const [scrolled, setScrolled] = useState(false);
+    const tenantName = localStorage.getItem("tenantName") || (user as any)?.tenantName || "Default University";
 
     useEffect(() => {
         if (!isLandingPage) {
@@ -76,30 +77,36 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                             Exam<span style={{ color: "var(--color-primary-500)" }}>Sys</span>
                         </Link>
 
-                        {/* Landing Page Navigation Links (Only for guests on landing page) */}
-                        {isLandingPage && (
-                            <div className="d-none d-lg-flex align-items-center gap-4 ms-4">
-                                <a href="#features" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                        {/* Guest Navigation Links (Available for all unauthenticated users) */}
+                        {!isAuthenticated && (
+                            <div className="d-none d-lg-flex align-items-center gap-4 gap-xl-5 ms-4 ms-xl-5 ps-lg-3">
+                                <a href="/#features" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.features", "Features")}
                                 </a>
-                                <a href="#how-it-works" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#how-it-works" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.how_it_works", "How It Works")}
                                 </a>
-                                <a href="#pricing" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#pricing" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.pricing", "Pricing")}
                                 </a>
-                                <a href="#testimonials" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#testimonials" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.testimonials", "Testimonials")}
                                 </a>
-                                <a href="#faq" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
+                                <a href="/#faq" className="text-secondary text-decoration-none hover-text-primary fw-medium" style={{ fontSize: "0.9rem" }}>
                                     {t("landing.nav.faq", "FAQ")}
                                 </a>
                             </div>
                         )}
                     </div>
 
-                    {/* Right Section: Globe, Theme, UserMenu / Auth Buttons */}
+                    {/* Right Section: Tenant Badge Display, Globe, Theme, UserMenu / Auth Buttons */}
                     <div className="d-flex align-items-center gap-2 gap-sm-3">
+                        {/* Tenant Badge Display */}
+                        <div className="d-none d-sm-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-primary-subtle text-primary border border-primary-subtle" style={{ fontSize: "0.82rem", fontWeight: 500 }} title="Current Institution Tenant">
+                            <Building2 size={14} />
+                            <span>{tenantName}</span>
+                        </div>
+
                         {/* Language Selector Dropdown */}
                         <Dropdown align="end">
                             <Dropdown.Toggle

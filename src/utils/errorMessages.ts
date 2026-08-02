@@ -48,6 +48,8 @@ export const ErrorMessages: Record<ApiErrorCode, string> = {
     [ApiErrorCode.HasActiveAttempt]: "You already have an active attempt for this exam.",
     [ApiErrorCode.AttemptNotCompleted]: "This attempt must be completed before it can be graded or reviewed.",
     [ApiErrorCode.GradingInProgress]: "Your exam is currently being graded. Please check back later.",
+    [ApiErrorCode.CourseMaxEnrollmentReached]: "This course has reached its maximum student capacity.",
+    [ApiErrorCode.StudentMaxCoursesExceeded]: "You have reached the maximum allowed number of enrolled courses.",
 
     // Server Errors
     [ApiErrorCode.InternalServerError]: "An internal server error occurred. Please try again later.",

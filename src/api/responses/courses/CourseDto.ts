@@ -7,4 +7,5 @@ export interface CourseDto {
     instructorName: string;
     createdDate: string;
     maxEnrollment: number;
+    enrolledCount?: number;
 }

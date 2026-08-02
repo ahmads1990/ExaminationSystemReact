@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, FileText, Plus, Search, Users } from "lucide-react";
+import { BookOpen, Eye, FileText, Plus, Search, Users } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, Col, Row, Spinner } from "react-bootstrap";
@@ -219,19 +219,23 @@ const DashboardPage = () => {
             },
             {
                 id: "actions",
-                header: t("dashboard.col_actions"),
-                size: 150,
-                cell: () => (
-                    <div className="text-end">
-                        <Link
-                            to="/instructor/exams"
-                            className="btn btn-link btn-sm p-0 d-inline-flex align-items-center text-primary text-decoration-none fw-semibold gap-1 hover-gap"
-                        >
-                            {t("dashboard.action_view_exams")}
-                            <ArrowRight size={14} className="transition-all" />
-                        </Link>
-                    </div>
-                )
+                header: () => <div className="text-center">{t("dashboard.col_actions")}</div>,
+                size: 160,
+                cell: (info: any) => {
+                    const courseId = info.row.original.courseId;
+                    return (
+                        <div className="text-center">
+                            <Link
+                                to={courseId ? `/instructor/exams?courseId=${courseId}` : "/instructor/exams"}
+                                className="btn btn-outline-primary btn-sm rounded-pill px-3 py-1 d-inline-flex align-items-center justify-content-center gap-1.5 shadow-sm fw-semibold hover-lift transition-all"
+                                style={{ fontSize: "0.825rem" }}
+                            >
+                                <Eye size={14} />
+                                {t("dashboard.action_view_exams", "View Exams")}
+                            </Link>
+                        </div>
+                    );
+                }
             }
         ];
     }, [orderBy, sortDirection, handleSort]);

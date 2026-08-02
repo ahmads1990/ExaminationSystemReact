@@ -30,6 +30,9 @@ api.interceptors.request.use(
             config.url?.includes("/StudentExams/answer") ||
             config.url?.includes("/StudentExams/submit-attempt");
 
+        const tenantId = localStorage.getItem("tenantId") || "1";
+        config.headers["X-Tenant-Id"] = tenantId;
+
         if (examToken && isExamTakingEndpoint) {
             config.headers.Authorization = `Bearer ${examToken}`;
         } else {
