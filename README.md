@@ -11,13 +11,16 @@
 
 **A production-ready, role-based examination management frontend built with React 19 + TypeScript**
 
-[Features](#-features) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [Pages & Routes](#-pages--routes) • [Contributing](#-contributing)
+[Features](#-features) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [Pages & Routes](#-pages--routes) • [Backend API Repository](https://github.com/ahmads1990/ExaminationSystemWebAPI) • [Contributing](#-contributing)
 
 </div>
 
 ---
 
+> ⚙️ **Backend Project**: The ASP.NET Core Web API for this application is hosted at [https://github.com/ahmads1990/ExaminationSystemWebAPI](https://github.com/ahmads1990/ExaminationSystemWebAPI).
+
 ## 📖 Overview
+
 
 **ExamSys Frontend** is the client-side counterpart to the [ExaminationSystem Web API](https://github.com/ahmads1990/ExaminationSystemWebAPI). Built with **React 19**, **TypeScript**, and **Vite**, it delivers a fully-featured examination platform for two distinct user roles — Instructors and Students — with a clean, responsive UI that adapts to both light and dark modes.
 
