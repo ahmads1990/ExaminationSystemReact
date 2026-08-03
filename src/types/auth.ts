@@ -10,6 +10,8 @@ export interface User {
     name: string;
     email: string;
     role: UserRole | string;
+    tenantId?: number;
+    tenantName?: string;
 }
 
 export interface AuthState {
@@ -20,7 +22,7 @@ export interface AuthState {
 }
 
 export interface AuthContextType extends AuthState {
-    login: (accessToken: string, refreshToken: string) => void;
+    login: (accessToken: string, refreshToken: string, tenantId?: number, tenantName?: string) => void;
     logout: () => void;
     updateUser: (user: User) => void;
 }

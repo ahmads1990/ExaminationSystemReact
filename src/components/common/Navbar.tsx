@@ -26,7 +26,7 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
 
     const isLandingPage = !isAuthenticated && location.pathname === "/";
     const [scrolled, setScrolled] = useState(false);
-    const tenantName = localStorage.getItem("tenantName") || (user as any)?.tenantName || "Default University";
+    const tenantName = (user as any)?.tenantName || localStorage.getItem("tenantName") || "Default University";
 
     useEffect(() => {
         if (!isLandingPage) {
@@ -102,10 +102,12 @@ const Navbar = ({ onToggleSidebar }: NavbarProps) => {
                     {/* Right Section: Tenant Badge Display, Globe, Theme, UserMenu / Auth Buttons */}
                     <div className="d-flex align-items-center gap-2 gap-sm-3">
                         {/* Tenant Badge Display */}
-                        <div className="d-none d-sm-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-primary-subtle text-primary border border-primary-subtle" style={{ fontSize: "0.82rem", fontWeight: 500 }} title="Current Institution Tenant">
-                            <Building2 size={14} />
-                            <span>{tenantName}</span>
-                        </div>
+                        {isAuthenticated && (
+                            <div className="d-none d-sm-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-primary-subtle text-primary border border-primary-subtle" style={{ fontSize: "0.82rem", fontWeight: 500 }} title="Current Institution Tenant">
+                                <Building2 size={14} />
+                                <span>{tenantName}</span>
+                            </div>
+                        )}
 
                         {/* Language Selector Dropdown */}
                         <Dropdown align="end">

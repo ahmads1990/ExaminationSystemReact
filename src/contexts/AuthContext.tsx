@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { AuthContextType, AuthState, User } from "../types/auth";
 import { extractUserFromToken, isTokenExpired } from "../utils/jwt";
-import { clearAuth, getToken, getUser, saveRefreshToken, saveToken, saveUser } from "../utils/storage";
+import { clearAuth, getTenantId, getTenantName, getToken, getUser, saveRefreshToken, saveTenantId, saveTenantName, saveToken, saveUser } from "../utils/storage";
 
 // Create and export the context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,6 +33,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                         isLoading: false
                     });
                 } else {
+                    const tenantIdStr = getTenantId();
+                    const tenantName = getTenantName();
+                    if (tenantIdStr) storedUser.tenantId = parseInt(tenantIdStr);
+                    if (tenantName) storedUser.tenantName = tenantName;
+
                     // Token valid, restore auth state
                     setState({
                         user: storedUser,
@@ -49,13 +54,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loadAuthData();
     }, []);
 
-    const login = (accessToken: string, refreshToken: string) => {
+    const login = (accessToken: string, refreshToken: string, tenantId?: number, tenantName?: string) => {
         // Extract user from token
         const user = extractUserFromToken(accessToken);
 
         if (!user) {
             console.error("Failed to extract user from token");
             return;
+        }
+
+        if (tenantId !== undefined && tenantId !== null) {
+            user.tenantId = tenantId;
+            saveTenantId(tenantId);
+        }
+        if (tenantName) {
+            user.tenantName = tenantName;
+            saveTenantName(tenantName);
         }
 
         // Save to localStorage

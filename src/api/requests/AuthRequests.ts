@@ -46,4 +46,7 @@ export interface ChangePasswordRequest {
 export interface UserTokensDto {
     jwtToken: string;
     refreshToken: string;
+    userId?: number;
+    tenantId?: number;
+    tenantName?: string;
 }
