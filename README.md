@@ -17,7 +17,7 @@
 
 ---
 
-> ⚙️ **Backend Project**: The ASP.NET Core Web API for this application is hosted at [https://github.com/ahmads1990/ExaminationSystemWebAPI](https://github.com/ahmads1990/ExaminationSystemWebAPI).
+> ⚙️ **Backend Project**: The ASP.NET Core Web API repository for this application is available at [https://github.com/ahmads1990/ExaminationSystemWebAPI](https://github.com/ahmads1990/ExaminationSystemWebAPI).
 
 ## 📖 Overview
 

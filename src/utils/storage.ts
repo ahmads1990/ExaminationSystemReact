@@ -4,7 +4,9 @@ const STORAGE_KEYS = {
     TOKEN: "auth_token",
     REFRESH_TOKEN: "auth_refresh_token",
     USER: "auth_user",
-    EXAM_TOKEN: "exam_token"
+    EXAM_TOKEN: "exam_token",
+    TENANT_ID: "tenantId",
+    TENANT_NAME: "tenantName"
 } as const;
 
 // Token management
@@ -46,6 +48,31 @@ export const removeExamToken = (): void => {
     localStorage.removeItem(STORAGE_KEYS.EXAM_TOKEN);
 };
 
+// Tenant management
+export const saveTenantId = (tenantId: string | number): void => {
+    localStorage.setItem(STORAGE_KEYS.TENANT_ID, tenantId.toString());
+};
+
+export const getTenantId = (): string | null => {
+    return localStorage.getItem(STORAGE_KEYS.TENANT_ID);
+};
+
+export const removeTenantId = (): void => {
+    localStorage.removeItem(STORAGE_KEYS.TENANT_ID);
+};
+
+export const saveTenantName = (tenantName: string): void => {
+    localStorage.setItem(STORAGE_KEYS.TENANT_NAME, tenantName);
+};
+
+export const getTenantName = (): string | null => {
+    return localStorage.getItem(STORAGE_KEYS.TENANT_NAME);
+};
+
+export const removeTenantName = (): void => {
+    localStorage.removeItem(STORAGE_KEYS.TENANT_NAME);
+};
+
 // User management
 export const saveUser = (user: object): void => {
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
@@ -72,4 +99,6 @@ export const clearAuth = (): void => {
     removeRefreshToken();
     removeUser();
     removeExamToken();
+    removeTenantId();
+    removeTenantName();
 };

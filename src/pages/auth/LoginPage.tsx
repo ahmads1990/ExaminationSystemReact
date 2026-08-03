@@ -38,8 +38,8 @@ const LoginPage = () => {
 
             if (response.success && response.data) {
                 // Login successful, save token and redirect
-                const { jwtToken, refreshToken } = response.data;
-                login(jwtToken, refreshToken);
+                const { jwtToken, refreshToken, tenantId, tenantName } = response.data;
+                login(jwtToken, refreshToken, tenantId, tenantName);
                 navigate("/");
             } else {
                 setError(response.message || "Login failed. Please try again.");
